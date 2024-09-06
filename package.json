@@ -1,5 +1,5 @@
 {
-  "name": "@binaryoperations/json-schema-form",
+  "name": "@binaryoperations/json-forms",
   "version": "0.0.0",
   "description": "",
   "main": "index.ts",
@@ -27,11 +27,14 @@
     "react": ">= 18.3.1 < 19"
   },
   "devDependencies": {
+    "@types/lodash": "^4.17.7",
     "@types/react": "^18.3.3",
     "@types/use-sync-external-store": "^0.0.6",
     "react": "^18.3.1"
   },
   "dependencies": {
+    "ajv-ts": "^0.7.0",
+    "lodash": "^4.17.21",
     "use-sync-external-store": "^1.2.2"
   }
 }
