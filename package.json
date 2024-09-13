@@ -18,19 +18,23 @@
     "headless-form-builder"
   ],
   "repository": "https://github.com/binaryoperations/json-schema-form",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
-  "peerDependencies": {
-    "react": ">= 18.3.1 < 19"
+
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    
+    "lint": "eslint .",
+    "lint:fix": "eslint --fix ."
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",
-    "@types/react": "^18.3.3",
-    "@types/use-sync-external-store": "^0.0.6",
-    "react": "^18.3.1"
+    "eslint": "^8.56.0",
+    "eslint-plugin-import": "^2.27.5",
+    "@typescript-eslint/eslint-plugin": "^5.62.0",
+    "@typescript-eslint/parser": "^5.54.1",
+    "typescript": "~5.1.0",
+    "ts-node": "^10.4.0"
   },
   "dependencies": {
     "ajv-ts": "^0.7.0",

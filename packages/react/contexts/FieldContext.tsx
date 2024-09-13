@@ -2,7 +2,7 @@ import { ComponentType, SyntheticEvent } from "react";
 import { createFastContext } from "./fast-context";
 
 export type FormContextType<Schema = {}> = {
-    value: any;
+    value: unknown;
     onChange: (e: SyntheticEvent<ComponentType, Schema>) => void;
 };
 

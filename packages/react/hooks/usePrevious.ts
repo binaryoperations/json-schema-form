@@ -1,6 +1,5 @@
-import { useLayoutEffect } from 'react';
+import { useLayoutEffect } from "react";
 import { useRef } from "./useRef";
-
 
 export const usePrevious = <T>(value: T) => {
     const ref = useRef<T>(value);
@@ -9,7 +8,6 @@ export const usePrevious = <T>(value: T) => {
     useLayoutEffect(() => {
         ref.current = value;
     }, [value]);
-
 
     return ref;
 };
