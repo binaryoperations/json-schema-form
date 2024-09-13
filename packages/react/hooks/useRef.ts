@@ -11,7 +11,7 @@ export const useRef = <T>(value: T) => {
             }),
             undefined
         ),
-        []
+        [ref]
     );
 
     return ref;

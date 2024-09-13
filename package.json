@@ -24,15 +24,16 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     
-    "lint": "eslint .",
-    "lint:fix": "eslint --fix ."
+    "lint": "eslint -c eslint.config.mjs .",
+    "lint:fix": "pnpm lint --fix"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",
-    "eslint": "^8.56.0",
-    "eslint-plugin-import": "^2.27.5",
-    "@typescript-eslint/eslint-plugin": "^5.62.0",
-    "@typescript-eslint/parser": "^5.54.1",
+    "@eslint/js": "^9.9.0",
+    "eslint": "^9.9.0",
+    "eslint-plugin-react-hooks": "^5.1.0-rc.0",
+    "eslint-plugin-react-refresh": "^0.4.9",
+    "typescript-eslint": "^8.0.1",
     "typescript": "~5.1.0",
     "ts-node": "^10.4.0"
   },
