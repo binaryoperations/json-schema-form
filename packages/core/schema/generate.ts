@@ -14,8 +14,7 @@ import uniqBy from "lodash/uniqBy";
 type Properties = { [property: string]: JsonSchema };
 
 export enum CONSTANTS {
-  ADDITIONAL_PROPS,
-  REQUIRED,
+  OBJECT,
   ARRAY,
   STRING,
   NUMBER,
@@ -23,10 +22,7 @@ export enum CONSTANTS {
 }
 
 type ExpectedResponse = {
-  [CONSTANTS.REQUIRED]: string[];
-  [CONSTANTS.ADDITIONAL_PROPS]: Partial<
-    Omit<ObjectJsonSchema, BaseKeys | "required">
-  >;
+  [CONSTANTS.OBJECT]: Partial<Omit<ObjectJsonSchema, BaseKeys | "properties">>;
   [CONSTANTS.ARRAY]: Partial<Omit<ArrayJsonSchema, BaseKeys | "items">>;
   [CONSTANTS.STRING]: Partial<Omit<StringJsonSchema, BaseKeys>>;
   [CONSTANTS.NUMBER]: Partial<Omit<StringJsonSchema, BaseKeys>>;
@@ -43,7 +39,7 @@ export class Generate<T extends JsonSchema = JsonSchema> {
 
   constructor(
     protected deriveOptions: (
-      value: Properties | any,
+      value: any,
       path: string[]
     ) => <T extends CONSTANTS>(prop: T) => ExpectedResponse[T]
   ) {}
@@ -77,10 +73,12 @@ export class Generate<T extends JsonSchema = JsonSchema> {
     return new Class(this.deriveOptions);
   }
 
-  protected preparePath(tail: string, head = "#/properties") {
+  protected preparePath(tail: string | string[], head = "") {
+    const $id = [head].concat(tail).join("/");
+    const normalizedHead = head ? [head] : [];
     return {
-      $id: [head, tail].join("/"),
-      path: [head.replace("#/properties", ""), tail],
+      $id: normalizedHead.concat(tail).join("/"),
+      path: $id.replaceAll(/#\/properties\//g, "").split("/"),
     };
   }
 
@@ -137,22 +135,15 @@ export class Generate<T extends JsonSchema = JsonSchema> {
 
 class GenerateObjectSchema extends Generate<ObjectJsonSchema> {
   prepareSchema(value: object, key: string, head?: string): ObjectJsonSchema {
-    const { $id, path } = this.preparePath(key, head);
-    const properties = this.parseProperties(value, $id);
-    const deriveOptions = this.deriveOptions(properties, path);
-
-    const required = deriveOptions(CONSTANTS.REQUIRED);
+    const { $id, path } = this.preparePath(["#", "properties", key], head);
+    const deriveOptions = this.deriveOptions(value, path);
 
     const objectSchema: ObjectJsonSchema = {
       $id,
       type: "object",
-      properties,
-      ...deriveOptions(CONSTANTS.ADDITIONAL_PROPS),
+      properties: this.parseProperties(value, $id),
+      ...deriveOptions(CONSTANTS.OBJECT),
     };
-
-    if (required.length) {
-      objectSchema.required = required;
-    }
 
     return objectSchema;
   }
