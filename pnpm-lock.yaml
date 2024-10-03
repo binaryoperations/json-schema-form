@@ -45,6 +45,19 @@ importers:
 
   packages/core:
     dependencies:
+      '@binaryoperations/json-forms-internals':
+        specifier: workspace:^
+        version: link:../internals
+      lodash:
+        specifier: ^4.17.21
+        version: 4.17.21
+    devDependencies:
+      '@types/lodash':
+        specifier: ^4.17.7
+        version: 4.17.7
+
+  packages/internals:
+    dependencies:
       lodash:
         specifier: ^4.17.21
         version: 4.17.21

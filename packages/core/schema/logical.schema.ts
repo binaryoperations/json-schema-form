@@ -10,7 +10,7 @@ import type {
 } from "../models/JsonSchema";
 
 import uniqBy from "lodash/uniqBy";
-import isNaN from "../../../utils/isNaN";
+import isNaN from "@binaryoperations/json-forms-internals/isNaN";
 
 type Properties = { [property: string]: JsonSchema };
 
@@ -147,6 +147,7 @@ class GenerateObjectSchema extends Generate<ObjectJsonSchema> {
 
         const objectSchema: ObjectJsonSchema = {
             $id,
+            $schema: "http://json-schema.org/draft-07/schema#",
             type: "object",
             properties: this.parseProperties(value, $id),
             ...deriveOptions(CONSTANTS.OBJECT),
@@ -201,6 +202,7 @@ class GenerateStringSchema extends Generate<StringJsonSchema> {
         };
     }
 }
+
 class GenerateNumberSchema extends Generate<NumberJsonSchema> {
     prepareSchema(value: number, key: string, head?: string): NumberJsonSchema {
         const { $id, path } = this.preparePath(key, head);
@@ -214,6 +216,7 @@ class GenerateNumberSchema extends Generate<NumberJsonSchema> {
         };
     }
 }
+
 class GenerateBooleanSchema extends Generate<BooleanJsonSchema> {
     prepareSchema(
         _value: boolean,
@@ -228,6 +231,7 @@ class GenerateBooleanSchema extends Generate<BooleanJsonSchema> {
         };
     }
 }
+
 class GenerateNullSchema extends Generate<NullJsonSchema> {
     prepareSchema(value: any[], key: string, head?: string): NullJsonSchema {
         const { $id, path } = this.preparePath(key, head);

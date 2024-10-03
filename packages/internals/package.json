@@ -1,5 +1,5 @@
 {
-    "name": "@binaryoperations/json-forms-core",
+    "name": "@binaryoperations/json-forms-internals",
     "version": "0.0.0",
     "description": "",
     "private": false,
@@ -24,8 +24,7 @@
         "lint": "eslint ."
     },
     "dependencies": {
-      "lodash": "^4.17.21",
-      "@binaryoperations/json-forms-internals": "workspace:^"
+      "lodash": "^4.17.21"
     },
     "devDependencies": {
         "@types/lodash": "^4.17.7"
