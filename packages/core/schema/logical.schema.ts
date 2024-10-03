@@ -10,7 +10,7 @@ import type {
 } from "../models/JsonSchema";
 
 import uniqBy from "lodash/uniqBy";
-import isNaN from "@binaryoperations/json-forms-internals/isNaN";
+import extractPathsFromSegment from "@binaryoperations/json-forms-internals/extractPathFromSegments";
 
 type Properties = { [property: string]: JsonSchema };
 
@@ -81,7 +81,7 @@ export class Generate<T extends JsonSchema = JsonSchema> {
         const $id = [head].concat(tail).filter(Boolean).filter(Boolean).join("/");
         return {
             $id,
-            path: $id.replaceAll(/#|properties|items\/?/g, "").split("/").filter(Boolean).map((node) => isNaN(node) ? node : +node),
+            path: extractPathsFromSegment($id),
         };
     }
 
