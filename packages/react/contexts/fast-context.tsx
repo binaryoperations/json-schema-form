@@ -13,9 +13,9 @@ import {
 
 import { useSyncExternalStoreWithSelector } from "use-sync-external-store/with-selector";
 import { usePrevious } from "../hooks/usePrevious";
-import { shallowCompare } from "../../../utils/compare";
+import { shallowCompare } from "../../internals/compare";
 
-type StoreDataType = Record<string, unknown>;
+type StoreDataType = NonNullable<object>;
 
 type SelectorOutputType<IStore, SelectorOutput> = (
     store: IStore
@@ -30,10 +30,9 @@ type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
 
 const useStoreData = <IStore extends StoreDataType = StoreDataType>(
     value: IStore,
-    defaultValue: IStore | null,
     watch = false
 ): UseStoreDataReturnType<IStore> => {
-    const store = useRef<IStore>({ ...defaultValue, ...(value as IStore) });
+    const store = useRef<IStore>((value as IStore));
     const watchRef = useRef(watch);
 
     const get = useCallback(() => store.current, [store]);
@@ -84,10 +83,7 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
     );
 };
 
-export const createFastContext = <T extends StoreDataType = StoreDataType>(
-    defaultValue: T | null = null,
-    watch = false
-) => {
+export const createFastContext = <T extends StoreDataType = StoreDataType>(watch = false) => {
     const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
     return {
@@ -104,7 +100,6 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
          */
         Provider: createProvider<T>(
             context as Context<UseStoreDataReturnType<T>>,
-            defaultValue,
             watch
         ),
 
@@ -151,13 +146,12 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
 
 export const createProvider = <T extends StoreDataType = StoreDataType>(
     StoreContext: Context<UseStoreDataReturnType<T>>,
-    defaultValue: T | null,
     watch: boolean
 ) =>
     memo(({ value, children }: { value: T; children: ReactNode }) => {
         return (
             <StoreContext.Provider
-                value={useStoreData<T>(value, defaultValue, watch)}
+                value={useStoreData<T>(value, watch)}
             >
                 {children}
             </StoreContext.Provider>
