@@ -10,7 +10,7 @@ import type {
 } from "../models/JsonSchema";
 
 import uniqBy from "lodash/uniqBy";
-import extractPathsFromSegment from "@binaryoperations/json-forms-internals/extractPathFromSegments";
+import extractSegmentsFromPath from "@binaryoperations/json-forms-internals/extractSegmentsFromPath";
 
 type Properties = { [property: string]: JsonSchema };
 
@@ -81,7 +81,7 @@ export class Generate<T extends JsonSchema = JsonSchema> {
         const $id = [head].concat(tail).filter(Boolean).filter(Boolean).join("/");
         return {
             $id,
-            path: extractPathsFromSegment($id),
+            path: extractSegmentsFromPath($id),
         };
     }
 

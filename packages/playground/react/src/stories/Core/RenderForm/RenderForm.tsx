@@ -11,6 +11,7 @@ import { ControlNode, UiNodeType, UiSchema } from '@binaryoperations/json-forms-
 
 import { createFastContext }  from "@binaryoperations/json-forms-react/contexts/fast-context";
 import shallowCompare from "@binaryoperations/json-forms-internals/compare";
+import resolvers from "@binaryoperations/json-forms-internals/resolvers";
 import { Column, Row } from '@binaryoperations/json-forms-react/components/Semantic';
 import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
 
@@ -19,9 +20,12 @@ import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox
 //   console.log(e, e.target)
 // }
 
-const { Provider: UiContextProvider, useContextValue } = createFastContext<UiStore>();
-const parseSchema = (uischema: UiSchema) => {
-  return new Parser({}).parse(uischema);
+const { Provider: FormDataProvider, useContextValue: useFormDataContext } = createFastContext<object>();
+
+
+const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } = createFastContext<UiStore>();
+const parseUISchema = (uischema: UiSchema) => {
+  return new Parser().parse(uischema);
 }
 
 
@@ -48,13 +52,15 @@ const RenderVariadicControl = (props: { id: string, type: keyof typeof controlTy
 
 
 const RenderControl = (props: { id: string }) => {
-  const control = useContextValue((store) => {
+  const control = useUiStoreContext((store) => {
     return store.getNode(props.id) as ControlNode;
   });
 
+  const value = useFormDataContext((data) => resolvers.resolveData(data, control.path ?? control.scope), shallowCompare);
+
   return <div style={{ backgroundColor: "#e5e5e5", wordBreak: "break-all" }}>
     <RenderVariadicControl id={props.id} type="text" />
-    {control.property}
+    {value || control.scope}
   </div>
 }
 
@@ -93,7 +99,7 @@ const types = {
 
 
 const RenderVariadic = (props: { id: string }) => {
-  const nodeType = useContextValue((store) => {
+  const nodeType = useUiStoreContext((store) => {
     return store.getNodeType(props.id);
   });
 
@@ -104,7 +110,7 @@ const RenderVariadic = (props: { id: string }) => {
 
 
 const RenderChildren = (props: { id: string }) => {
-  const nodes = useContextValue((store) => {
+  const nodes = useUiStoreContext((store) => {
     return store.getChildren(props.id);
   }, shallowCompare).map((node) => {
     return <RenderVariadic key={node} id={node} />
@@ -123,16 +129,18 @@ const RenderChildren = (props: { id: string }) => {
 }
 
 
-function App(props: { uiSchema: UiSchema }) {
-  const store = useMemo(() => parseSchema(props.uiSchema), [props.uiSchema]);
+function App(props: { uiSchema: UiSchema, data: object }) {
+  const store = useMemo(() => parseUISchema(props.uiSchema), [props.uiSchema]);
   return (
-    <UiContextProvider value={store}>
-      <Form>
-        <Row style={defaultStyles}>
-          <RenderChildren id="root" />
-        </Row>
-      </Form>
-    </UiContextProvider>
+    <FormDataProvider value={props.data}>
+      <UiStoreContextProvider value={store}>
+        <Form>
+          <Row style={defaultStyles}>
+            <RenderChildren id="root" />
+          </Row>
+        </Form>
+      </UiStoreContextProvider>
+    </FormDataProvider>
   )
 }
 

@@ -24,13 +24,15 @@ type Story = StoryObj<typeof meta>;
 
 export const Customer: Story = {
   args: {
-    uiSchema: customer.uiSchema!
+    uiSchema: customer.uiSchema!,
+    data: customer.data!,
   }
 }
 
 
 export const CustomerWizard: Story = {
   args: {
-    uiSchema: customerWizard.uiSchema!
+    uiSchema: customerWizard.uiSchema!,
+    data: customerWizard.data!,
   }
 }

@@ -1,5 +1,4 @@
 import orderBy from "lodash/orderBy";
-import { JsonSchema } from "../models/JsonSchema";
 import { UiSchema, FieldsetNode, UiNodeType, ControlNode } from "../models/UiSchema";
 
 export class Generate {
@@ -12,7 +11,7 @@ export class Parser {
 
     private store!: UiStore;
 
-    constructor(private schema: JsonSchema) {
+    constructor() {
         this.resetStore();
     }
 
@@ -63,6 +62,8 @@ export class Parser {
 export class UiStore {
     keyMap: Record<string, UiSchema | FieldsetNode> = {}
     tree: Record<string, string[]> = {}
+
+    constructor() {}
 
     getChildren(key: string) {
         return this.tree[key];

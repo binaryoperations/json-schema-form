@@ -22,46 +22,46 @@ export const newsLetterForm: FormConfig = {
 
 export const customer: FormConfig = {
     data: {
-        email: "", // email field
-        firstName: "", // string
-        lastName: "", // string
-        phone: "",  // custom?
+        email: "forms@binaryoperation.io", // email field
+        firstName: "Form", // string
+        lastName: "Hero", // string
+        phone: "007",  // custom?
         dateOfBirth: "", // date input/ date picker
         computedAge: "", // computed field? hide if date of birth is invalid
-        rating: "", // would be a number // slider/number field + steps
+        rating: "7", // would be a number // slider/number field + steps
         gender: "", // options // render select/radio-buttons
         website: '', // url field,
         interests: [], // options // render multiselect/combobox/checkbox,
         address: {
-            lineOne: "",
+            lineOne: "21 Bakersstreet",
             lineTwo: "",
-            city: "",
+            city: "London",
             postalCode: "",
-            country: "",
+            country: "United Kingdom",
         },
     },
     uiSchema: {
         type: UiNodeType.ROWS, // fieldsets | fieldset | columns | rows | control
         // order: 0,
         nodes: [
-            { type: UiNodeType.CONTROL, property: "#/properties/email" },
-            { type: UiNodeType.CONTROL, property: "#/properties/firstName" },
-            { type: UiNodeType.CONTROL, property: "#/properties/lastName" },
-            { type: UiNodeType.CONTROL, property: "#/properties/phone" },
-            { type: UiNodeType.CONTROL, property: "#/properties/dateOfBirth" },
-            { type: UiNodeType.CONTROL, property: "#/properties/computedAge" },
-            { type: UiNodeType.CONTROL, property: "#/properties/rating" },
-            { type: UiNodeType.CONTROL, property: "#/properties/gender" },
-            { type: UiNodeType.CONTROL, property: "#/properties/website" },
-            { type: UiNodeType.CONTROL, property: "#/properties/interests" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/email" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/firstName" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/lastName" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/phone" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/dateOfBirth" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/computedAge" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/rating" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/gender" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/website" },
+            { type: UiNodeType.CONTROL, scope: "#/properties/interests" },
             {
                 type: UiNodeType.ROWS,
                 nodes: [
-                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/lineOne" },
-                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/lineTwo" },
-                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/postalCode" },
-                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/city" },
-                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/country" },
+                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/lineOne" },
+                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/lineTwo" },
+                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/postalCode" },
+                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/city" },
+                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/country" },
                 ],
             },
         ],
@@ -70,10 +70,10 @@ export const customer: FormConfig = {
 
 export const customerWizard: FormConfig = {
     data: {
-        email: "", // email field
-        firstName: "", // string
-        lastName: "", // string
-        phone: "",  // custom?
+        email: "forms@binaryoperation.io", // email field
+        firstName: "Form", // string
+        lastName: "Hero", // string
+        phone: "007",  // custom?
         dateOfBirth: "", // date input/ date picker
         computedAge: "", // computed field? hide if date of birth is invalid
         rating: "", // would be a number // slider/number field + steps
@@ -81,11 +81,11 @@ export const customerWizard: FormConfig = {
         website: '', // url field,
         interests: [], // options // render multiselect/combobox/checkbox,
         address: {
-            lineOne: "",
+            lineOne: "21 Bakersstreet",
             lineTwo: "",
-            city: "",
+            city: "London",
             postalCode: "",
-            country: "",
+            country: "United Kingdom",
         },
     },
     uiSchema: {
@@ -99,13 +99,13 @@ export const customerWizard: FormConfig = {
                     {
                         type: UiNodeType.ROWS,
                         nodes: [
-                            { type: UiNodeType.CONTROL, property: "#/properties/email" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/firstName" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/lastName" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/phone" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/dateOfBirth" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/email" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/firstName" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/lastName" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/phone" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/dateOfBirth" },
                             {
-                                type: UiNodeType.CONTROL, property: "#/properties/computedAge",
+                                type: UiNodeType.CONTROL, scope: "#/properties/computedAge",
                                 rules: {
                                     effect: RuleEffect.HIDE,
                                     operator: RuleOperator.AND,
@@ -115,10 +115,10 @@ export const customerWizard: FormConfig = {
                                     }]
                                 }
                             },
-                            { type: UiNodeType.CONTROL, property: "#/properties/rating" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/gender" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/website" },
-                            { type: UiNodeType.CONTROL, property: "#/properties/interests" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/rating" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/gender" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/website" },
+                            { type: UiNodeType.CONTROL, scope: "#/properties/interests" },
                         ],
                     }
                 ]
@@ -133,14 +133,14 @@ export const customerWizard: FormConfig = {
                             {
                                 type: UiNodeType.ROWS,
                                 nodes: [
-                                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/lineOne" },
-                                    { type: UiNodeType.CONTROL, property: "#/properties/address/properties/lineTwo" },
+                                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/lineOne" },
+                                    { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/lineTwo" },
                                     {
                                         type: UiNodeType.COLUMNS,
                                         nodes: [
-                                            { type: UiNodeType.CONTROL, property: "#/properties/address/properties/postalCode" },
-                                            { type: UiNodeType.CONTROL, property: "#/properties/address/properties/city" },
-                                            { type: UiNodeType.CONTROL, property: "#/properties/address/properties/country" },
+                                            { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/postalCode" },
+                                            { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/city" },
+                                            { type: UiNodeType.CONTROL, scope: "#/properties/address/properties/country" },
                                         ]
                                     }
                                 ],
@@ -155,31 +155,31 @@ export const customerWizard: FormConfig = {
                                 nodes: [
                                     {
                                         type: UiNodeType.CONTROL,
-                                        property: "#/properties/address/properties/lineOne",
-                                        readonly: true,
+                                        scope: "#/properties/address/properties/lineOne",
+                                        options: { readOnly: true, }
                                     },
                                     {
                                         type: UiNodeType.CONTROL,
-                                        property: "#/properties/address/properties/lineTwo",
-                                        readonly: true,
+                                        scope: "#/properties/address/properties/lineTwo",
+                                        options: { readOnly: true, }
                                     },
                                     {
                                         type: UiNodeType.COLUMNS,
                                         nodes: [
                                             {
                                                 type: UiNodeType.CONTROL,
-                                                property: "#/properties/address/properties/postalCode",
-                                                readonly: true,
+                                                scope: "#/properties/address/properties/postalCode",
+                                                options: { readOnly: true, }
                                             },
                                             {
                                                 type: UiNodeType.CONTROL,
-                                                property: "#/properties/address/properties/city",
-                                                readonly: true,
+                                                scope: "#/properties/address/properties/city",
+                                                options: { readOnly: true, }
                                             },
                                             {
                                                 type: UiNodeType.CONTROL,
-                                                property: "#/properties/address/properties/country",
-                                                readonly: true,
+                                                scope: "#/properties/address/properties/country",
+                                                options: { readOnly: true, }
                                             },
                                         ]
                                     }

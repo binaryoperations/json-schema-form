@@ -63,11 +63,12 @@ export interface ColumnsNode extends UiNodeVase {
     nodes: ChildNode<PossibleRootNodes>[]
 }
 
-export interface ControlNode extends UiNodeVase {
+export interface ControlNode<T extends object = object> extends UiNodeVase {
     type: UiNodeType.CONTROL,
     label?: string;
-    property: string;
-    readonly?: boolean;
+    scope: string;
+    path?: string;
+    options?: T
 }
 
 type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;
