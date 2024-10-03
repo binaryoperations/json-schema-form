@@ -14,7 +14,9 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "@binaryoperations/json-forms-core": "workspace:^"
+    "@binaryoperations/json-forms-core": "workspace:^",
+    "@binaryoperations/json-forms-react": "workspace:^",
+    "@binaryoperations/json-forms-internals": "workspace:^"
   },
   "devDependencies": {
     "@chromatic-com/storybook": "^1.9.0",

@@ -1,9 +1,9 @@
 import {  FormEvent,  useMemo, useReducer, } from 'react';
 
 import {Generate} from "@binaryoperations/json-forms-core/schema/logical.schema";
-import { Input } from '../../components/Input';
-import { Button } from '../../components/Button';
-import { Form } from '../../components/Form';
+import { Input } from '../../../components/Input';
+import { Button } from '../../../components/Button';
+import { Form } from '../../../components/Form';
 
 const onSubmit = (e: FormEvent) => {
   e?.preventDefault?.();
