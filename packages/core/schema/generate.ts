@@ -10,6 +10,7 @@ import type {
 } from "../models/JsonSchema";
 
 import uniqBy from "lodash/uniqBy";
+import isNaN from "../../../utils/isNaN";
 
 type Properties = { [property: string]: JsonSchema };
 
@@ -42,8 +43,8 @@ export class Generate<T extends JsonSchema = JsonSchema> {
     constructor(
         protected deriveOptions: (
             value: any,
-            path: string[]
-        ) => <T extends CONSTANTS>(prop: T) => ExpectedResponse[T]
+            path: (string| number)[]
+        ) => <T extends CONSTANTS = CONSTANTS>(prop: T) => undefined | ExpectedResponse[T]
     ) {}
 
     protected get Constructor(): typeof Generate {
@@ -52,8 +53,8 @@ export class Generate<T extends JsonSchema = JsonSchema> {
 
     protected getTypedClass(type: string) {
         switch (type) {
-            case "string":
-                return this.Constructor.StringSchema;
+            case "null":
+                return this.Constructor.NullSchema;
             case "number":
                 return this.Constructor.NumberSchema;
             case "boolean":
@@ -62,25 +63,25 @@ export class Generate<T extends JsonSchema = JsonSchema> {
                 return this.Constructor.ObjectSchema;
             case "array":
                 return this.Constructor.ArraySchema;
-            case "null":
-                return this.Constructor.NullSchema;
+            case "string":
+                default:
+                return this.Constructor.StringSchema;
+                
         }
-
-        throw new Error(`Unhandled type: "${type}"`);
     }
 
-    protected getTypedInstance(type: string) {
+    protected getTypedInstance(type: unknown) {
+        const normalizedType = typeof type === "string" ? type : type === null ? "null" : Array.isArray(type) ? "array" : typeof type;
         // TODO: infer type correctly
-        const Class = this.getTypedClass(type);
+        const Class = this.getTypedClass(normalizedType);
         return new Class(this.deriveOptions);
     }
 
     protected preparePath(tail: string | string[], head = "") {
-        const $id = [head].concat(tail).join("/");
-        const normalizedHead = head ? [head] : [];
+        const $id = [head].concat(tail).filter(Boolean).filter(Boolean).join("/");
         return {
-            $id: normalizedHead.concat(tail).join("/"),
-            path: $id.replaceAll(/#\/properties\//g, "").split("/"),
+            $id,
+            path: $id.replaceAll(/#|properties|items\/?/g, "").split("/").filter(Boolean).map((node) => isNaN(node) ? node : +node),
         };
     }
 
@@ -134,14 +135,14 @@ export class Generate<T extends JsonSchema = JsonSchema> {
         );
     }
 
-    parse(object: object) {
-        return this.getTypedInstance("object").prepareSchema(object, "");
+    parse(object: unknown) {
+        return this.getTypedInstance(object).prepareSchema(object, '', '#');
     }
 }
 
 class GenerateObjectSchema extends Generate<ObjectJsonSchema> {
     prepareSchema(value: object, key: string, head?: string): ObjectJsonSchema {
-        const { $id, path } = this.preparePath(["#", "properties", key], head);
+        const { $id, path } = this.preparePath([key, "properties"], head);
         const deriveOptions = this.deriveOptions(value, path);
 
         const objectSchema: ObjectJsonSchema = {
@@ -173,7 +174,7 @@ class GenerateArraySchema extends Generate<ArrayJsonSchema> {
     }
 
     prepareSchema(value: any[], key: string, head?: string): ArrayJsonSchema {
-        const { $id, path } = this.preparePath(key, head);
+        const { $id, path } = this.preparePath(["items", key], head);
         const items = this.parseArray(value, $id);
 
         const deriveOptions = this.deriveOptions(value, path);

@@ -55,6 +55,9 @@ importers:
 
   packages/playground/react:
     dependencies:
+      '@binaryoperations/json-forms-core':
+        specifier: workspace:^
+        version: link:../../core
       react:
         specifier: ^18.3.1
         version: 18.3.1
