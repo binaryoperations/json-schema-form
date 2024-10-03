@@ -1,9 +1,9 @@
 import {  FormEvent,  useMemo, useReducer, } from 'react';
 
 import {Generate} from "@binaryoperations/json-forms-core/schema/generate";
-import { Input } from './components/Input';
-import { Button } from './components/Button';
-import { Form } from './components/Form';
+import { Input } from '../../components/Input';
+import { Button } from '../../components/Button';
+import { Form } from '../../components/Form';
 
 const onSubmit = (e: FormEvent) => {
   e?.preventDefault?.();
@@ -20,9 +20,8 @@ const reducer = (state: NonNullable<object>, action: { type: string, payload: un
 };
 
 const makeSchema = (values: unknown) => {
-  return new Generate((value, options) => {
-    return (prop) => {
-      console.log(prop, JSON.stringify(value), options);
+  return new Generate(() => {
+    return () => {
       return undefined
     };
   }).parse(values);
@@ -58,9 +57,9 @@ function App() {
 
   return (
     <Form onSubmit={onSubmit}>
-      <Input label='Name' name="name" onChange={(e) => handleChange(e.target.name, e.target.value)} />
-      <Input label='Last Name' name="last_name" onChange={(e) => handleChange(e.target.name, e.target.value)}  />
-      <Input label='Email' name="email" onChange={(e) => handleChange(e.target.name, e.target.value)}  />
+      <div><Input label='Name' name="name" onChange={(e) => handleChange(e.target.name, e.target.value)} /></div>
+      <div><Input label='Last Name' name="last_name" onChange={(e) => handleChange(e.target.name, e.target.value)}  /></div>
+      <div><Input label='Email' name="email" onChange={(e) => handleChange(e.target.name, e.target.value)}  /></div>
       <Button onSubmit={onSubmit}>Hello World</Button>
     </Form>
   )
