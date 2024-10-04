@@ -1,3 +1,4 @@
+import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
 import {
   RuleEffect,
   RuleOperator,
@@ -8,6 +9,7 @@ import {
 export type FormConfig = {
   data: object;
   uiSchema?: UiSchema;
+  schema?: JsonSchema;
 };
 
 export const signinForm: FormConfig = {
@@ -24,7 +26,7 @@ export const newsLetterForm: FormConfig = {
   },
 };
 
-export const customer: FormConfig = {
+const customerData: FormConfig = {
   data: {
     email: 'forms@binaryoperation.io', // email field
     firstName: 'Form', // string
@@ -44,6 +46,77 @@ export const customer: FormConfig = {
       country: 'United Kingdom',
     },
   },
+  schema: {
+    type: 'object',
+    definitions: {
+      phoneWithCountryCode: {
+        type: 'object',
+        properties: {
+          countryCode: { type: 'number' },
+          number: { type: 'number' },
+          extension: { type: 'number' },
+        },
+        required: ['number', 'countryCode'],
+      },
+      phoneNumber: { type: 'number' },
+      address: {
+        type: 'object',
+        properties: {
+          lineOne: { type: 'string' },
+          lineTwo: { type: 'string' },
+          city: { type: 'string' },
+          postalCode: { type: 'string' },
+          country: { type: 'string' },
+        },
+        required: ['lineOne', 'city', 'postalCode', 'country'],
+      },
+    },
+    properties: {
+      email: { type: 'string' },
+      firstName: { type: 'string' },
+      lastName: { type: 'string' },
+      phone: {
+        format: 'phoneWithCountryCode',
+        oneOf: [
+          { $ref: '#/definitions/phoneNumber' },
+          { $ref: '#/definitions/phoneWithCountryCode' },
+        ],
+      },
+      dateOfBirth: {
+        type: 'string',
+        format: 'date',
+      },
+      computedAge: {
+        type: 'number',
+        exclusiveMinimum: 18,
+        readOnly: true,
+      },
+      rating: {
+        type: 'number',
+        minimum: 0,
+        maximum: 7,
+      },
+      gender: {
+        type: 'string',
+        enum: ['male', 'female'],
+      },
+      website: {
+        type: 'string',
+        format: 'url',
+      },
+      interests: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['football', 'basketball', 'volleyball'],
+        },
+      },
+    },
+  },
+};
+
+export const customer: FormConfig = {
+  ...customerData,
   uiSchema: {
     type: UiNodeType.ROWS, // fieldsets | fieldset | columns | rows | control
     // order: 0,
@@ -88,25 +161,7 @@ export const customer: FormConfig = {
 };
 
 export const customerWizard: FormConfig = {
-  data: {
-    email: 'forms@binaryoperation.io', // email field
-    firstName: 'Form', // string
-    lastName: 'Hero', // string
-    phone: '007', // custom?
-    dateOfBirth: '', // date input/ date picker
-    computedAge: '', // computed field? hide if date of birth is invalid
-    rating: '', // would be a number // slider/number field + steps
-    gender: '', // options // render select/radio-buttons
-    website: '', // url field,
-    interests: [], // options // render multiselect/combobox/checkbox,
-    address: {
-      lineOne: '21 Bakersstreet',
-      lineTwo: '',
-      city: 'London',
-      postalCode: '',
-      country: 'United Kingdom',
-    },
-  },
+  ...customerData,
   uiSchema: {
     type: UiNodeType.FIELD_SETS, // fieldsets | fieldset | columns | rows | control
     // order: 0,

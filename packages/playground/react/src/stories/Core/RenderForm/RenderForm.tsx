@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  Parser,
+import UiSchemaPrepare, {
   UiStore,
 } from '@binaryoperations/json-forms-core/schema/ui.schema';
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
@@ -28,6 +27,7 @@ import {
   Row,
 } from '@binaryoperations/json-forms-react/components/Semantic';
 import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
+import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
 
 // const onSubmit = (e: FormEvent) => {
 //   e?.preventDefault?.();
@@ -39,8 +39,8 @@ const { Provider: FormDataProvider, useContextValue: useFormDataContext } =
 
 const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } =
   createFastContext<UiStore>();
-const parseUISchema = (uischema: UiSchema) => {
-  return new Parser().parse(uischema);
+const parseUISchema = (uischema: UiSchema, schema: JsonSchema) => {
+  return UiSchemaPrepare.parse(uischema, schema);
 };
 
 const defaultStyles = {
@@ -71,7 +71,7 @@ const RenderControl = (props: { id: string }) => {
   });
 
   const value = useFormDataContext(
-    (data) => resolvers.resolveData(data, control.path ?? control.scope),
+    (data) => resolvers.resolvePath(data, control.path ?? control.scope),
     shallowCompare
   );
 
@@ -151,8 +151,11 @@ const RenderChildren = (props: { id: string }) => {
   // )
 };
 
-function App(props: { uiSchema: UiSchema; data: object }) {
-  const store = useMemo(() => parseUISchema(props.uiSchema), [props.uiSchema]);
+function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
+  const store = useMemo(
+    () => parseUISchema(props.uiSchema, props.schema),
+    [props.schema, props.uiSchema]
+  );
   return (
     <FormDataProvider value={props.data}>
       <UiStoreContextProvider value={store}>

@@ -7,7 +7,7 @@ import type {
   NumberJsonSchema,
   ObjectJsonSchema,
   StringJsonSchema,
-} from '../models/JsonSchema';
+} from '../../models/JsonSchema';
 
 import uniqBy from 'lodash/uniqBy';
 import extractSegmentsFromPath from '@binaryoperations/json-forms-internals/extractSegmentsFromPath';
@@ -30,25 +30,35 @@ type ExpectedResponse = {
   [CONSTANTS.NULL]: Partial<Omit<StringJsonSchema, BaseKeys>>;
 };
 
-export class Generate<T extends JsonSchema = JsonSchema> {
-  static StringSchema: typeof Generate<StringJsonSchema>;
-  static NumberSchema: typeof Generate<NumberJsonSchema>;
-  static BooleanSchema: typeof Generate<BooleanJsonSchema>;
-  static NullSchema: typeof Generate<NullJsonSchema>;
-  static ArraySchema: typeof Generate<ArrayJsonSchema>;
-  static ObjectSchema: typeof Generate<ObjectJsonSchema>;
+type DeriveOptions = (
+  value: any,
+  path: (string | number)[]
+) => <T extends CONSTANTS = CONSTANTS>(
+  prop: T
+) => undefined | ExpectedResponse[T];
 
-  constructor(
-    protected deriveOptions: (
-      value: any,
-      path: (string | number)[]
-    ) => <T extends CONSTANTS = CONSTANTS>(
-      prop: T
-    ) => undefined | ExpectedResponse[T]
-  ) {}
+export class JsonSchemaGenerator<T extends JsonSchema = JsonSchema> {
+  static StringSchema: typeof JsonSchemaGenerator<StringJsonSchema>;
+  static NumberSchema: typeof JsonSchemaGenerator<NumberJsonSchema>;
+  static BooleanSchema: typeof JsonSchemaGenerator<BooleanJsonSchema>;
+  static NullSchema: typeof JsonSchemaGenerator<NullJsonSchema>;
+  static ArraySchema: typeof JsonSchemaGenerator<ArrayJsonSchema>;
+  static ObjectSchema: typeof JsonSchemaGenerator<ObjectJsonSchema>;
 
-  protected get Constructor(): typeof Generate {
-    return this.constructor as typeof Generate;
+  constructor(protected deriveOptions: DeriveOptions) {}
+
+  protected get Constructor(): typeof JsonSchemaGenerator {
+    return this.constructor as typeof JsonSchemaGenerator;
+  }
+
+  private static construct(deriveOptions?: DeriveOptions) {
+    deriveOptions = deriveOptions ?? (() => () => undefined);
+    return new this(deriveOptions);
+  }
+
+  static generate(object: unknown, deriveOptions?: DeriveOptions) {
+    const instance = this.construct(deriveOptions);
+    return instance.getTypedInstance(object).prepareSchema(object, '', '#');
   }
 
   protected getTypedClass(type: string) {
@@ -80,7 +90,7 @@ export class Generate<T extends JsonSchema = JsonSchema> {
             : typeof type;
     // TODO: infer type correctly
     const Class = this.getTypedClass(normalizedType);
-    return new Class(this.deriveOptions);
+    return Class.construct(this.deriveOptions);
   }
 
   protected preparePath(tail: string | string[], head = '') {
@@ -136,13 +146,9 @@ export class Generate<T extends JsonSchema = JsonSchema> {
       }" prepareSchema method is not defined on this class`
     );
   }
-
-  parse(object: unknown) {
-    return this.getTypedInstance(object).prepareSchema(object, '', '#');
-  }
 }
 
-class GenerateObjectSchema extends Generate<ObjectJsonSchema> {
+class JsconSchemaProcesserObjectSchema extends JsonSchemaGenerator<ObjectJsonSchema> {
   prepareSchema(value: object, key: string, head?: string): ObjectJsonSchema {
     const { $id, path } = this.preparePath([key, 'properties'], head);
     const deriveOptions = this.deriveOptions(value, path);
@@ -159,7 +165,7 @@ class GenerateObjectSchema extends Generate<ObjectJsonSchema> {
   }
 }
 
-class GenerateArraySchema extends Generate<ArrayJsonSchema> {
+class JsconSchemaProcesserArraySchema extends JsonSchemaGenerator<ArrayJsonSchema> {
   private parseArray(value: any[], head: string) {
     if (!value.length) return value;
 
@@ -191,7 +197,7 @@ class GenerateArraySchema extends Generate<ArrayJsonSchema> {
   }
 }
 
-class GenerateStringSchema extends Generate<StringJsonSchema> {
+class JsconSchemaProcesserStringSchema extends JsonSchemaGenerator<StringJsonSchema> {
   prepareSchema(value: string, key: string, head?: string): StringJsonSchema {
     const { $id, path } = this.preparePath(key, head);
 
@@ -205,7 +211,7 @@ class GenerateStringSchema extends Generate<StringJsonSchema> {
   }
 }
 
-class GenerateNumberSchema extends Generate<NumberJsonSchema> {
+class JsconSchemaProcesserNumberSchema extends JsonSchemaGenerator<NumberJsonSchema> {
   prepareSchema(value: number, key: string, head?: string): NumberJsonSchema {
     const { $id, path } = this.preparePath(key, head);
 
@@ -219,7 +225,7 @@ class GenerateNumberSchema extends Generate<NumberJsonSchema> {
   }
 }
 
-class GenerateBooleanSchema extends Generate<BooleanJsonSchema> {
+class JsconSchemaProcesserBooleanSchema extends JsonSchemaGenerator<BooleanJsonSchema> {
   prepareSchema(
     _value: boolean,
     key: string,
@@ -234,7 +240,7 @@ class GenerateBooleanSchema extends Generate<BooleanJsonSchema> {
   }
 }
 
-class GenerateNullSchema extends Generate<NullJsonSchema> {
+class JsconSchemaProcesserNullSchema extends JsonSchemaGenerator<NullJsonSchema> {
   prepareSchema(value: any[], key: string, head?: string): NullJsonSchema {
     const { $id, path } = this.preparePath(key, head);
     const deriveOptions = this.deriveOptions(value, path);
@@ -247,9 +253,9 @@ class GenerateNullSchema extends Generate<NullJsonSchema> {
   }
 }
 
-Generate.StringSchema = GenerateStringSchema;
-Generate.NumberSchema = GenerateNumberSchema;
-Generate.BooleanSchema = GenerateBooleanSchema;
-Generate.ObjectSchema = GenerateObjectSchema;
-Generate.ArraySchema = GenerateArraySchema;
-Generate.NullSchema = GenerateNullSchema;
+JsonSchemaGenerator.StringSchema = JsconSchemaProcesserStringSchema;
+JsonSchemaGenerator.NumberSchema = JsconSchemaProcesserNumberSchema;
+JsonSchemaGenerator.BooleanSchema = JsconSchemaProcesserBooleanSchema;
+JsonSchemaGenerator.ObjectSchema = JsconSchemaProcesserObjectSchema;
+JsonSchemaGenerator.ArraySchema = JsconSchemaProcesserArraySchema;
+JsonSchemaGenerator.NullSchema = JsconSchemaProcesserNullSchema;

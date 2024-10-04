@@ -1,6 +1,6 @@
 import { FormEvent, useMemo, useReducer } from 'react';
 
-import { Generate } from '@binaryoperations/json-forms-core/schema/logical.schema';
+import JsonSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
 import { Button } from '@binaryoperations/json-forms-react/components/Button';
 import { Form } from '@binaryoperations/json-forms-react/components/Form';
@@ -22,11 +22,11 @@ const reducer = (
 };
 
 const makeSchema = (values: unknown) => {
-  return new Generate(() => {
+  return JsonSchema.generate(values, () => {
     return () => {
       return undefined;
     };
-  }).parse(values);
+  });
 };
 
 function App() {
