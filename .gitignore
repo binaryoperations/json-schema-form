@@ -25,6 +25,9 @@ node_modules/
 # Mac
 .DS_Store
 
+# Turborepo
+.turbo
+
 
 # Output of 'npm pack'
 *.tgz

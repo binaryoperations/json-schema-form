@@ -18,11 +18,14 @@
       "resolveJsonModule": true,
       "skipLibCheck": true,
       "strict": true,
-      "target": "esnext"
+      "target": "esnext",
     },
     "include": [
       "**/*.ts",
       "**/*.tsx",
     ],
+    "exclude": [
+      "**/playground/**"
+    ]
   }
   

@@ -18,4 +18,4 @@ const meta = {
 export default meta;
 
 type Story = StoryObj<typeof meta>;
-export const GenerateSchema: Story = {}
+export const GenerateSchema: Story = {};
