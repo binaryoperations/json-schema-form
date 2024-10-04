@@ -21,12 +21,14 @@
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "scripts": {
+    "preinstall": "npx only-allow pnpm",
     "test": "echo \"Error: no test specified\" && exit 1",
     "check-types": "tsc --noEmit",
     "lint": "turbo run lint",
     "lint:fix": "pnpm lint --fix"
   },
   "devDependencies": {
+    "@changesets/cli": "^2.27.9",
     "@eslint/js": "^9.9.0",
     "@stylistic/eslint-plugin": "^2.8.0",
     "@types/lodash": "^4.17.7",
