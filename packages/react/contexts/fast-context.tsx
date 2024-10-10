@@ -13,7 +13,7 @@ import {
 
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 import { usePrevious } from '../hooks/usePrevious';
-import { shallowCompare } from '../../internals/compare';
+import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
 import { useLatest } from '../hooks';
 
 type StoreDataType = NonNullable<object>;

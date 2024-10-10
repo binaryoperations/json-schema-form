@@ -26,41 +26,41 @@ type RuleSet = {
 };
 
 type Rules = RuleSet & {
-  effect: RuleEffect;
+  effect: `${RuleEffect}`;
 };
 
 type ChildNode<T> = T & {
   order?: number;
 };
 
-export interface UiNodeVase {
-  type: UiNodeType[keyof UiNodeType];
+export interface UiNodeBase {
+  type: `${UiNodeType}`;
   rules?: Rules;
   id?: string;
 }
 
-export interface FieldsetsNode extends UiNodeVase {
+export interface FieldsetsNode extends UiNodeBase {
   type: UiNodeType.FIELD_SETS;
   nodes: ChildNode<FieldsetNode>[];
 }
 
-export interface FieldsetNode extends UiNodeVase {
+export interface FieldsetNode extends UiNodeBase {
   type: UiNodeType.FIELD_SET;
   label?: string;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
-export interface RowsNode extends UiNodeVase {
+export interface RowsNode extends UiNodeBase {
   type: UiNodeType.ROWS;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
-export interface ColumnsNode extends UiNodeVase {
+export interface ColumnsNode extends UiNodeBase {
   type: UiNodeType.COLUMNS;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
-export interface ControlNode<T extends object = object> extends UiNodeVase {
+export interface ControlNode<T extends object = object> extends UiNodeBase {
   type: UiNodeType.CONTROL;
   label?: string;
   scope: string;

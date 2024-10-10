@@ -1,11 +1,12 @@
-import { useId, type FC } from 'react';
+import { createTextControl } from '@binaryoperations/json-forms-core/controls/createControl';
+import { useId } from 'react';
 
 type HtmlInputProps = JSX.IntrinsicElements['input'];
 export interface InputProps extends HtmlInputProps {
   label?: string;
 }
 
-export const Input: FC<InputProps> = (props) => {
+export const Input = createTextControl((props: InputProps) => {
   const inputId = useId();
   const { label: inputLabel, id = inputId, ...inputProps } = props;
 
@@ -15,4 +16,4 @@ export const Input: FC<InputProps> = (props) => {
       <input {...inputProps} id={id} />
     </>
   );
-};
+});

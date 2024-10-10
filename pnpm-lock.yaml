@@ -189,6 +189,12 @@ importers:
 
   packages/react:
     dependencies:
+      '@binaryoperations/json-forms-core':
+        specifier: workspace:^
+        version: link:../core
+      '@binaryoperations/json-forms-internals':
+        specifier: workspace:^
+        version: link:../internals
       use-sync-external-store:
         specifier: ^1.2.2
         version: 1.2.2(react@18.3.1)

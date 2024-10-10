@@ -77,7 +77,7 @@ const customerData: FormConfig = {
       lastName: { type: 'string' },
       phone: { $ref: '#/definitions/phoneWithCountryCode' },
       dateOfBirth: {
-        type: 'number',
+        type: 'string',
         format: 'date',
       },
       computedAge: {
@@ -133,7 +133,11 @@ export const customer: FormConfig = {
         ],
       },
       { type: UiNodeType.CONTROL, scope: '#/properties/dateOfBirth' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/computedAge' },
+      {
+        type: UiNodeType.CONTROL,
+        scope: '#/properties/computedAge',
+        options: { readOnly: true },
+      },
       { type: UiNodeType.CONTROL, scope: '#/properties/rating' },
       { type: UiNodeType.CONTROL, scope: '#/properties/gender' },
       { type: UiNodeType.CONTROL, scope: '#/properties/website' },
@@ -200,6 +204,7 @@ export const customerWizard: FormConfig = {
               {
                 type: UiNodeType.CONTROL,
                 scope: '#/properties/computedAge',
+                options: { readOnly: true },
                 rules: {
                   effect: RuleEffect.HIDE,
                   operator: RuleOperator.AND,

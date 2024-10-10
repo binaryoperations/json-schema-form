@@ -1,10 +1,11 @@
-import { memo, useCallback, useMemo, useState } from 'react';
+import { FC, memo, useCallback, useMemo, useState } from 'react';
 
 import UiSchemaPrepare, {
   UiStore,
 } from '@binaryoperations/json-forms-core/schema/ui.schema';
 import JsonSchemaPrepare from '@binaryoperations/json-forms-core/schema/logical.schema';
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
+import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
 // import { Button } from '@binaryoperations/json-forms-react/components/Button';
 import { Form } from '@binaryoperations/json-forms-react/components/Form';
 import { Radio } from '@binaryoperations/json-forms-react/components/Radio';
@@ -21,8 +22,11 @@ import {
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 
 import { createFastContext } from '@binaryoperations/json-forms-react/contexts/fast-context';
-import { set } from '@binaryoperations/json-forms-internals/object';
-import shallowCompare from '@binaryoperations/json-forms-internals/compare';
+
+import {
+  set,
+  shallowCompare,
+} from '@binaryoperations/json-forms-internals/object';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 import {
   Column,
@@ -30,6 +34,7 @@ import {
 } from '@binaryoperations/json-forms-react/components/Semantic';
 import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
 import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
+import { cast } from '@binaryoperations/json-forms-internals/cast';
 
 // const onSubmit = (e: FormEvent) => {
 //   e?.preventDefault?.();
@@ -65,7 +70,7 @@ const controlTypes = {
   datetime: DateTime,
   time: Time,
   string: Input,
-  number: Input,
+  number: NumberComponent,
   checkbox: Checkbox,
   radio: Radio,
 };
@@ -91,56 +96,62 @@ function useControlValue(path: string) {
   ];
 }
 
-const Unhandled = (props: { controlType: any; scope: string }) => {
+const Unhandled = (props: { scope: string }) => {
   const [value] = useControlValue(props.scope);
   return (
     <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
       value: {JSON.stringify(value)} <br />
-      controlType:{' '}
-      {JSON.stringify(props.controlType) || typeof props.controlType} <br />
       scope: {JSON.stringify(props.scope)} <br />
     </div>
   );
 };
 
-const RenderVariadicControl = (props: {
-  path: string;
-  type: keyof typeof controlTypes;
-}) => {
-  const Component = controlTypes[props.type];
-
-  const [value, setValue] = useControlValue(props.path);
-
-  if (!Component) return null;
-  return (
-    <Component
-      value={(value ?? '') as any}
-      onChange={(e) => {
-        setValue(e.target.value);
-      }}
-    />
-  );
-};
-
 const RenderControl = (props: { id: string }) => {
+  const Control = useUiStoreContext((store) => {
+    const ranked = Object.values(controlTypes).reduce(
+      (lastControl, control) => {
+        const rank = control.is(
+          store.uiContext.deriveNodeSchema(store.schema, props.id)!,
+          store.uiContext.getNode(props.id),
+          { rootSchema: store.schema }
+        );
+
+        if (!rank) return lastControl;
+
+        if (lastControl && rank in lastControl) return lastControl;
+
+        return {
+          ...lastControl,
+          ...Object.fromEntries([[rank, control.Control]]),
+        };
+      },
+      cast<null | Record<string, FC>>(null)
+    );
+
+    if (!ranked) return;
+
+    const maxRank = Math.max(...Object.keys(ranked).map(Number));
+    return ranked?.[maxRank];
+  }, shallowCompare);
+
   const control = useUiStoreContext((store) => {
     return store.uiContext.getNode(props.id) as ControlNode;
   }, shallowCompare);
 
-  const controlType = useUiStoreContext((store) => {
-    const schema = store.uiContext.deriveNodeSchema(store.schema, props.id);
-    if (!schema) return;
-    return schema.type;
-  });
+  const path = control.path ?? control.scope;
+  const [value, setValue] = useControlValue(path);
 
-  if (!controlType || controlType === 'null')
-    return <Unhandled controlType={controlType} scope={control.scope} />;
+  if (!Control) return <Unhandled scope={control.scope} />;
 
   return (
     <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
-      <RenderVariadicControl
-        path={control.path ?? control.scope}
-        type={controlType as keyof typeof controlTypes}
+      <Control
+        {...control.options}
+        label={control.scope}
+        value={(value ?? '') as any}
+        onChange={(e) => {
+          setValue(e.target.value);
+        }}
       />
     </div>
   );
