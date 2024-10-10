@@ -1,6 +1,5 @@
 import orderBy from 'lodash/orderBy';
 import { UiSchema, FieldsetNode } from '../../models/UiSchema';
-import { JsonSchema } from '../../models';
 import { UiStore } from './UiStore';
 
 export class UiSchemaParser {
@@ -8,11 +7,14 @@ export class UiSchemaParser {
 
   store!: UiStore;
 
-  constructor(private schema: JsonSchema) {
-    this.store = new UiStore(this.schema);
+  constructor() {
+    this.store = new UiStore();
   }
 
-  private walk(uiSchema: UiSchema | FieldsetNode, idRoot: string) {
+  // reconsider:
+  // Do I need to prepare the tree in ahead-of-time?
+  // can the child nodes be derived just-in-time?
+  private traverse(uiSchema: UiSchema | FieldsetNode, idRoot: string) {
     const nextCount = ++this.counter;
     const id = idRoot + '/' + (uiSchema.id ?? nextCount);
 
@@ -23,7 +25,7 @@ export class UiSchemaParser {
 
       const nodes = uiSchema.nodes.filter(Boolean);
       for (const nextUiSchema of nodes) {
-        treeNodes.push(this.walk(nextUiSchema, id));
+        treeNodes.push(this.traverse(nextUiSchema, id));
       }
 
       this.store.tree[id] = orderBy(
@@ -36,11 +38,11 @@ export class UiSchemaParser {
     return id;
   }
 
-  static parse(uiSchema: UiSchema, schema: JsonSchema) {
+  static parse(uiSchema: UiSchema) {
     const ClassConstructor: typeof UiSchemaParser = Object.assign(this);
-    const parser = new ClassConstructor(schema);
+    const parser = new ClassConstructor();
 
-    const id = parser.walk(uiSchema, 'root');
+    const id = parser.traverse(uiSchema, 'root');
 
     parser.store.setRoot(id);
     const store = parser.store;

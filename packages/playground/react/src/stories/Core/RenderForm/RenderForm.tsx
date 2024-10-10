@@ -1,14 +1,15 @@
-import { useMemo } from 'react';
+import { memo, useCallback, useMemo, useState } from 'react';
 
 import UiSchemaPrepare, {
   UiStore,
 } from '@binaryoperations/json-forms-core/schema/ui.schema';
+import JsonSchemaPrepare from '@binaryoperations/json-forms-core/schema/logical.schema';
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
 // import { Button } from '@binaryoperations/json-forms-react/components/Button';
 import { Form } from '@binaryoperations/json-forms-react/components/Form';
 import { Radio } from '@binaryoperations/json-forms-react/components/Radio';
 import {
-  Date,
+  Date as DateComponent,
   DateTime,
   Time,
 } from '@binaryoperations/json-forms-react/components/DateTime';
@@ -20,6 +21,7 @@ import {
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 
 import { createFastContext } from '@binaryoperations/json-forms-react/contexts/fast-context';
+import { set } from '@binaryoperations/json-forms-internals/object';
 import shallowCompare from '@binaryoperations/json-forms-internals/compare';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 import {
@@ -34,13 +36,24 @@ import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema'
 //   console.log(e, e.target)
 // }
 
-const { Provider: FormDataProvider, useContextValue: useFormDataContext } =
-  createFastContext<object>();
+const {
+  Provider: FormDataProvider,
+  useStoreRef: useStoreContextRef,
+  useContextValue: useFormDataContext,
+} = createFastContext<object>();
 
 const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } =
-  createFastContext<UiStore>();
-const parseUISchema = (uischema: UiSchema, schema: JsonSchema) => {
-  return UiSchemaPrepare.parse(uischema, schema);
+  createFastContext<{
+    uiContext: UiStore;
+    schema: JsonSchema;
+  }>();
+
+const parseUISchema = (uischema: UiSchema) => {
+  return UiSchemaPrepare.parse(uischema);
+};
+
+const parseSchema = (schema: JsonSchema) => {
+  return JsonSchemaPrepare.parse(schema);
 };
 
 const defaultStyles = {
@@ -48,37 +61,87 @@ const defaultStyles = {
 };
 
 const controlTypes = {
-  date: Date,
+  date: DateComponent,
   datetime: DateTime,
   time: Time,
-  text: Input,
+  string: Input,
+  number: Input,
   checkbox: Checkbox,
   radio: Radio,
 };
 
+function useControlValue(path: string) {
+  const value = useFormDataContext(
+    (data) => resolvers.resolvePath(data, path),
+    shallowCompare
+  );
+
+  const store = useStoreContextRef();
+
+  return [
+    value,
+    useCallback(
+      (value: unknown) => {
+        store.set((oldValue) => {
+          return set(oldValue, path, value);
+        });
+      },
+      [path, store]
+    ),
+  ];
+}
+
+const Unhandled = (props: { controlType: any; scope: string }) => {
+  const [value] = useControlValue(props.scope);
+  return (
+    <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
+      value: {JSON.stringify(value)} <br />
+      controlType:{' '}
+      {JSON.stringify(props.controlType) || typeof props.controlType} <br />
+      scope: {JSON.stringify(props.scope)} <br />
+    </div>
+  );
+};
+
 const RenderVariadicControl = (props: {
-  id: string;
+  path: string;
   type: keyof typeof controlTypes;
 }) => {
   const Component = controlTypes[props.type];
+
+  const [value, setValue] = useControlValue(props.path);
+
   if (!Component) return null;
-  return <Component />;
+  return (
+    <Component
+      value={(value ?? '') as any}
+      onChange={(e) => {
+        setValue(e.target.value);
+      }}
+    />
+  );
 };
 
 const RenderControl = (props: { id: string }) => {
   const control = useUiStoreContext((store) => {
-    return store.getNode(props.id) as ControlNode;
+    return store.uiContext.getNode(props.id) as ControlNode;
+  }, shallowCompare);
+
+  const controlType = useUiStoreContext((store) => {
+    const schema = store.uiContext.deriveNodeSchema(store.schema, props.id);
+    if (!schema) return;
+    return schema.type;
   });
 
-  const value = useFormDataContext(
-    (data) => resolvers.resolvePath(data, control.path ?? control.scope),
-    shallowCompare
-  );
+  if (!controlType || controlType === 'null')
+    return <Unhandled controlType={controlType} scope={control.scope} />;
 
   return (
     <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
-      <RenderVariadicControl id={props.id} type='text' />
-      {value || control.scope}
+      <RenderVariadicControl
+        path={control.path ?? control.scope}
+        type={controlType as keyof typeof controlTypes}
+      />
     </div>
   );
 };
@@ -123,18 +186,18 @@ const types = {
   [UiNodeType.FIELD_SET]: RenderFieldSet,
 };
 
-const RenderVariadic = (props: { id: string }) => {
+const RenderVariadic = memo((props: { id: string }) => {
   const nodeType = useUiStoreContext((store) => {
-    return store.getNodeType(props.id);
+    return store.uiContext.getNodeType(props.id);
   });
 
   const Renderer = types[nodeType];
   return <Renderer id={props.id} />;
-};
+});
 
-const RenderChildren = (props: { id: string }) => {
+const RenderChildren = memo((props: { id: string }) => {
   const nodes = useUiStoreContext((store) => {
-    return store.getChildren(props.id);
+    return store.uiContext.getChildren(props.id);
   }, shallowCompare).map((node) => {
     return <RenderVariadic key={node} id={node} />;
   });
@@ -149,16 +212,34 @@ const RenderChildren = (props: { id: string }) => {
   //     <Button onSubmit={onSubmit}>Hello World</Button>
   //   </Form>
   // )
-};
+});
 
 function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
-  const store = useMemo(
-    () => parseUISchema(props.uiSchema, props.schema),
-    [props.schema, props.uiSchema]
+  const [lastUpdatedAt, setLastUpdatedAt] = useState(() => Date.now());
+  const schema = useMemo(() => {
+    console.log(lastUpdatedAt);
+    return parseSchema(JSON.parse(JSON.stringify(props.schema)));
+  }, [props.schema, lastUpdatedAt]);
+  const uiContext = useMemo(() => {
+    console.log(lastUpdatedAt);
+    return parseUISchema(JSON.parse(JSON.stringify(props.uiSchema)));
+  }, [props.uiSchema, lastUpdatedAt]);
+
+  const onChange = useCallback(() => {
+    setLastUpdatedAt(Date.now());
+  }, []);
+
+  const context = useMemo(
+    () => ({
+      schema,
+      uiContext,
+    }),
+    [schema, uiContext]
   );
+
   return (
-    <FormDataProvider value={props.data}>
-      <UiStoreContextProvider value={store}>
+    <FormDataProvider value={props.data} onChange={onChange}>
+      <UiStoreContextProvider value={context}>
         <Form>
           <Row style={defaultStyles}>
             <RenderChildren id='root' />

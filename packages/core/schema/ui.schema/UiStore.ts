@@ -1,18 +1,18 @@
 import { cast } from '@binaryoperations/json-forms-internals/cast';
-import { JsonSchema } from '../../models';
+import { ControlJsonSchema, JsonSchema } from '../../models';
 import {
   UiSchema,
   FieldsetNode,
   UiNodeType,
   ControlNode,
 } from '../../models/UiSchema';
-import { resolvePath } from '@binaryoperations/json-forms-internals/resolvers';
+import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 
 export class UiStore {
   keyMap: Record<string, UiSchema | FieldsetNode> = {};
   tree: Record<string, string[]> = {};
 
-  constructor(private schema: JsonSchema) {}
+  constructor() {}
 
   getChildren(key: string) {
     return this.tree[key];
@@ -53,11 +53,11 @@ export class UiStore {
     this.tree = Object.freeze(this.tree);
   }
 
-  deriveNodeSchema(key: string) {
+  deriveNodeSchema(schema: JsonSchema, key: string) {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNode>(this.getNode(key));
 
-    return resolvePath(this.schema, node.scope);
+    return cast<ControlJsonSchema>(resolvers.resolveSchmea(schema, node.scope));
   }
 }

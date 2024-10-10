@@ -1,7 +1,10 @@
 import isEmpty from 'lodash/isEmpty';
-import extractSegmentsFromPath from './extractSegmentsFromPath';
+import {
+  extractSegmentsFromPath,
+  extractSchmeaSegmentsFromPath,
+} from './extractSegmentsFromPath';
 
-export const resolvePath = <T = any>(data: any, path: string): T => {
+function resolvePath<T = any>(data: any, path: string): T {
   if (isEmpty(path)) return data;
   if (!data) return data;
 
@@ -13,8 +16,23 @@ export const resolvePath = <T = any>(data: any, path: string): T => {
 
     return value[nextSegment];
   }, data);
-};
+}
+
+function resolveSchmea<T = any>(data: any, path: string): T {
+  if (isEmpty(path)) return data;
+  if (!data) return data;
+
+  const segments = extractSchmeaSegmentsFromPath(path);
+
+  return segments.reduce((value, nextSegment) => {
+    if (!value || !Object.prototype.hasOwnProperty.call(value, nextSegment))
+      return undefined;
+
+    return value[nextSegment];
+  }, data);
+}
 
 export default {
   resolvePath,
+  resolveSchmea,
 };

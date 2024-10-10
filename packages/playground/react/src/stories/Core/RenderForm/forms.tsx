@@ -53,7 +53,7 @@ const customerData: FormConfig = {
         type: 'object',
         properties: {
           countryCode: { type: 'number' },
-          number: { type: 'number' },
+          number: { $ref: '#/definitions/phoneNumber' },
           extension: { type: 'number' },
         },
         required: ['number', 'countryCode'],
@@ -75,15 +75,9 @@ const customerData: FormConfig = {
       email: { type: 'string' },
       firstName: { type: 'string' },
       lastName: { type: 'string' },
-      phone: {
-        format: 'phoneWithCountryCode',
-        oneOf: [
-          { $ref: '#/definitions/phoneNumber' },
-          { $ref: '#/definitions/phoneWithCountryCode' },
-        ],
-      },
+      phone: { $ref: '#/definitions/phoneWithCountryCode' },
       dateOfBirth: {
-        type: 'string',
+        type: 'number',
         format: 'date',
       },
       computedAge: {
@@ -111,6 +105,7 @@ const customerData: FormConfig = {
           enum: ['football', 'basketball', 'volleyball'],
         },
       },
+      address: { $ref: '#/definitions/address' },
     },
   },
 };
@@ -124,7 +119,19 @@ export const customer: FormConfig = {
       { type: UiNodeType.CONTROL, scope: '#/properties/email' },
       { type: UiNodeType.CONTROL, scope: '#/properties/firstName' },
       { type: UiNodeType.CONTROL, scope: '#/properties/lastName' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/phone' },
+      {
+        type: UiNodeType.COLUMNS,
+        nodes: [
+          {
+            type: UiNodeType.CONTROL,
+            scope: '#/properties/phone/properties/countryCode',
+          },
+          {
+            type: UiNodeType.CONTROL,
+            scope: '#/properties/phone/properties/number',
+          },
+        ],
+      },
       { type: UiNodeType.CONTROL, scope: '#/properties/dateOfBirth' },
       { type: UiNodeType.CONTROL, scope: '#/properties/computedAge' },
       { type: UiNodeType.CONTROL, scope: '#/properties/rating' },
@@ -176,7 +183,19 @@ export const customerWizard: FormConfig = {
               { type: UiNodeType.CONTROL, scope: '#/properties/email' },
               { type: UiNodeType.CONTROL, scope: '#/properties/firstName' },
               { type: UiNodeType.CONTROL, scope: '#/properties/lastName' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/phone' },
+              {
+                type: UiNodeType.COLUMNS,
+                nodes: [
+                  {
+                    type: UiNodeType.CONTROL,
+                    scope: '#/properties/phone/properties/countryCode',
+                  },
+                  {
+                    type: UiNodeType.CONTROL,
+                    scope: '#/properties/phone/properties/number',
+                  },
+                ],
+              },
               { type: UiNodeType.CONTROL, scope: '#/properties/dateOfBirth' },
               {
                 type: UiNodeType.CONTROL,

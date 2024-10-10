@@ -1,5 +1,5 @@
 import { ArrayJsonSchema, JsonSchema, ObjectJsonSchema } from '../../models';
-import { resolvePath } from '@binaryoperations/json-forms-internals/resolvers';
+import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 
 const arrayProperties: (keyof JsonSchema)[] = ['allOf', 'anyOf', 'oneOf'];
 const objectProperties: (keyof JsonSchema)[] = [
@@ -30,11 +30,11 @@ export class JsonSchemaParser {
   }
 
   private explodeRef(ref: string): JsonSchema {
-    const schema = resolvePath(this.rootSchema, ref);
+    const schema = resolvers.resolvePath(this.rootSchema, ref);
     if (!schema || typeof schema !== 'object' || Array.isArray(schema))
       throw new Error(`Invalid definition: "${ref}"`);
 
-    return schema;
+    return this.walk(schema);
   }
 
   walk(node: JsonSchema): JsonSchema {

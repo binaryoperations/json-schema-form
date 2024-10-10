@@ -1,9 +1,18 @@
 import isNaN from './isNaN';
 
-export default function extractSegmentsFromPath(path: string) {
+export function extractSegmentsFromPath(path: string) {
+  return extractSchmeaSegmentsFromPath(
+    path.replaceAll(/#|properties|items\/?/g, '')
+  );
+}
+
+export function extractSchmeaSegmentsFromPath(path: string) {
   return path
-    .replaceAll(/#|properties|items\/?/g, '')
+    .replaceAll(/#\/?/g, '')
     .split('/')
-    .filter(Boolean)
-    .map((node) => (isNaN(node) ? node : +node));
+    .reduce(
+      (nodes: (string | number)[], node) =>
+        !node ? nodes : nodes.concat(isNaN(node) ? node : +node),
+      []
+    );
 }

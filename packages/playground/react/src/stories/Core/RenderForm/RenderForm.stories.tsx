@@ -24,6 +24,7 @@ export const Customer: Story = {
   args: {
     uiSchema: customer.uiSchema!,
     data: customer.data!,
+    schema: customer.schema!,
   },
 };
 
@@ -31,5 +32,6 @@ export const CustomerWizard: Story = {
   args: {
     uiSchema: customerWizard.uiSchema!,
     data: customerWizard.data!,
+    schema: customer.schema!,
   },
 };

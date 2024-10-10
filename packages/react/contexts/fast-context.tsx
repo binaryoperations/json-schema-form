@@ -14,6 +14,7 @@ import {
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 import { usePrevious } from '../hooks/usePrevious';
 import { shallowCompare } from '../../internals/compare';
+import { useLatest } from '../hooks';
 
 type StoreDataType = NonNullable<object>;
 
@@ -30,10 +31,12 @@ type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
 
 const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   value: IStore,
+  onChange?: (nextValue: IStore) => void,
   watch = false
 ): UseStoreDataReturnType<IStore> => {
   const store = useRef<IStore>(value as IStore);
   const watchRef = useRef(watch);
+  const onChangeRef = useLatest(onChange);
 
   const get = useCallback(() => store.current, [store]);
 
@@ -43,8 +46,9 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
     (callback: (prev: IStore) => Partial<IStore>) => {
       store.current = { ...store.current, ...callback(store.current) };
       subscribers.current.forEach((subscriber) => subscriber());
+      onChangeRef.current?.(store.current);
     },
-    [store]
+    [store, onChangeRef]
   );
 
   const subscribe = useCallback((callback: () => void) => {
@@ -150,13 +154,23 @@ export const createProvider = <T extends StoreDataType = StoreDataType>(
   StoreContext: Context<UseStoreDataReturnType<T>>,
   watch: boolean
 ) =>
-  memo(({ value, children }: { value: T; children: ReactNode }) => {
-    return (
-      <StoreContext.Provider value={useStoreData<T>(value, watch)}>
-        {children}
-      </StoreContext.Provider>
-    );
-  });
+  memo(
+    ({
+      value,
+      children,
+      onChange,
+    }: {
+      value: T;
+      children: ReactNode;
+      onChange?: (nextValue: T) => void;
+    }) => {
+      return (
+        <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
+          {children}
+        </StoreContext.Provider>
+      );
+    }
+  );
 
 export const createUseRefContext = <T extends StoreDataType = StoreDataType>(
   _Context: Context<UseStoreDataReturnType<T> | null>

@@ -10,7 +10,7 @@ import type {
 } from '../../models/JsonSchema';
 
 import uniqBy from 'lodash/uniqBy';
-import extractSegmentsFromPath from '@binaryoperations/json-forms-internals/extractSegmentsFromPath';
+import { extractSegmentsFromPath } from '@binaryoperations/json-forms-internals/extractSegmentsFromPath';
 
 type Properties = { [property: string]: JsonSchema };
 

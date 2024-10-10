@@ -183,3 +183,11 @@ export type JsonSchema =
   | NullJsonSchema
   | BooleanJsonSchema
   | JsonSchemaBase;
+
+export type ControlJsonSchema =
+  | StringJsonSchema
+  | NumberJsonSchema
+  | ArrayJsonSchema
+  | ObjectJsonSchema
+  | NullJsonSchema
+  | BooleanJsonSchema;
