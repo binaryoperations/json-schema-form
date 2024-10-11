@@ -1,4 +1,11 @@
-import { FC, memo, useCallback, useMemo, useState } from 'react';
+import {
+  ComponentProps,
+  FC,
+  memo,
+  useCallback,
+  useMemo,
+  useState,
+} from 'react';
 
 import UiSchemaPrepare, {
   UiStore,
@@ -35,6 +42,8 @@ import {
 import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
 import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
+import createControl from '@binaryoperations/json-forms-core/controls/createControl';
+import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 
 // const onSubmit = (e: FormEvent) => {
 //   e?.preventDefault?.();
@@ -45,7 +54,7 @@ const {
   Provider: FormDataProvider,
   useStoreRef: useStoreContextRef,
   useContextValue: useFormDataContext,
-} = createFastContext<object>();
+} = createFastContext<object>(true);
 
 const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } =
   createFastContext<{
@@ -73,6 +82,22 @@ const controlTypes = {
   number: NumberComponent,
   checkbox: Checkbox,
   radio: Radio,
+  computedDate: createControl(
+    (
+      props: ComponentProps<typeof NumberComponent.Control> & {
+        deriveFrom?: string;
+      }
+    ) => {
+      const { deriveFrom, ...componentProps } = props;
+      const value = useFormDataContext((data) =>
+        deriveFrom ? computeAge(resolvers.resolvePath(data, deriveFrom)) : ''
+      );
+      return <NumberComponent.Control {...componentProps} value={value} />;
+    },
+    createRankedTester((_, uischema) =>
+      (uischema as ControlNode).scope.includes('computedAge') ? 100 : -1
+    )
+  ),
 };
 
 function useControlValue(path: string) {
@@ -225,19 +250,26 @@ const RenderChildren = memo((props: { id: string }) => {
   // )
 });
 
-function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
-  const [lastUpdatedAt, setLastUpdatedAt] = useState(() => Date.now());
-  const schema = useMemo(() => {
-    console.log(lastUpdatedAt);
-    return parseSchema(JSON.parse(JSON.stringify(props.schema)));
-  }, [props.schema, lastUpdatedAt]);
-  const uiContext = useMemo(() => {
-    console.log(lastUpdatedAt);
-    return parseUISchema(JSON.parse(JSON.stringify(props.uiSchema)));
-  }, [props.uiSchema, lastUpdatedAt]);
+function datediff(first: number, second: number) {
+  return Math.round((second - first) / (1000 * 60 * 60 * 24));
+}
 
-  const onChange = useCallback(() => {
-    setLastUpdatedAt(Date.now());
+function computeAge(date: string) {
+  const resolvedTime = new Date(date).getTime();
+  if (isNaN(resolvedTime)) return '';
+  return datediff(resolvedTime, Date.now());
+}
+function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
+  const [data, setData] = useState(props.data);
+  const schema = useMemo(() => {
+    return parseSchema(JSON.parse(JSON.stringify(props.schema)));
+  }, [props.schema]);
+  const uiContext = useMemo(() => {
+    return parseUISchema(JSON.parse(JSON.stringify(props.uiSchema)));
+  }, [props.uiSchema]);
+
+  const onChange = useCallback((next: object) => {
+    setData(next);
   }, []);
 
   const context = useMemo(
@@ -249,7 +281,7 @@ function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
   );
 
   return (
-    <FormDataProvider value={props.data} onChange={onChange}>
+    <FormDataProvider value={data} onChange={onChange}>
       <UiStoreContextProvider value={context}>
         <Form>
           <Row style={defaultStyles}>

@@ -204,7 +204,10 @@ export const customerWizard: FormConfig = {
               {
                 type: UiNodeType.CONTROL,
                 scope: '#/properties/computedAge',
-                options: { readOnly: true },
+                options: {
+                  readOnly: true,
+                  deriveFrom: '#/properties/dateOfBirth',
+                },
                 rules: {
                   effect: RuleEffect.HIDE,
                   operator: RuleOperator.AND,

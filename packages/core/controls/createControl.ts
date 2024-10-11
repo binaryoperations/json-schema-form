@@ -1,5 +1,5 @@
 import {
-  type CheckAndRank,
+  type Ranker,
   isArrayRanked,
   isDateRanked,
   isNumberRanked,
@@ -7,7 +7,7 @@ import {
   isTimeRanked,
 } from '../testers/testers';
 
-export default function createControl<T>(Control: T, is: CheckAndRank) {
+export default function createControl<T>(Control: T, is: Ranker) {
   return {
     Control,
     is,

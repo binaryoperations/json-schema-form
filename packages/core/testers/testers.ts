@@ -18,11 +18,11 @@ export type Tester = (
   context: { rootSchema: JsonSchema }
 ) => boolean;
 
-export type CheckAndRank = (
+export type Ranker = (
   schema: JsonSchema,
   uiSchema: UiSchema | FieldsetNode,
   context: { rootSchema: JsonSchema }
-) => number | false;
+) => number;
 
 export const and = (...functions: Tester[]): Tester => {
   return (...arg) => functions.every((func) => func(...arg));
@@ -32,15 +32,13 @@ export const or = (...functions: Tester[]): Tester => {
   return (...arg) => functions.some((func) => func(...arg));
 };
 
-export const ranked = (
-  ...functions: (Tester | CheckAndRank)[]
-): CheckAndRank => {
+export const ranked = (...functions: (Tester | Ranker)[]): Ranker => {
   return (...arg) => {
     let counter = 0;
 
     for (const nextFunc of functions) {
       const resolution = nextFunc(...arg);
-      if (resolution === false) return false;
+      if (+resolution <= 0) return -1;
       counter += +resolution;
     }
 
@@ -136,7 +134,8 @@ export const formatIs = (expectedValue: unknown): Tester => {
  *
  */
 
-export const createRankedTester = (tester: Tester) => ranked(isControl, tester);
+export const createRankedTester = (...testers: (Tester | Ranker)[]) =>
+  ranked(isControl, ...testers);
 
 export const isTextRanked = createRankedTester(isStringSchema);
 
