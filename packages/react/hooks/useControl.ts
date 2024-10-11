@@ -1,5 +1,5 @@
-import { ControlJsonSchema } from '../../core/models';
+import { ControlSchema } from '../../core/models';
 
-export const useControl = (control: ControlJsonSchema) => {
+export const useControl = (control: ControlSchema) => {
   return control.type;
 };

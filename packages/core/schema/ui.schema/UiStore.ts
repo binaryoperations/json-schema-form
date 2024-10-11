@@ -1,12 +1,10 @@
 import { cast } from '@binaryoperations/json-forms-internals/cast';
-import { ControlJsonSchema, JsonSchema } from '../../models';
 import {
   UiSchema,
   FieldsetNode,
   UiNodeType,
   ControlNode,
 } from '../../models/UiSchema';
-import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 
 export class UiStore {
   keyMap: Record<string, UiSchema | FieldsetNode> = {};
@@ -53,11 +51,11 @@ export class UiStore {
     this.tree = Object.freeze(this.tree);
   }
 
-  deriveNodeSchema(schema: JsonSchema, key: string) {
+  deriveNodeSchema(key: string) {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNode>(this.getNode(key));
 
-    return cast<ControlJsonSchema>(resolvers.resolveSchmea(schema, node.scope));
+    return node.schema;
   }
 }

@@ -1,4 +1,4 @@
-export type SupportedSchemaTypes =
+export type ControlSchemaTypes =
   | 'string'
   | 'number'
   | 'array'
@@ -6,9 +6,9 @@ export type SupportedSchemaTypes =
   | 'boolean'
   | 'null';
 
-export type BaseKeys = keyof JsonSchemaBase;
+export type BaseKeys = keyof ControlSchemaBase;
 
-interface JsonSchemaBase<Default = unknown> {
+interface ControlSchemaBase<Default = unknown> {
   $ref?: string;
   /////////////////////////////////////////////////
   // Schema Metadata
@@ -51,34 +51,34 @@ interface JsonSchemaBase<Default = unknown> {
    * [string, number, object, array, boolean, null]
    * or an array of the acceptable types
    */
-  type?: SupportedSchemaTypes;
+  type?: `${ControlSchemaTypes}`;
 
   /////////////////////////////////////////////////
   // Combining Schemas
   /////////////////////////////////////////////////
-  allOf?: JsonSchema[];
-  anyOf?: JsonSchema[];
-  oneOf?: JsonSchema[];
+  allOf?: Schema[];
+  anyOf?: Schema[];
+  oneOf?: Schema[];
   /**
    * The entity being validated must not match this schema
    */
-  not?: JsonSchema;
+  not?: Schema;
 
   format?: string;
   readOnly?: boolean;
   writeOnly?: boolean;
   examples?: any[];
-  contains?: JsonSchema;
-  propertyNames?: JsonSchema;
+  contains?: Schema;
+  propertyNames?: Schema;
   const?: any;
-  if?: JsonSchema;
-  then?: JsonSchema;
-  else?: JsonSchema;
+  if?: Schema;
+  then?: Schema;
+  else?: Schema;
   errorMessage?: any;
 }
 
 //string, number, object, array, boolean, null
-export interface StringJsonSchema extends JsonSchemaBase<string> {
+export interface StringJsonSchema extends ControlSchemaBase<string> {
   /////////////////////////////////////////////////
   // String Validation
   /////////////////////////////////////////////////
@@ -93,7 +93,7 @@ export interface StringJsonSchema extends JsonSchemaBase<string> {
 }
 
 //string, number, object, array, boolean, null
-export interface NumberJsonSchema extends JsonSchemaBase<number> {
+export interface NumberJsonSchema extends ControlSchemaBase<number> {
   /////////////////////////////////////////////////
   // Number Validation
   /////////////////////////////////////////////////
@@ -115,19 +115,19 @@ export interface NumberJsonSchema extends JsonSchemaBase<number> {
   exclusiveMinimum?: number;
 }
 
-export interface ArrayJsonSchema extends JsonSchemaBase<any[]> {
+export interface ArrayJsonSchema extends ControlSchemaBase<any[]> {
   /////////////////////////////////////////////////
   // Array Validation
   /////////////////////////////////////////////////
   type: 'array';
-  additionalItems?: boolean | JsonSchema;
-  items?: JsonSchema | JsonSchema[];
+  additionalItems?: boolean | Schema;
+  items?: Schema | Schema[];
   maxItems?: number;
   minItems?: number;
   uniqueItems?: boolean;
 }
 
-export interface ObjectJsonSchema extends JsonSchemaBase<object> {
+export interface ObjectJsonSchema extends ControlSchemaBase<object> {
   /////////////////////////////////////////////////
   // Object Validation
   /////////////////////////////////////////////////
@@ -135,22 +135,22 @@ export interface ObjectJsonSchema extends JsonSchemaBase<object> {
   maxProperties?: number;
   minProperties?: number;
   required?: string[];
-  additionalProperties?: boolean | JsonSchema;
+  additionalProperties?: boolean | Schema;
   /**
    * Holds simple JSON Schema definitions for
    * referencing from elsewhere.
    */
-  definitions?: { [key: string]: JsonSchema };
+  definitions?: { [key: string]: Schema };
   /**
    * The keys that can exist on the object with the
    * json schema that should validate their value
    */
-  properties?: { [property: string]: JsonSchema };
+  properties?: { [property: string]: Schema };
   /**
    * The key of this object is a regex for which
    * properties the schema applies to
    */
-  patternProperties?: { [pattern: string]: JsonSchema };
+  patternProperties?: { [pattern: string]: Schema };
   /**
    * If the key is present as a property then the
    * string of properties must also be present.
@@ -158,36 +158,29 @@ export interface ObjectJsonSchema extends JsonSchemaBase<object> {
    * also be valid for the object if the key is
    * present.
    */
-  dependencies?: { [key: string]: JsonSchema | string[] };
+  dependencies?: { [key: string]: Schema | string[] };
 }
 
-export interface NullJsonSchema extends JsonSchemaBase<null> {
+export interface NullJsonSchema extends ControlSchemaBase<null> {
   /////////////////////////////////////////////////
   // Object Validation
   /////////////////////////////////////////////////
   type: 'null';
 }
 
-export interface BooleanJsonSchema extends JsonSchemaBase<boolean> {
+export interface BooleanJsonSchema extends ControlSchemaBase<boolean> {
   /////////////////////////////////////////////////
   // Object Validation
   /////////////////////////////////////////////////
   type: 'boolean';
 }
 
-export type JsonSchema =
-  | StringJsonSchema
-  | NumberJsonSchema
-  | ArrayJsonSchema
-  | ObjectJsonSchema
-  | NullJsonSchema
-  | BooleanJsonSchema
-  | JsonSchemaBase;
-
-export type ControlJsonSchema =
+export type ControlSchema =
   | StringJsonSchema
   | NumberJsonSchema
   | ArrayJsonSchema
   | ObjectJsonSchema
   | NullJsonSchema
   | BooleanJsonSchema;
+
+export type Schema = ControlSchema | ControlSchemaBase;

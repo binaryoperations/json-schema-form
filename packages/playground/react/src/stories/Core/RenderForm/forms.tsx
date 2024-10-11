@@ -1,16 +1,69 @@
-import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
+import { StringJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
-  RuleEffect,
-  RuleOperator,
   UiNodeType,
   UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
+import { cast } from '@binaryoperations/json-forms-internals/cast';
 
 export type FormConfig = {
   data: object;
   uiSchema?: UiSchema;
-  schema?: JsonSchema;
 };
+
+const schema = {
+  phone: {
+    type: 'object',
+    properties: {
+      countryCode: { type: 'number' },
+      number: { type: 'number' },
+      extension: { type: 'number' },
+    },
+    required: ['number', 'countryCode'],
+  },
+  address: {
+    type: 'object',
+    properties: {
+      lineOne: { type: 'string' },
+      lineTwo: { type: 'string' },
+      city: { type: 'string' },
+      postalCode: { type: 'string' },
+      country: { type: 'string' },
+    },
+    required: ['lineOne', 'city', 'postalCode', 'country'],
+  },
+  email: { type: 'string' },
+  firstName: { type: 'string' },
+  lastName: { type: 'string' },
+  dateOfBirth: {
+    type: 'string',
+    format: 'date',
+  },
+  computedAge: {
+    type: 'number',
+    exclusiveMinimum: 18,
+    readOnly: true,
+  },
+  rating: {
+    type: 'number',
+    minimum: 0,
+    maximum: 7,
+  },
+  gender: {
+    type: 'string',
+    enum: ['male', 'female'],
+  },
+  website: {
+    type: 'string',
+    format: 'url',
+  },
+  interests: {
+    type: 'array',
+    items: {
+      type: 'string',
+      enum: ['football', 'basketball', 'volleyball'],
+    },
+  },
+} as const;
 
 export const signinForm: FormConfig = {
   data: {
@@ -46,68 +99,6 @@ const customerData: FormConfig = {
       country: 'United Kingdom',
     },
   },
-  schema: {
-    type: 'object',
-    definitions: {
-      phoneWithCountryCode: {
-        type: 'object',
-        properties: {
-          countryCode: { type: 'number' },
-          number: { $ref: '#/definitions/phoneNumber' },
-          extension: { type: 'number' },
-        },
-        required: ['number', 'countryCode'],
-      },
-      phoneNumber: { type: 'number' },
-      address: {
-        type: 'object',
-        properties: {
-          lineOne: { type: 'string' },
-          lineTwo: { type: 'string' },
-          city: { type: 'string' },
-          postalCode: { type: 'string' },
-          country: { type: 'string' },
-        },
-        required: ['lineOne', 'city', 'postalCode', 'country'],
-      },
-    },
-    properties: {
-      email: { type: 'string' },
-      firstName: { type: 'string' },
-      lastName: { type: 'string' },
-      phone: { $ref: '#/definitions/phoneWithCountryCode' },
-      dateOfBirth: {
-        type: 'string',
-        format: 'date',
-      },
-      computedAge: {
-        type: 'number',
-        exclusiveMinimum: 18,
-        readOnly: true,
-      },
-      rating: {
-        type: 'number',
-        minimum: 0,
-        maximum: 7,
-      },
-      gender: {
-        type: 'string',
-        enum: ['male', 'female'],
-      },
-      website: {
-        type: 'string',
-        format: 'url',
-      },
-      interests: {
-        type: 'array',
-        items: {
-          type: 'string',
-          enum: ['football', 'basketball', 'volleyball'],
-        },
-      },
-      address: { $ref: '#/definitions/address' },
-    },
-  },
 };
 
 export const customer: FormConfig = {
@@ -116,54 +107,74 @@ export const customer: FormConfig = {
     type: UiNodeType.ROWS, // fieldsets | fieldset | columns | rows | control
     // order: 0,
     nodes: [
-      { type: UiNodeType.CONTROL, scope: '#/properties/email' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/firstName' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/lastName' },
+      { type: UiNodeType.CONTROL, path: 'email', schema: schema.email },
+      { type: UiNodeType.CONTROL, path: 'firstName', schema: schema.firstName },
+      { type: UiNodeType.CONTROL, path: 'lastName', schema: schema.lastName },
       {
         type: UiNodeType.COLUMNS,
         nodes: [
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/phone/properties/countryCode',
+            path: 'phone/countryCode',
+            schema: schema.phone.properties.countryCode,
           },
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/phone/properties/number',
+            path: 'phone/number',
+            schema: schema.phone.properties.number,
           },
         ],
       },
-      { type: UiNodeType.CONTROL, scope: '#/properties/dateOfBirth' },
       {
         type: UiNodeType.CONTROL,
-        scope: '#/properties/computedAge',
+        path: 'dateOfBirth',
+        schema: schema.dateOfBirth,
+      },
+      {
+        type: UiNodeType.CONTROL,
+        path: 'computedAge',
+        schema: schema.computedAge,
         options: { readOnly: true },
       },
-      { type: UiNodeType.CONTROL, scope: '#/properties/rating' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/gender' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/website' },
-      { type: UiNodeType.CONTROL, scope: '#/properties/interests' },
+      { type: UiNodeType.CONTROL, path: 'rating', schema: schema.rating },
+      {
+        type: UiNodeType.CONTROL,
+        path: 'gender',
+        schema: cast<StringJsonSchema>(schema.gender),
+      },
+      { type: UiNodeType.CONTROL, path: 'website', schema: schema.website },
+      {
+        type: UiNodeType.CONTROL,
+        path: 'interests',
+        schema: cast<StringJsonSchema>(schema.interests),
+      },
       {
         type: UiNodeType.ROWS,
         nodes: [
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/address/properties/lineOne',
+            path: 'address/lineOne',
+            schema: schema.address.properties.lineOne,
           },
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/address/properties/lineTwo',
+            path: 'address/lineTwo',
+            schema: schema.address.properties.lineTwo,
           },
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/address/properties/postalCode',
+            path: 'address/postalCode',
+            schema: schema.address.properties.postalCode,
           },
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/address/properties/city',
+            path: 'address/city',
+            schema: schema.address.properties.city,
           },
           {
             type: UiNodeType.CONTROL,
-            scope: '#/properties/address/properties/country',
+            path: 'address/country',
+            schema: schema.address.properties.country,
           },
         ],
       },
@@ -184,45 +195,66 @@ export const customerWizard: FormConfig = {
           {
             type: UiNodeType.ROWS,
             nodes: [
-              { type: UiNodeType.CONTROL, scope: '#/properties/email' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/firstName' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/lastName' },
+              { type: UiNodeType.CONTROL, path: 'email', schema: schema.email },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'firstName',
+                schema: schema.firstName,
+              },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'lastName',
+                schema: schema.lastName,
+              },
               {
                 type: UiNodeType.COLUMNS,
                 nodes: [
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/phone/properties/countryCode',
+                    path: 'phone/countryCode',
+                    schema: schema.phone.properties.countryCode,
                   },
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/phone/properties/number',
+                    path: 'phone/number',
+                    schema: schema.phone.properties.number,
                   },
                 ],
               },
-              { type: UiNodeType.CONTROL, scope: '#/properties/dateOfBirth' },
               {
                 type: UiNodeType.CONTROL,
-                scope: '#/properties/computedAge',
+                path: 'dateOfBirth',
+                schema: schema.dateOfBirth,
+              },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'computedAge',
+                schema: schema.computedAge,
                 options: {
                   readOnly: true,
-                  deriveFrom: '#/properties/dateOfBirth',
-                },
-                rules: {
-                  effect: RuleEffect.HIDE,
-                  operator: RuleOperator.AND,
-                  conditions: [
-                    {
-                      scope: '#/properties/name',
-                      schema: { not: { $isEmpty: true } },
-                    },
-                  ],
+                  deriveFrom: 'dateOfBirth',
                 },
               },
-              { type: UiNodeType.CONTROL, scope: '#/properties/rating' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/gender' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/website' },
-              { type: UiNodeType.CONTROL, scope: '#/properties/interests' },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'rating',
+                schema: schema.rating,
+              },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'gender',
+                schema: cast<StringJsonSchema>(schema.gender),
+              },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'website',
+                schema: schema.website,
+              },
+              {
+                type: UiNodeType.CONTROL,
+                path: 'interests',
+                schema: cast<StringJsonSchema>(schema.interests),
+              },
             ],
           },
         ],
@@ -239,26 +271,31 @@ export const customerWizard: FormConfig = {
                 nodes: [
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/address/properties/lineOne',
+                    path: 'address/lineOne',
+                    schema: schema.address.properties.lineOne,
                   },
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/address/properties/lineTwo',
+                    path: 'address/lineTwo',
+                    schema: schema.address.properties.lineTwo,
                   },
                   {
                     type: UiNodeType.COLUMNS,
                     nodes: [
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/postalCode',
+                        path: 'address/postalCode',
+                        schema: schema.address.properties.postalCode,
                       },
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/city',
+                        path: 'address/city',
+                        schema: schema.address.properties.city,
                       },
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/country',
+                        path: 'address/country',
+                        schema: schema.address.properties.country,
                       },
                     ],
                   },
@@ -274,12 +311,14 @@ export const customerWizard: FormConfig = {
                 nodes: [
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/address/properties/lineOne',
+                    path: 'address/lineOne',
+                    schema: schema.address.properties.lineOne,
                     options: { readOnly: true },
                   },
                   {
                     type: UiNodeType.CONTROL,
-                    scope: '#/properties/address/properties/lineTwo',
+                    path: 'address/lineTwo',
+                    schema: schema.address.properties.lineTwo,
                     options: { readOnly: true },
                   },
                   {
@@ -287,17 +326,20 @@ export const customerWizard: FormConfig = {
                     nodes: [
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/postalCode',
+                        path: 'address/postalCode',
+                        schema: schema.address.properties.postalCode,
                         options: { readOnly: true },
                       },
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/city',
+                        path: 'address/city',
+                        schema: schema.address.properties.city,
                         options: { readOnly: true },
                       },
                       {
                         type: UiNodeType.CONTROL,
-                        scope: '#/properties/address/properties/country',
+                        path: 'address/country',
+                        schema: schema.address.properties.country,
                         options: { readOnly: true },
                       },
                     ],

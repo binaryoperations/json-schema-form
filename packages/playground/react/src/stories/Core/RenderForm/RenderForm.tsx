@@ -10,7 +10,6 @@ import {
 import UiSchemaPrepare, {
   UiStore,
 } from '@binaryoperations/json-forms-core/schema/ui.schema';
-import JsonSchemaPrepare from '@binaryoperations/json-forms-core/schema/logical.schema';
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
 import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
 // import { Button } from '@binaryoperations/json-forms-react/components/Button';
@@ -40,7 +39,7 @@ import {
   Row,
 } from '@binaryoperations/json-forms-react/components/Semantic';
 import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
-import { JsonSchema } from '@binaryoperations/json-forms-core/models/JsonSchema';
+import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
 import createControl from '@binaryoperations/json-forms-core/controls/createControl';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
@@ -57,17 +56,10 @@ const {
 } = createFastContext<object>(true);
 
 const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } =
-  createFastContext<{
-    uiContext: UiStore;
-    schema: JsonSchema;
-  }>();
+  createFastContext<{ uiContext: UiStore }>();
 
 const parseUISchema = (uischema: UiSchema) => {
   return UiSchemaPrepare.parse(uischema);
-};
-
-const parseSchema = (schema: JsonSchema) => {
-  return JsonSchemaPrepare.parse(schema);
 };
 
 const defaultStyles = {
@@ -95,7 +87,7 @@ const controlTypes = {
       return <NumberComponent.Control {...componentProps} value={value} />;
     },
     createRankedTester((_, uischema) =>
-      (uischema as ControlNode).scope.includes('computedAge') ? 100 : -1
+      'deriveFrom' in ((uischema as ControlNode).options ?? {}) ? 100 : -1
     )
   ),
 };
@@ -121,12 +113,12 @@ function useControlValue(path: string) {
   ];
 }
 
-const Unhandled = (props: { scope: string }) => {
-  const [value] = useControlValue(props.scope);
+const Unhandled = (props: { path: string }) => {
+  const [value] = useControlValue(props.path);
   return (
     <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
       value: {JSON.stringify(value)} <br />
-      scope: {JSON.stringify(props.scope)} <br />
+      scope: {JSON.stringify(props.path)} <br />
     </div>
   );
 };
@@ -135,10 +127,11 @@ const RenderControl = (props: { id: string }) => {
   const Control = useUiStoreContext((store) => {
     const ranked = Object.values(controlTypes).reduce(
       (lastControl, control) => {
+        const node = store.uiContext.deriveNodeSchema(props.id)!;
         const rank = control.is(
-          store.uiContext.deriveNodeSchema(store.schema, props.id)!,
+          store.uiContext.deriveNodeSchema(props.id)!,
           store.uiContext.getNode(props.id),
-          { rootSchema: store.schema }
+          { rootSchema: node }
         );
 
         if (!rank) return lastControl;
@@ -163,16 +156,16 @@ const RenderControl = (props: { id: string }) => {
     return store.uiContext.getNode(props.id) as ControlNode;
   }, shallowCompare);
 
-  const path = control.path ?? control.scope;
+  const path = control.path;
   const [value, setValue] = useControlValue(path);
 
-  if (!Control) return <Unhandled scope={control.scope} />;
+  if (!Control) return <Unhandled path={path} />;
 
   return (
     <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
       <Control
         {...control.options}
-        label={control.scope}
+        label={path}
         value={(value ?? '') as any}
         onChange={(e) => {
           setValue(e.target.value);
@@ -259,11 +252,9 @@ function computeAge(date: string) {
   if (isNaN(resolvedTime)) return '';
   return datediff(resolvedTime, Date.now());
 }
-function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
+function App(props: { uiSchema: UiSchema; schema: Schema; data: object }) {
   const [data, setData] = useState(props.data);
-  const schema = useMemo(() => {
-    return parseSchema(JSON.parse(JSON.stringify(props.schema)));
-  }, [props.schema]);
+
   const uiContext = useMemo(() => {
     return parseUISchema(JSON.parse(JSON.stringify(props.uiSchema)));
   }, [props.uiSchema]);
@@ -272,13 +263,7 @@ function App(props: { uiSchema: UiSchema; schema: JsonSchema; data: object }) {
     setData(next);
   }, []);
 
-  const context = useMemo(
-    () => ({
-      schema,
-      uiContext,
-    }),
-    [schema, uiContext]
-  );
+  const context = useMemo(() => ({ uiContext }), [uiContext]);
 
   return (
     <FormDataProvider value={data} onChange={onChange}>

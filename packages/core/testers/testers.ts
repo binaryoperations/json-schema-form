@@ -1,27 +1,27 @@
 import type {
   ArrayJsonSchema,
   BooleanJsonSchema,
-  JsonSchema,
+  Schema,
   NullJsonSchema,
   NumberJsonSchema,
   ObjectJsonSchema,
   StringJsonSchema,
-} from '../models/JsonSchema';
+} from '../models/ControlSchema';
 
 import { ControlNode, FieldsetNode, type UiSchema } from '../models/UiSchema';
 import { get } from '@binaryoperations/json-forms-internals/object';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
 
 export type Tester = (
-  schema: JsonSchema,
+  schema: Schema,
   uiSchema: UiSchema | FieldsetNode,
-  context: { rootSchema: JsonSchema }
+  context: { rootSchema: Schema }
 ) => boolean;
 
 export type Ranker = (
-  schema: JsonSchema,
+  schema: Schema,
   uiSchema: UiSchema | FieldsetNode,
-  context: { rootSchema: JsonSchema }
+  context: { rootSchema: Schema }
 ) => number;
 
 export const and = (...functions: Tester[]): Tester => {
@@ -96,7 +96,7 @@ export const optionStartsWith = (
 
 /**
  *
- * @param schema {JsonSchema}
+ * @param schema {Schema}
  * @returns boolean
  */
 export const isStringSchema: Tester = (schema): schema is StringJsonSchema =>
