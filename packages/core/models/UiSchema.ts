@@ -1,4 +1,4 @@
-import { ControlJsonSchema } from './JsonSchema';
+import { ControlSchema } from './ControlSchema';
 
 export enum UiNodeType {
   FIELD_SETS = 'fieldsets',
@@ -78,10 +78,9 @@ export interface ColumnsNode extends UiNodeBase {
 export interface ControlNode<T extends object = object> extends UiNodeBase {
   type: UiNodeType.CONTROL;
   label?: string;
-  scope: string;
-  path?: string;
+  path: string;
   options?: T;
-  schema?: ControlJsonSchema;
+  schema?: ControlSchema;
 }
 
 type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;
