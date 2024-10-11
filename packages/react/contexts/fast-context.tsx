@@ -13,7 +13,7 @@ import {
 
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 import { usePrevious } from '../hooks/usePrevious';
-import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
+import { shallowCompare } from '../../internals/object';
 import { useLatest } from '../hooks';
 
 type StoreDataType = NonNullable<object>;
@@ -36,6 +36,7 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
 ): UseStoreDataReturnType<IStore> => {
   const store = useRef<IStore>(value as IStore);
   const watchRef = useRef(watch);
+  const effectRef = useRef(false);
   const onChangeRef = useLatest(onChange);
 
   const get = useCallback(() => store.current, [store]);
@@ -45,8 +46,10 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   const set = useCallback(
     (callback: (prev: IStore) => Partial<IStore>) => {
       store.current = { ...store.current, ...callback(store.current) };
-      subscribers.current.forEach((subscriber) => subscriber());
-      onChangeRef.current?.(store.current);
+      if (!effectRef.current && onChangeRef.current)
+        onChangeRef.current(store.current);
+      else subscribers.current.forEach((subscriber) => subscriber());
+      effectRef.current = false;
     },
     [store, onChangeRef]
   );
@@ -62,8 +65,9 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
    */
   useEffect(() => {
     if (!watchRef.current) return;
-    set((prev) => ({ ...prev, ...value }));
-  }, [set, value]);
+    effectRef.current = true;
+    set(() => value);
+  }, [set, store, value]);
 
   /**
    *
