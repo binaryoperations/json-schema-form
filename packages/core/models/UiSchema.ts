@@ -77,10 +77,10 @@ export interface ColumnsNode extends UiNodeBase {
 
 export interface ControlNode<T extends object = object> extends UiNodeBase {
   type: UiNodeType.CONTROL;
+  schema: ControlSchema;
   label?: string;
   path: string;
   options?: T;
-  schema?: ControlSchema;
 }
 
 type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;

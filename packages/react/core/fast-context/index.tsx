@@ -1,57 +1,31 @@
 import {
   createContext,
-  MutableRefObject,
-  ReactNode,
+  type MutableRefObject,
+  type ReactNode,
   useCallback,
-  useContext,
   useRef,
-  Context,
+  type Context,
   useEffect,
   useMemo,
   memo,
 } from 'react';
 
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
-import { usePrevious } from '../core/hooks/usePrevious';
 
-import { useLatest } from '../core/hooks';
+import { usePrevious } from '../hooks/usePrevious';
+import { useLatest } from '../hooks/useLatest';
+import { useInvariantContext } from '../hooks/useInvariantContext';
+
 import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
 
 type StoreDataType = NonNullable<object>;
 
-type SelectorOutputType<IStore, SelectorOutput> = (
-  store: IStore
-) => SelectorOutput;
-
-type Action<Configuration = object> = {
-  type: string;
-  payload: unknown;
-  configuration: Partial<Configuration>;
-};
-
-type Reducer<IStore, Configuration = object> = (
-  state: IStore,
-  action: Action<Configuration>
-) => IStore;
-
-type MiddlewareFunction<IStore, Configuration = object> = (
-  next: Middleware<IStore, Configuration>
-) => Reducer<IStore, Configuration>;
-
-type MiddlewareObject<IStore, Configuration = object> = Configuration & {
-  reducer: (
-    next: Middleware<IStore, Configuration>
-  ) => Reducer<IStore, Configuration>;
-};
-
-type Middleware<IStore, Configuration = object> =
-  | MiddlewareObject<IStore, Configuration>
-  | MiddlewareFunction<IStore, Configuration>;
+type Selector<IStore, SelectorOutput> = (store: IStore) => SelectorOutput;
+type EqualityCheck = (prev: any, next: any) => boolean;
 
 type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
   get: () => IStore;
   set: (value: (prev: IStore) => Partial<IStore>) => void;
-  middlewares?: Middleware<IStore>[];
   store: MutableRefObject<IStore>;
   subscribe: (callback: () => void) => () => void;
 };
@@ -118,6 +92,24 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   );
 };
 
+export type CreateFastContext = <T extends StoreDataType = StoreDataType>(
+  watch?: boolean
+) => {
+  useStoreRef: ReturnType<typeof createUseRefContext<T>>;
+  Provider: ReturnType<typeof createProvider<T>>;
+  useContext: <SelectorResult>(
+    selector: Selector<T, SelectorResult>,
+    equalityCheck: EqualityCheck
+  ) => [
+    selectedResult: SelectorResult,
+    setValue: UseStoreDataReturnType<T>['set'],
+  ];
+  useContextValue: <SelectorResult>(
+    selector: Selector<T, SelectorResult>,
+    equalityCheck: EqualityCheck
+  ) => SelectorResult;
+};
+
 export const createFastContext = <T extends StoreDataType = StoreDataType>(
   watch = false
 ) => {
@@ -148,14 +140,9 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
      *
      */
     useContext: <SelectorOutput,>(
-      selector: SelectorOutputType<T, SelectorOutput>,
-      equalityCheck = shallowCompare
-    ) =>
-      useStore(
-        context as Context<UseStoreDataReturnType<T>>,
-        selector,
-        equalityCheck
-      ),
+      selector: Selector<T, SelectorOutput>,
+      equalityCheck: EqualityCheck = shallowCompare
+    ) => useStore(context, selector, equalityCheck),
 
     /**
      *
@@ -165,14 +152,9 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
      *
      */
     useContextValue: <SelectorOutput,>(
-      selector: SelectorOutputType<T, SelectorOutput>,
-      equalityCheck = shallowCompare
-    ) =>
-      useStoreValue(
-        context as Context<UseStoreDataReturnType<T>>,
-        selector,
-        equalityCheck
-      ),
+      selector: Selector<T, SelectorOutput>,
+      equalityCheck: EqualityCheck = shallowCompare
+    ) => useStoreValue(context, selector, equalityCheck),
 
     /**
      * context of the store. Useful for ContextBridge
@@ -207,23 +189,20 @@ export const createUseRefContext = <T extends StoreDataType = StoreDataType>(
   _Context: Context<UseStoreDataReturnType<T> | null>
 ) => {
   return () => {
-    const value = useContext<UseStoreDataReturnType<T> | null>(_Context);
-    if (value === null)
-      throw 'Fast Context requires the value to be wrapped in a Provider with a value.';
-
+    const value = useInvariantContext(
+      _Context,
+      'Fast Context requires the value to be wrapped in a Provider with a value.'
+    );
     return value;
   };
 };
 
 export const useStore = <IStore extends StoreDataType, SelectorOutput>(
-  _Context: Context<UseStoreDataReturnType<IStore>>,
-  selector: SelectorOutputType<IStore, SelectorOutput>,
+  _Context: Context<UseStoreDataReturnType<IStore> | null>,
+  selector: Selector<IStore, SelectorOutput>,
   equalityFn = Object.is
-): [SelectorOutput, (value: (prev: IStore) => Partial<IStore>) => void] => {
-  const store = useContext(_Context);
-  if (!store) {
-    throw new Error('Store not found');
-  }
+): [value: SelectorOutput, set: UseStoreDataReturnType<IStore>['set']] => {
+  const store = useInvariantContext(_Context, 'Store not found');
 
   const state = useSyncExternalStoreWithSelector(
     store.subscribe,
@@ -241,8 +220,8 @@ export const useStore = <IStore extends StoreDataType, SelectorOutput>(
 };
 
 export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
-  _Context: Context<UseStoreDataReturnType<IStore>>,
-  selector: SelectorOutputType<IStore, SelectorOutput>,
+  _Context: Context<UseStoreDataReturnType<IStore> | null>,
+  selector: Selector<IStore, SelectorOutput>,
   equalityFn = Object.is
 ) => {
   return useStore(_Context, selector, equalityFn)[0];

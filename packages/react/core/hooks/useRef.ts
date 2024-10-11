@@ -5,13 +5,7 @@ export const useRef = <T>(value: T) => {
 
   // clear the value after the timeout.
   useEffect(
-    () => () => (
-      setTimeout(() => {
-        ref.current = null;
-      }),
-      undefined
-    ),
-
+    () => () => (setTimeout(() => (ref.current = null)), undefined),
     [ref]
   );
 

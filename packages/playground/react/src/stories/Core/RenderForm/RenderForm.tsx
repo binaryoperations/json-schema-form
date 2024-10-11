@@ -7,9 +7,13 @@ import {
   useState,
 } from 'react';
 
-import UiSchemaPrepare, {
-  UiStore,
-} from '@binaryoperations/json-forms-core/schema/ui.schema';
+import UiSchemaPrepare from '@binaryoperations/json-forms-core/schema/ui.schema';
+import { UiStoreContextProvider } from '@binaryoperations/json-forms-react/core/context/StoreContext';
+import {
+  FormDataProvider,
+  useFormDataContext,
+} from '@binaryoperations/json-forms-react/core/context/FormDataContext';
+
 import { Input } from '@binaryoperations/json-forms-react/components/Input';
 import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
 // import { Button } from '@binaryoperations/json-forms-react/components/Button';
@@ -27,12 +31,7 @@ import {
   UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 
-import { createFastContext } from '@binaryoperations/json-forms-react/contexts/fast-context';
-
-import {
-  set,
-  shallowCompare,
-} from '@binaryoperations/json-forms-internals/object';
+import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 import {
   Column,
@@ -43,20 +42,15 @@ import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
 import createControl from '@binaryoperations/json-forms-core/controls/createControl';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
+import {
+  useStore,
+  useControlValue,
+} from '@binaryoperations/json-forms-react/core/hooks';
 
 // const onSubmit = (e: FormEvent) => {
 //   e?.preventDefault?.();
 //   console.log(e, e.target)
 // }
-
-const {
-  Provider: FormDataProvider,
-  useStoreRef: useStoreContextRef,
-  useContextValue: useFormDataContext,
-} = createFastContext<object>(true);
-
-const { Provider: UiStoreContextProvider, useContextValue: useUiStoreContext } =
-  createFastContext<{ uiContext: UiStore }>();
 
 const parseUISchema = (uischema: UiSchema) => {
   return UiSchemaPrepare.parse(uischema);
@@ -92,27 +86,6 @@ const controlTypes = {
   ),
 };
 
-function useControlValue(path: string) {
-  const value = useFormDataContext(
-    (data) => resolvers.resolvePath(data, path),
-    shallowCompare
-  );
-
-  const store = useStoreContextRef();
-
-  return [
-    value,
-    useCallback(
-      (value: unknown) => {
-        store.set((oldValue) => {
-          return set(oldValue, path, value);
-        });
-      },
-      [path, store]
-    ),
-  ];
-}
-
 const Unhandled = (props: { path: string }) => {
   const [value] = useControlValue(props.path);
   return (
@@ -124,7 +97,7 @@ const Unhandled = (props: { path: string }) => {
 };
 
 const RenderControl = (props: { id: string }) => {
-  const Control = useUiStoreContext((store) => {
+  const Control = useStore((store) => {
     const ranked = Object.values(controlTypes).reduce(
       (lastControl, control) => {
         const node = store.uiContext.deriveNodeSchema(props.id)!;
@@ -152,7 +125,7 @@ const RenderControl = (props: { id: string }) => {
     return ranked?.[maxRank];
   }, shallowCompare);
 
-  const control = useUiStoreContext((store) => {
+  const control = useStore((store) => {
     return store.uiContext.getNode(props.id) as ControlNode;
   }, shallowCompare);
 
@@ -216,7 +189,7 @@ const types = {
 };
 
 const RenderVariadic = memo((props: { id: string }) => {
-  const nodeType = useUiStoreContext((store) => {
+  const nodeType = useStore((store) => {
     return store.uiContext.getNodeType(props.id);
   });
 
@@ -225,7 +198,7 @@ const RenderVariadic = memo((props: { id: string }) => {
 });
 
 const RenderChildren = memo((props: { id: string }) => {
-  const nodes = useUiStoreContext((store) => {
+  const nodes = useStore((store) => {
     return store.uiContext.getChildren(props.id);
   }, shallowCompare).map((node) => {
     return <RenderVariadic key={node} id={node} />;
