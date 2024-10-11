@@ -22,9 +22,35 @@ type SelectorOutputType<IStore, SelectorOutput> = (
   store: IStore
 ) => SelectorOutput;
 
+type Action<Configuration = object> = {
+  type: string;
+  payload: unknown;
+  configuration: Partial<Configuration>;
+};
+
+type Reducer<IStore, Configuration = object> = (
+  state: IStore,
+  action: Action<Configuration>
+) => IStore;
+
+type MiddlewareFunction<IStore, Configuration = object> = (
+  next: Middleware<IStore, Configuration>
+) => Reducer<IStore, Configuration>;
+
+type MiddlewareObject<IStore, Configuration = object> = Configuration & {
+  reducer: (
+    next: Middleware<IStore, Configuration>
+  ) => Reducer<IStore, Configuration>;
+};
+
+type Middleware<IStore, Configuration = object> =
+  | MiddlewareObject<IStore, Configuration>
+  | MiddlewareFunction<IStore, Configuration>;
+
 type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
   get: () => IStore;
   set: (value: (prev: IStore) => Partial<IStore>) => void;
+  middlewares?: Middleware<IStore>[];
   store: MutableRefObject<IStore>;
   subscribe: (callback: () => void) => () => void;
 };

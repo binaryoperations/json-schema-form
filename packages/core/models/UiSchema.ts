@@ -1,3 +1,5 @@
+import { ControlJsonSchema } from './JsonSchema';
+
 export enum UiNodeType {
   FIELD_SETS = 'fieldsets',
   FIELD_SET = 'fieldset',
@@ -6,6 +8,10 @@ export enum UiNodeType {
   CONTROL = 'control',
 }
 
+/**
+ *
+ * Rules
+ */
 export enum RuleEffect {
   HIDE = 'hide',
   SHOW = 'show',
@@ -29,10 +35,19 @@ type Rules = RuleSet & {
   effect: `${RuleEffect}`;
 };
 
+/**
+ *
+ * Children
+ */
 type ChildNode<T> = T & {
   order?: number;
 };
 
+/**
+ *
+ * Available Ui Schemas
+ *
+ */
 export interface UiNodeBase {
   type: `${UiNodeType}`;
   rules?: Rules;
@@ -66,6 +81,7 @@ export interface ControlNode<T extends object = object> extends UiNodeBase {
   scope: string;
   path?: string;
   options?: T;
+  schema?: ControlJsonSchema;
 }
 
 type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;

@@ -80,6 +80,7 @@ export class JsonSchemaParser {
     }
   }
 
+  // TODO: flatten schema from "allOf" | "oneOf" | "anyOf"
   private walkObject(node: ObjectJsonSchema): ObjectJsonSchema {
     const walkObjectValues = (value: Record<string, JsonSchema>) =>
       Object.entries(value).reduce(
