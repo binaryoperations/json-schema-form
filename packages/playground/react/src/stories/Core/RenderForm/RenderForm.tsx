@@ -1,4 +1,4 @@
-import { ComponentProps, memo, useCallback, useState } from 'react';
+import { ComponentProps, useCallback, useState } from 'react';
 
 import '@binaryoperations/json-forms-react';
 import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Form';
@@ -75,24 +75,24 @@ const types = {
   }) {
     return <Row data-type='row' style={defaultStyles} {...props} />;
   }),
-  [UiNodeType.CONTROL]: createLayoutRenderer(
-    memo(function LayoutControl(props: { id: string }) {
-      return (
-        <Row
-          data-type='control'
-          style={{
-            backgroundColor: '#e5e5e5',
-            wordBreak: 'break-all',
-            flexDirection: 'column',
-            display: 'flex',
-            alignItems: 'flex-start',
-            flex: 1,
-          }}
-          {...props}
-        />
-      );
-    })
-  ),
+  [UiNodeType.CONTROL]: createLayoutRenderer(function LayoutControl(props: {
+    id: string;
+  }) {
+    return (
+      <Row
+        data-type='control'
+        style={{
+          backgroundColor: '#e5e5e5',
+          wordBreak: 'break-all',
+          flexDirection: 'column',
+          display: 'flex',
+          alignItems: 'flex-start',
+          flex: 1,
+        }}
+        {...props}
+      />
+    );
+  }),
   [UiNodeType.FIELD_SETS]: createLayoutRenderer(
     function LayoutFieldSets(props: { id: string }) {
       return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
@@ -115,7 +115,7 @@ function computeAge(date: string) {
   return datediff(resolvedTime, Date.now());
 }
 
-function App(props: { uiSchema: UiSchema; schema: Schema; data: object }) {
+function App(props: { uiSchema: UiSchema; schema?: Schema; data: object }) {
   const [data, setData] = useState(props.data);
 
   const onChange = useCallback((next: object) => {

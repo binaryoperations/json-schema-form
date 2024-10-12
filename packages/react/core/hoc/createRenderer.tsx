@@ -1,4 +1,4 @@
-import { ComponentType, memo } from 'react';
+import { ComponentType } from 'react';
 import { LayoutChildren } from '../components/LayoutNode';
 import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
 import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
@@ -10,13 +10,13 @@ import {
 export const createLayoutRenderer = <P extends object>(
   Component: ComponentType<P>
 ): ComponentType<{ id: string } & P> => {
-  return memo(function LayoutRenderer(props) {
+  return function LayoutRenderer(props) {
     return (
       <Component {...props}>
         <LayoutChildren id={props.id} />
       </Component>
     );
-  });
+  };
 };
 
 export const createControl = <P extends ComponentType<BaseControlProps>>(

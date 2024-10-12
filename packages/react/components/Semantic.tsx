@@ -1,4 +1,4 @@
-import { FC, memo } from 'react';
+import { FC } from 'react';
 
 const styles = {
   row: {
@@ -13,12 +13,10 @@ const styles = {
   },
 } as const;
 
-export const Row: FC<JSX.IntrinsicElements['div']> = memo(function Row(props) {
+export const Row: FC<JSX.IntrinsicElements['div']> = function Row(props) {
   return <div {...props} style={{ ...styles.row, ...props.style }}></div>;
-});
+};
 
-export const Column: FC<JSX.IntrinsicElements['div']> = memo(
-  function Column(props) {
-    return <div {...props} style={{ ...styles.column, ...props.style }}></div>;
-  }
-);
+export const Column: FC<JSX.IntrinsicElements['div']> = function Column(props) {
+  return <div {...props} style={{ ...styles.column, ...props.style }}></div>;
+};

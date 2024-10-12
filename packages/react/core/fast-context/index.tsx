@@ -98,8 +98,12 @@ export type ProviderProps<T> = PropsWithChildren<{
   onChange?: (nextValue: T) => void;
 }>;
 
+type CreateFastContextConfig =
+  | boolean
+  | { watch?: boolean; debugName?: string };
+
 export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
-  watch?: boolean
+  config?: CreateFastContextConfig
 ) => {
   useStoreRef: ReturnType<typeof createUseRefContext<T>>;
   Provider: ComponentType<ProviderProps<T>>;
@@ -117,10 +121,13 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
 };
 
 export const createFastContext = <T extends StoreDataType = StoreDataType>(
-  watch = false,
-  useDebugValue?: () => void
+  config?: CreateFastContextConfig
 ) => {
+  const { watch = false, debugName } =
+    typeof config !== 'object' ? { watch: config } : config;
+
   const context = createContext<UseStoreDataReturnType<T> | null>(null);
+  context.displayName = debugName;
 
   return {
     /**
@@ -161,7 +168,7 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
     useContextValue: <SelectorOutput,>(
       selector: Selector<T, SelectorOutput>,
       equalityCheck: EqualityCheck = shallowCompare
-    ) => useStoreValue(context, selector, equalityCheck, useDebugValue),
+    ) => useStoreValue(context, selector, equalityCheck),
 
     /**
      * context of the store. Useful for ContextBridge
@@ -173,18 +180,22 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
 export const createProvider = <T extends StoreDataType = StoreDataType>(
   StoreContext: Context<UseStoreDataReturnType<T>>,
   watch: boolean
-) =>
-  memo(function CreateFastContext({
-    value,
-    children,
-    onChange,
-  }: ProviderProps<T>) {
-    return (
-      <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
-        {children}
-      </StoreContext.Provider>
-    );
-  });
+) => {
+  return Object.assign(
+    memo(function CreateFastContext({
+      value,
+      children,
+      onChange,
+    }: ProviderProps<T>) {
+      return (
+        <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
+          {children}
+        </StoreContext.Provider>
+      );
+    }),
+    { displayName: StoreContext.displayName }
+  );
+};
 
 export const createUseRefContext = <T extends StoreDataType = StoreDataType>(
   _Context: Context<UseStoreDataReturnType<T> | null>
@@ -226,9 +237,7 @@ export const useFastContextStore = <
 export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
   _Context: Context<UseStoreDataReturnType<IStore> | null>,
   selector: Selector<IStore, SelectorOutput>,
-  equalityFn = Object.is,
-  useDebugValue?: () => void
+  equalityFn = Object.is
 ) => {
-  useDebugValue?.();
   return useFastContextStore(_Context, selector, equalityFn)[0];
 };

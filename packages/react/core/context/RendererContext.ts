@@ -11,7 +11,9 @@ export type RendererContextType<
   layout: Record<string, ComponentType<PropsWithChildren<{ id: string }>>>;
 };
 
-const RendererContext = createFastContext<RendererContextType>();
+const RendererContext = createFastContext<RendererContextType>({
+  debugName: 'ComponentContext',
+});
 
 export const RendererContextProvider = RendererContext.Provider;
 export const useRendererContext = RendererContext.useContextValue;

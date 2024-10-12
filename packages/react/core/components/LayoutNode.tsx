@@ -5,12 +5,12 @@ import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
 import { useLayoutNode } from '../hooks/useRenderer';
 import { ControlNode } from './ControlNode';
 
-export const LayoutNode = memo(function LayoutNode(props: { id: string }) {
+export const LayoutNode = function LayoutNode(props: { id: string }) {
   const nodeType = useStore((store) => store.uiContext.getNodeType(props.id));
   const LayoutNode = useLayoutNode(nodeType);
 
   return <LayoutNode id={props.id} />;
-});
+};
 
 export const LayoutChildren = memo(function LayoutChildren(props: {
   id: string;
