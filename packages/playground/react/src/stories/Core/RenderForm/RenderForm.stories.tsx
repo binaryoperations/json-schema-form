@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react';
 
-import RenderFormApp from './RenderForm';
 import { customer, customerWizard } from './forms';
+import RenderFormApp from './RenderForm';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {

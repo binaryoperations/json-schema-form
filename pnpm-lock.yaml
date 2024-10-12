@@ -54,6 +54,9 @@ importers:
       eslint-plugin-react-refresh:
         specifier: ^0.4.9
         version: 0.4.11(eslint@9.11.1)
+      eslint-plugin-simple-import-sort:
+        specifier: ^12.1.1
+        version: 12.1.1(eslint@9.11.1)
       prettier-eslint:
         specifier: ^16.3.0
         version: 16.3.0
@@ -1731,6 +1734,11 @@ packages:
     resolution: {integrity: sha512-wrAKxMbVr8qhXTtIKfXqAn5SAtRZt0aXxe5P23Fh4pUAdC6XEsybGLB8P0PI4j1yYqOgUEUlzKAGDfo7rJOjcw==}
     peerDependencies:
       eslint: '>=7'
+
+  eslint-plugin-simple-import-sort@12.1.1:
+    resolution: {integrity: sha512-6nuzu4xwQtE3332Uz0to+TxDQYRLTKRESSc2hefVT48Zc8JthmN23Gx9lnYhu0FtkRSL1oxny3kJ2aveVhmOVA==}
+    peerDependencies:
+      eslint: '>=5.0.0'
 
   eslint-plugin-storybook@0.9.0:
     resolution: {integrity: sha512-qOT/2vQBo0VqrG/BhZv8IdSsKQiyzJw+2Wqq+WFCiblI/PfxLSrGkF/buiXF+HumwfsCyBdaC94UhqhmYFmAvA==}
@@ -4872,6 +4880,10 @@ snapshots:
       eslint: 9.10.0
 
   eslint-plugin-react-refresh@0.4.11(eslint@9.11.1):
+    dependencies:
+      eslint: 9.11.1
+
+  eslint-plugin-simple-import-sort@12.1.1(eslint@9.11.1):
     dependencies:
       eslint: 9.11.1
 

@@ -1,23 +1,21 @@
+import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
 import {
+  type ComponentType,
   type Context,
-  type MutableRefObject,
   createContext,
+  memo,
+  type MutableRefObject,
+  PropsWithChildren,
   useCallback,
-  useRef,
   useEffect,
   useMemo,
-  memo,
-  ComponentType,
+  useRef,
 } from 'react';
-
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 
-import { usePrevious } from '../hooks/usePrevious';
-import { useLatest } from '../hooks/useLatest';
 import { useInvariantContext } from '../hooks/useInvariantContext';
-
-import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
-import { PropsWithChildren } from 'react';
+import { useLatest } from '../hooks/useLatest';
+import { usePrevious } from '../hooks/usePrevious';
 
 type StoreDataType = NonNullable<object>;
 

@@ -1,7 +1,6 @@
-export * from './useRef';
+export * from './useControl';
+export * from './useInvariantContext';
 export * from './useLatest';
 export * from './usePrevious';
-export * from './useInvariantContext';
-
+export * from './useRef';
 export * from './useStore';
-export * from './useControl';

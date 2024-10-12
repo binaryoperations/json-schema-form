@@ -1,34 +1,31 @@
-import { ComponentProps, useCallback, useState } from 'react';
-
 import '@binaryoperations/json-forms-react';
-import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Form';
-import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
 
-import { Input } from '@binaryoperations/json-forms-react/components/Input';
-import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
-import { Radio } from '@binaryoperations/json-forms-react/components/Radio';
-import {
-  Date as DateComponent,
-  DateTime,
-  Time,
-} from '@binaryoperations/json-forms-react/components/DateTime';
-
+import createControl from '@binaryoperations/json-forms-core/controls/createControl';
+import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   ControlNode,
   UiNodeType,
   UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
-
+import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
+import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
+import {
+  Date as DateComponent,
+  DateTime,
+  Time,
+} from '@binaryoperations/json-forms-react/components/DateTime';
+import { Input } from '@binaryoperations/json-forms-react/components/Input';
+import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
+import { Radio } from '@binaryoperations/json-forms-react/components/Radio';
 import {
   Column,
   Row,
 } from '@binaryoperations/json-forms-react/components/Semantic';
-import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
-import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
-import createControl from '@binaryoperations/json-forms-core/controls/createControl';
-import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
+import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Form';
+import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
 import { createLayoutRenderer } from '@binaryoperations/json-forms-react/core/hoc/createRenderer';
+import { ComponentProps, useCallback, useState } from 'react';
 
 const defaultStyles = {
   gap: 8,
@@ -68,19 +65,19 @@ const types = {
   [UiNodeType.COLUMNS]: createLayoutRenderer(function LayoutColumn(props: {
     id: string;
   }) {
-    return <Column data-type='column' style={defaultStyles} {...props} />;
+    return <Column data-type="column" style={defaultStyles} {...props} />;
   }),
   [UiNodeType.ROWS]: createLayoutRenderer(function LayoutRow(props: {
     id: string;
   }) {
-    return <Row data-type='row' style={defaultStyles} {...props} />;
+    return <Row data-type="row" style={defaultStyles} {...props} />;
   }),
   [UiNodeType.CONTROL]: createLayoutRenderer(function LayoutControl(props: {
     id: string;
   }) {
     return (
       <Row
-        data-type='control'
+        data-type="control"
         style={{
           backgroundColor: '#e5e5e5',
           wordBreak: 'break-all',
@@ -95,13 +92,13 @@ const types = {
   }),
   [UiNodeType.FIELD_SETS]: createLayoutRenderer(
     function LayoutFieldSets(props: { id: string }) {
-      return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
+      return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
     }
   ),
   [UiNodeType.FIELD_SET]: createLayoutRenderer(function LayoutFieldSet(props: {
     id: string;
   }) {
-    return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
+    return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
   }),
 };
 

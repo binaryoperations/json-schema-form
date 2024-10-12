@@ -1,11 +1,13 @@
 import js from '@eslint/js';
+import stylisticTs from '@stylistic/eslint-plugin';
+import lintJson from 'eslint-plugin-json';
 import reactHooks from 'eslint-plugin-react-hooks';
 import reactRefresh from 'eslint-plugin-react-refresh';
+import simpleImportSort from 'eslint-plugin-simple-import-sort';
 import tseslint from 'typescript-eslint';
-import lintJson from 'eslint-plugin-json';
-import stylisticTs from '@stylistic/eslint-plugin';
 
 import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended';
+import _ from 'lodash';
 
 export default tseslint.config(
   { ignores: ['dist'] },
@@ -41,10 +43,25 @@ export default tseslint.config(
       ],
     },
   },
-  {
-    files: ['**/*.{ts,tsx,json}'],
-    ...eslintPluginPrettierRecommended,
-  },
+  _.merge({ files: ['**/*.{ts,tsx,json}'] }, eslintPluginPrettierRecommended, {
+    plugins: {
+      'simple-import-sort': simpleImportSort,
+    },
+    rules: {
+      'prettier/prettier': [
+        'error',
+        {
+          singleQuote: true,
+          jsxSingleQuote: false,
+          endOfLine: 'auto',
+          semi: true,
+          trailingComma: 'es5',
+        },
+      ],
+      'simple-import-sort/imports': 'error',
+      'simple-import-sort/exports': 'error',
+    },
+  }),
   {
     files: ['**/*.json'],
     ...lintJson.configs['recommended-with-comments'],

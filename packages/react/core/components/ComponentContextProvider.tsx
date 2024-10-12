@@ -1,10 +1,9 @@
-import { ComponentType, PropsWithChildren } from 'react';
+import { ComponentType, memo, PropsWithChildren, useMemo } from 'react';
+
 import {
-  type RendererContextType,
   RendererContextProvider,
+  type RendererContextType,
 } from '../context/RendererContext';
-import { useMemo } from 'react';
-import { memo } from 'react';
 
 export type ComponentContextProviderProps =
   PropsWithChildren<RendererContextType>;

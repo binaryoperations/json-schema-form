@@ -1,4 +1,5 @@
-import { UiStore } from '@binaryoperations/json-forms-core/schema/ui.schema';
+import type { UiStore } from '@binaryoperations/json-forms-core/schema/ui.schema';
+
 import { createFastContext } from '../fast-context';
 
 const StoreContext = createFastContext<{ uiContext: UiStore }>({

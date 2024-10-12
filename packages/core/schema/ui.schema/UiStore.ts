@@ -1,9 +1,10 @@
 import { cast } from '@binaryoperations/json-forms-internals/cast';
+
 import {
-  UiSchema,
+  ControlNode,
   FieldsetNode,
   UiNodeType,
-  ControlNode,
+  UiSchema,
 } from '../../models/UiSchema';
 
 export class UiStore {

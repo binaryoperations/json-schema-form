@@ -1,8 +1,9 @@
-import { UiStoreContextProvider } from '../context/StoreContext';
-import { memo, useMemo } from 'react';
+import type { UiSchema } from '@binaryoperations/json-forms-core/models';
 import UiSchemaPrepare from '@binaryoperations/json-forms-core/schema/ui.schema';
 import type { ComponentType, PropsWithChildren } from 'react';
-import type { UiSchema } from '@binaryoperations/json-forms-core/models';
+import { memo, useMemo } from 'react';
+
+import { UiStoreContextProvider } from '../context/StoreContext';
 
 export type StoreContextProviderProps = PropsWithChildren<{
   uiSchema: UiSchema;

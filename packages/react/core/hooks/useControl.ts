@@ -1,22 +1,23 @@
-import {
+import type {
   ControlNode,
   ControlSchema,
 } from '@binaryoperations/json-forms-core/models';
-import { Selector } from '@binaryoperations/json-forms-core/types/reducers';
+import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
-import { ControlContext } from '../context/ControlContext';
-import { useStore } from './useStore';
-import { useInvariantContext } from './useInvariantContext';
-import {
-  useFormDataContext,
-  useStoreContextRef,
-} from '../context/FormDataContext';
-import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 import {
   set,
   shallowCompare,
 } from '@binaryoperations/json-forms-internals/object';
+import resolvers from '@binaryoperations/json-forms-internals/resolvers';
 import { useCallback } from 'react';
+
+import { ControlContext } from '../context/ControlContext';
+import {
+  useFormDataContext,
+  useStoreContextRef,
+} from '../context/FormDataContext';
+import { useInvariantContext } from './useInvariantContext';
+import { useStore } from './useStore';
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);

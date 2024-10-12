@@ -1,5 +1,6 @@
-import { ArrayJsonSchema, Schema, ObjectJsonSchema } from '../../models';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
+
+import { ArrayJsonSchema, ObjectJsonSchema, Schema } from '../../models';
 
 const arrayProperties: (keyof Schema)[] = ['allOf', 'anyOf', 'oneOf'];
 const objectProperties: (keyof Schema)[] = [

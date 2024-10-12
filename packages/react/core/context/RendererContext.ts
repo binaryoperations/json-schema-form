@@ -1,8 +1,9 @@
-import { type ComponentType } from 'react';
+import type { RankedControl } from '@binaryoperations/json-forms-core/controls/createControl';
+import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
+import type { ComponentType } from 'react';
+import type { PropsWithChildren } from 'react';
+
 import { createFastContext } from '../fast-context';
-import { RankedControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import { PropsWithChildren } from 'react';
 
 export type RendererContextType<
   T extends BaseControlProps<any> = BaseControlProps<any>,

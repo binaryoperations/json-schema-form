@@ -1,7 +1,7 @@
-import { memo } from 'react';
-import { useStore } from '../hooks';
-
 import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
+import { memo } from 'react';
+
+import { useStore } from '../hooks';
 import { useLayoutNode } from '../hooks/useRenderer';
 import { ControlNode } from './ControlNode';
 

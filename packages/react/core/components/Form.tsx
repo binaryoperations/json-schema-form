@@ -1,16 +1,17 @@
+import { UiSchema } from '@binaryoperations/json-forms-core/models';
 import { ComponentType, memo } from 'react';
+
+import { Row } from '../../components/Semantic';
 import {
   FormDataProvider,
   FormDataProviderProps,
 } from '../context/FormDataContext';
-import { UiSchema } from '@binaryoperations/json-forms-core/models';
-import { StoreContextProvider } from './StoreContextProvider';
 import {
   ComponentContextProvider,
   ComponentContextProviderProps,
 } from './ComponentContextProvider';
-import { Row } from '../../components/Semantic';
 import { LayoutChildren } from './LayoutNode';
+import { StoreContextProvider } from './StoreContextProvider';
 
 export type FormProps = Omit<ComponentContextProviderProps, 'children'> & {
   uiSchema: UiSchema;
@@ -27,7 +28,7 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
       <StoreContextProvider uiSchema={props.uiSchema}>
         <FormDataProvider value={props.data} onChange={props.onDataChange}>
           <Row style={props.style}>
-            <LayoutChildren id='root' />
+            <LayoutChildren id="root" />
           </Row>
         </FormDataProvider>
       </StoreContextProvider>

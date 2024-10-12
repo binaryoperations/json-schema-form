@@ -1,5 +1,5 @@
 import type { ComponentType } from 'react';
-import { type PropsWithChildren, type ReactNode, PureComponent } from 'react';
+import { type PropsWithChildren, PureComponent, type ReactNode } from 'react';
 
 type ErrorBoundaryState = {
   error: Error | null;

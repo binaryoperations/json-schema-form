@@ -1,11 +1,12 @@
-import { ComponentType } from 'react';
-import { LayoutChildren } from '../components/LayoutNode';
-import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
-import {
+import type {
   GetValueFromEvent,
   RankedControl,
 } from '@binaryoperations/json-forms-core/controls/createControl';
+import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
+import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
+import type { ComponentType } from 'react';
+
+import { LayoutChildren } from '../components/LayoutNode';
 
 export const createLayoutRenderer = <P extends object>(
   Component: ComponentType<P>

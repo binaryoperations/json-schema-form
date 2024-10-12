@@ -1,16 +1,16 @@
+import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { get } from '@binaryoperations/json-forms-internals/object';
+
 import type {
   ArrayJsonSchema,
   BooleanJsonSchema,
-  Schema,
   NullJsonSchema,
   NumberJsonSchema,
   ObjectJsonSchema,
+  Schema,
   StringJsonSchema,
 } from '../models/ControlSchema';
-
 import { ControlNode, FieldsetNode, type UiSchema } from '../models/UiSchema';
-import { get } from '@binaryoperations/json-forms-internals/object';
-import { cast } from '@binaryoperations/json-forms-internals/cast';
 
 export type Tester = (
   schema: Schema,

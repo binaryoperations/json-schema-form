@@ -1,6 +1,7 @@
 import { maxBy } from 'lodash';
-import { ControlSchema, FieldsetNode, UiSchema } from '../models';
-import { RankedControl } from './createControl';
+
+import type { ControlSchema, FieldsetNode, UiSchema } from '../models';
+import type { RankedControl } from './createControl';
 
 export const findControl = <T>(
   controls: RankedControl<T>[],

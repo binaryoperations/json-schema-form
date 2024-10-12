@@ -1,6 +1,6 @@
 import { createTextControl } from '@binaryoperations/json-forms-core/controls/createControl';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
-import { ChangeEvent, SyntheticEvent, useId } from 'react';
+import { type ChangeEvent, type SyntheticEvent, useId } from 'react';
 
 type HtmlInputProps = JSX.IntrinsicElements['input'];
 export interface InputProps extends HtmlInputProps {

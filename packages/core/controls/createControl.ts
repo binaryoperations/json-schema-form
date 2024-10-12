@@ -1,11 +1,12 @@
-import { ChangeEvent } from 'react';
+import type { ChangeEvent } from 'react';
+
 import {
-  type Ranker,
   isArrayRanked,
   isDateRanked,
   isNumberRanked,
   isTextRanked,
   isTimeRanked,
+  type Ranker,
 } from '../testers/testers';
 
 export type GetValueFromEvent = <T extends ChangeEvent>(e: T) => any;
