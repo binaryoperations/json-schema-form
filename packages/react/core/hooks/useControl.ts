@@ -30,12 +30,14 @@ export function useControl<SelectorOutput>(
   selector: Selector<ControlNode, SelectorOutput>,
   equalityCheck = Object.is
 ) {
-  const currentControl = useInvariantControl(
+  const currentControlId = useInvariantControl(
     'useControl can only be called inside ControlContext'
   );
 
   return useStore((store) => {
-    return selector(cast<ControlNode>(store.uiContext.getNode(currentControl)));
+    return selector(
+      cast<ControlNode>(store.uiContext.getNode(currentControlId))
+    );
   }, equalityCheck);
 }
 

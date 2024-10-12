@@ -1,13 +1,13 @@
 import {
-  createContext,
+  type Context,
   type MutableRefObject,
-  type ReactNode,
+  createContext,
   useCallback,
   useRef,
-  type Context,
   useEffect,
   useMemo,
   memo,
+  ComponentType,
 } from 'react';
 
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
@@ -17,6 +17,7 @@ import { useLatest } from '../hooks/useLatest';
 import { useInvariantContext } from '../hooks/useInvariantContext';
 
 import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
+import { PropsWithChildren } from 'react';
 
 type StoreDataType = NonNullable<object>;
 
@@ -92,11 +93,16 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   );
 };
 
-export type CreateFastContext = <T extends StoreDataType = StoreDataType>(
+export type ProviderProps<T> = PropsWithChildren<{
+  value: T;
+  onChange?: (nextValue: T) => void;
+}>;
+
+export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
   watch?: boolean
 ) => {
   useStoreRef: ReturnType<typeof createUseRefContext<T>>;
-  Provider: ReturnType<typeof createProvider<T>>;
+  Provider: ComponentType<ProviderProps<T>>;
   useContext: <SelectorResult>(
     selector: Selector<T, SelectorResult>,
     equalityCheck: EqualityCheck
@@ -142,7 +148,7 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
     useContext: <SelectorOutput,>(
       selector: Selector<T, SelectorOutput>,
       equalityCheck: EqualityCheck = shallowCompare
-    ) => useStore(context, selector, equalityCheck),
+    ) => useFastContextStore(context, selector, equalityCheck),
 
     /**
      *
@@ -167,23 +173,13 @@ export const createProvider = <T extends StoreDataType = StoreDataType>(
   StoreContext: Context<UseStoreDataReturnType<T>>,
   watch: boolean
 ) =>
-  memo(
-    ({
-      value,
-      children,
-      onChange,
-    }: {
-      value: T;
-      children: ReactNode;
-      onChange?: (nextValue: T) => void;
-    }) => {
-      return (
-        <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
-          {children}
-        </StoreContext.Provider>
-      );
-    }
-  );
+  memo(({ value, children, onChange }: ProviderProps<T>) => {
+    return (
+      <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
+        {children}
+      </StoreContext.Provider>
+    );
+  });
 
 export const createUseRefContext = <T extends StoreDataType = StoreDataType>(
   _Context: Context<UseStoreDataReturnType<T> | null>
@@ -197,7 +193,10 @@ export const createUseRefContext = <T extends StoreDataType = StoreDataType>(
   };
 };
 
-export const useStore = <IStore extends StoreDataType, SelectorOutput>(
+export const useFastContextStore = <
+  IStore extends StoreDataType,
+  SelectorOutput,
+>(
   _Context: Context<UseStoreDataReturnType<IStore> | null>,
   selector: Selector<IStore, SelectorOutput>,
   equalityFn = Object.is
@@ -224,5 +223,5 @@ export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
   selector: Selector<IStore, SelectorOutput>,
   equalityFn = Object.is
 ) => {
-  return useStore(_Context, selector, equalityFn)[0];
+  return useFastContextStore(_Context, selector, equalityFn)[0];
 };
