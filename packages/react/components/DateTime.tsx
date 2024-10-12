@@ -8,7 +8,7 @@ import { ChangeEvent } from 'react';
 import { cast } from '@binaryoperations/json-forms-internals/cast';
 
 export const Date = createDateControl(
-  (props: JSX.IntrinsicElements['input'] & { type?: 'date' }) => {
+  function Date(props: JSX.IntrinsicElements['input'] & { type?: 'date' }) {
     return <Input.Control {...props} type='date' />;
   },
   (event: SyntheticEvent) =>
@@ -16,7 +16,9 @@ export const Date = createDateControl(
 );
 
 export const DateTime = createDateControl(
-  (props: JSX.IntrinsicElements['input'] & { type?: 'datetime-local' }) => {
+  function DateTime(
+    props: JSX.IntrinsicElements['input'] & { type?: 'datetime-local' }
+  ) {
     return <Input.Control {...props} type='datetime-local' />;
   },
   (event: SyntheticEvent) =>
@@ -24,7 +26,7 @@ export const DateTime = createDateControl(
 );
 
 export const Time = createTimeControl(
-  (props: JSX.IntrinsicElements['input'] & { type?: 'time' }) => {
+  function Time(props: JSX.IntrinsicElements['input'] & { type?: 'time' }) {
     return <Input.Control {...props} type='time' />;
   },
   (event: SyntheticEvent) =>

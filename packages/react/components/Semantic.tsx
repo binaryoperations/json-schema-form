@@ -13,10 +13,12 @@ const styles = {
   },
 } as const;
 
-export const Row: FC<JSX.IntrinsicElements['div']> = memo((props) => {
+export const Row: FC<JSX.IntrinsicElements['div']> = memo(function Row(props) {
   return <div {...props} style={{ ...styles.row, ...props.style }}></div>;
 });
 
-export const Column: FC<JSX.IntrinsicElements['div']> = memo((props) => {
-  return <div {...props} style={{ ...styles.column, ...props.style }}></div>;
-});
+export const Column: FC<JSX.IntrinsicElements['div']> = memo(
+  function Column(props) {
+    return <div {...props} style={{ ...styles.column, ...props.style }}></div>;
+  }
+);

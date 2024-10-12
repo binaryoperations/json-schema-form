@@ -1,4 +1,4 @@
-import { ComponentProps, useCallback, useState } from 'react';
+import { ComponentProps, memo, useCallback, useState } from 'react';
 
 import '@binaryoperations/json-forms-react';
 import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Form';
@@ -65,32 +65,42 @@ const controlTypes = {
 const controls = Object.values(controlTypes);
 
 const types = {
-  [UiNodeType.COLUMNS]: createLayoutRenderer((props: { id: string }) => {
+  [UiNodeType.COLUMNS]: createLayoutRenderer(function LayoutColumn(props: {
+    id: string;
+  }) {
     return <Column data-type='column' style={defaultStyles} {...props} />;
   }),
-  [UiNodeType.ROWS]: createLayoutRenderer((props: { id: string }) => {
+  [UiNodeType.ROWS]: createLayoutRenderer(function LayoutRow(props: {
+    id: string;
+  }) {
     return <Row data-type='row' style={defaultStyles} {...props} />;
   }),
-  [UiNodeType.CONTROL]: createLayoutRenderer((props: { id: string }) => {
-    return (
-      <Row
-        data-type='control'
-        style={{
-          backgroundColor: '#e5e5e5',
-          wordBreak: 'break-all',
-          flexDirection: 'column',
-          display: 'flex',
-          alignItems: 'flex-start',
-          flex: 1,
-        }}
-        {...props}
-      />
-    );
-  }),
-  [UiNodeType.FIELD_SETS]: createLayoutRenderer((props: { id: string }) => {
-    return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
-  }),
-  [UiNodeType.FIELD_SET]: createLayoutRenderer((props: { id: string }) => {
+  [UiNodeType.CONTROL]: createLayoutRenderer(
+    memo(function LayoutControl(props: { id: string }) {
+      return (
+        <Row
+          data-type='control'
+          style={{
+            backgroundColor: '#e5e5e5',
+            wordBreak: 'break-all',
+            flexDirection: 'column',
+            display: 'flex',
+            alignItems: 'flex-start',
+            flex: 1,
+          }}
+          {...props}
+        />
+      );
+    })
+  ),
+  [UiNodeType.FIELD_SETS]: createLayoutRenderer(
+    function LayoutFieldSets(props: { id: string }) {
+      return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
+    }
+  ),
+  [UiNodeType.FIELD_SET]: createLayoutRenderer(function LayoutFieldSet(props: {
+    id: string;
+  }) {
     return <Column data-type='fieldSet' style={defaultStyles} {...props} />;
   }),
 };

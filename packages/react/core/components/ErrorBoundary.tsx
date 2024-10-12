@@ -1,5 +1,5 @@
-import { ComponentType, memo } from 'react';
-import { PropsWithChildren, PureComponent, ReactNode } from 'react';
+import type { ComponentType } from 'react';
+import { type PropsWithChildren, type ReactNode, PureComponent } from 'react';
 
 type ErrorBoundaryState = {
   error: Error | null;
@@ -47,12 +47,12 @@ export const withErrorBoundary = <Props extends object>(
   Component: ComponentType<Props>,
   Fallback?: ErrorBoundaryProps['Fallback']
 ) => {
-  return memo((props: Props) => {
+  return function withErrorBoundary(props: Props) {
     const { ...componentProps } = props;
     return (
       <ErrorBoundary Fallback={Fallback}>
         <Component {...(componentProps as Props)} />
       </ErrorBoundary>
     );
-  });
+  };
 };

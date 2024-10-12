@@ -21,7 +21,7 @@ export type FormProps = Omit<ComponentContextProviderProps, 'children'> & {
 
 export type Bootstrap = ComponentType<FormProps>;
 
-export const Bootstrap: Bootstrap = memo((props) => {
+export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
   return (
     <ComponentContextProvider layout={props.layout} controls={props.controls}>
       <StoreContextProvider uiSchema={props.uiSchema}>

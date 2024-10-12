@@ -10,7 +10,7 @@ import {
 export const createLayoutRenderer = <P extends object>(
   Component: ComponentType<P>
 ): ComponentType<{ id: string } & P> => {
-  return memo((props) => {
+  return memo(function LayoutRenderer(props) {
     return (
       <Component {...props}>
         <LayoutChildren id={props.id} />

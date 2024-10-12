@@ -5,6 +5,6 @@ export function useInvariantContext<T>(
   Context: Context<T | null>,
   message: string
 ) {
-  const value = invariant(useContext(Context), message);
-  return value;
+  const value = useContext(Context);
+  return invariant(value, message);
 }

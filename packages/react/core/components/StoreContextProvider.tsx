@@ -9,18 +9,20 @@ export type StoreContextProviderProps = PropsWithChildren<{
 }>;
 export type StoreContextProvider = ComponentType<StoreContextProviderProps>;
 
-export const StoreContextProvider: StoreContextProvider = memo((props) => {
-  const uiContext = useMemo(() => {
-    return {
-      uiContext: UiSchemaPrepare.parse(
-        JSON.parse(JSON.stringify(props.uiSchema))
-      ),
-    };
-  }, [props.uiSchema]);
+export const StoreContextProvider: StoreContextProvider = memo(
+  function StoreContextProvider(props) {
+    const uiContext = useMemo(() => {
+      return {
+        uiContext: UiSchemaPrepare.parse(
+          JSON.parse(JSON.stringify(props.uiSchema))
+        ),
+      };
+    }, [props.uiSchema]);
 
-  return (
-    <UiStoreContextProvider value={uiContext}>
-      {props.children}
-    </UiStoreContextProvider>
-  );
-});
+    return (
+      <UiStoreContextProvider value={uiContext}>
+        {props.children}
+      </UiStoreContextProvider>
+    );
+  }
+);

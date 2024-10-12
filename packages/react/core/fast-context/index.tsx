@@ -117,7 +117,8 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
 };
 
 export const createFastContext = <T extends StoreDataType = StoreDataType>(
-  watch = false
+  watch = false,
+  useDebugValue?: () => void
 ) => {
   const context = createContext<UseStoreDataReturnType<T> | null>(null);
 
@@ -160,7 +161,7 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
     useContextValue: <SelectorOutput,>(
       selector: Selector<T, SelectorOutput>,
       equalityCheck: EqualityCheck = shallowCompare
-    ) => useStoreValue(context, selector, equalityCheck),
+    ) => useStoreValue(context, selector, equalityCheck, useDebugValue),
 
     /**
      * context of the store. Useful for ContextBridge
@@ -173,7 +174,11 @@ export const createProvider = <T extends StoreDataType = StoreDataType>(
   StoreContext: Context<UseStoreDataReturnType<T>>,
   watch: boolean
 ) =>
-  memo(({ value, children, onChange }: ProviderProps<T>) => {
+  memo(function CreateFastContext({
+    value,
+    children,
+    onChange,
+  }: ProviderProps<T>) {
     return (
       <StoreContext.Provider value={useStoreData<T>(value, onChange, watch)}>
         {children}
@@ -221,7 +226,9 @@ export const useFastContextStore = <
 export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
   _Context: Context<UseStoreDataReturnType<IStore> | null>,
   selector: Selector<IStore, SelectorOutput>,
-  equalityFn = Object.is
+  equalityFn = Object.is,
+  useDebugValue?: () => void
 ) => {
+  useDebugValue?.();
   return useFastContextStore(_Context, selector, equalityFn)[0];
 };

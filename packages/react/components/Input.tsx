@@ -8,7 +8,7 @@ export interface InputProps extends HtmlInputProps {
 }
 
 export const Input = createTextControl(
-  (props: InputProps) => {
+  function Input(props: InputProps) {
     const inputId = useId();
     const { label: inputLabel, id = inputId, ...inputProps } = props;
 

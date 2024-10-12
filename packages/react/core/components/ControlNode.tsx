@@ -1,4 +1,3 @@
-import { memo } from 'react';
 import { useControl, useControlValue } from '../hooks';
 
 import { useControlNode } from '../hooks/useRenderer';
@@ -28,17 +27,17 @@ const Unhandled = () => {
 const withControlContext = <Props extends { id: string }>(
   Component: ComponentType<Props>
 ) => {
-  return memo((props: Props) => {
+  return function withControlContext(props: Props) {
     return (
       <ControlContext.Provider value={props.id}>
         <Component {...props} />
       </ControlContext.Provider>
     );
-  });
+  };
 };
 
 export const ControlNode = withControlContext(
-  withErrorBoundary((props: { id: string }) => {
+  withErrorBoundary(function ControlNode(props: { id: string }) {
     const control = useControl((control) => control);
 
     const { Control, getValueFromEvent } = invariant(
