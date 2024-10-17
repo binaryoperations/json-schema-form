@@ -1,12 +1,19 @@
-import { Tabs } from '@binaryoperations/json-forms-react/components/Semantic/Tabs';
+import {
+  Tabs,
+  type TabsPropsBase,
+} from '@binaryoperations/json-forms-react/components/Semantic/Tabs';
+import { type ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
 import type { Meta, StoryObj } from '@storybook/react';
+import { FC } from 'react';
 
 import { tabNodes, tabs } from './tabData';
+
+type TabsComponent = FC<TabsPropsBase & ActiveStateProps>;
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
 const meta = {
   title: 'Components/Tabs',
-  component: Tabs,
+  component: Tabs as TabsComponent,
   parameters: {
     // Optional parameter to center the component in the Canvas. More info: https://storybook.js.org/docs/configure/story-layout
     layout: 'fullscreen',
@@ -14,7 +21,7 @@ const meta = {
   // This component will have an automatically generated Autodocs entry: https://storybook.js.org/docs/writing-docs/autodocs
   tags: ['autodocs'],
   // More on argTypes: https://storybook.js.org/docs/api/argtypes
-} satisfies Meta<typeof Tabs>;
+} satisfies Meta<TabsComponent>;
 
 export default meta;
 

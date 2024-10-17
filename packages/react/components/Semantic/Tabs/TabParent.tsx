@@ -10,15 +10,15 @@ import { Row } from '../Row';
 import { styles } from '../styles';
 import { TabItem, TabItemProps } from './TabItem';
 
-export type TabsProps<T = unknown> = PropsWithChildren<
-  ActiveStateProps & {
-    tabs: Omit<TabItemProps<T>, 'onActivate'>[];
-    position?: 'left' | 'right' | 'top' | 'bottom';
-    tabListProps?: Omit<ColumnProps, 'children'>;
-  }
->;
+export type TabsPropsBase<T = unknown> = PropsWithChildren<{
+  tabs: Omit<TabItemProps<T>, 'onActivate'>[];
+  position?: 'left' | 'right' | 'top' | 'bottom';
+  tabListProps?: Omit<ColumnProps, 'children'>;
+}>;
 
-export const Tabs = function Tabs<T = unknown>(props: TabsProps<T>) {
+export type TabsProps<T = unknown> = ActiveStateProps<T> & TabsPropsBase<T>;
+
+export const Tabs = function Tabs(props: TabsProps) {
   const { render } = useActiveStateContext(props);
 
   const { position = 'top', tabs, tabListProps } = props;

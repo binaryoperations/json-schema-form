@@ -1,2 +1,2 @@
 export { TabItem, type TabItemProps } from './TabItem';
-export { Tabs, type TabsProps } from './TabParent';
+export { Tabs, type TabsProps, type TabsPropsBase } from './TabParent';
