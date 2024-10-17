@@ -19,5 +19,8 @@
     "noUnusedParameters": true,
     "noFallthroughCasesInSwitch": true
   },
-  "include": ["src", "../../react/components"]
+  "include": ["src"],
+  "references": [
+    { "@binaryoperations/json-forms-react": "../../react/tsconfig.json" }
+  ]
 }
