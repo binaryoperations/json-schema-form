@@ -1,21 +1,26 @@
-import { type FC, type PropsWithChildren } from 'react';
+import { type PropsWithChildren } from 'react';
 
-import { withActiveStateContext } from '../../../context/ActiveStateContext/withActiveStateContext';
-import { ID } from '../../../type';
+import {
+  type ActiveStateProps,
+  useActiveStateContext,
+} from '#context/ActiveStateContext';
+
 import { Column, ColumnProps } from '../Column';
 import { Row } from '../Row';
 import { styles } from '../styles';
 import { TabItem, TabItemProps } from './TabItem';
 
-export type TabsProps<T extends ID = string> = PropsWithChildren<{
+export type TabsPropsBase<T = unknown> = PropsWithChildren<{
   tabs: Omit<TabItemProps<T>, 'onActivate'>[];
   position?: 'left' | 'right' | 'top' | 'bottom';
   tabListProps?: Omit<ColumnProps, 'children'>;
 }>;
 
-export type Tabs<T extends ID = string> = FC<TabsProps<T>>;
+export type TabsProps<T = unknown> = ActiveStateProps<T> & TabsPropsBase<T>;
 
-export const Tabs = withActiveStateContext<TabsProps<ID>>(function Tabs(props) {
+export const Tabs = function Tabs(props: TabsProps) {
+  const { render } = useActiveStateContext(props);
+
   const { position = 'top', tabs, tabListProps } = props;
   const reverse = position === 'bottom' || position === 'right';
   const isVertical = position === 'top' || position === 'bottom';
@@ -23,13 +28,13 @@ export const Tabs = withActiveStateContext<TabsProps<ID>>(function Tabs(props) {
   const NodeList = isVertical ? Column : Row;
 
   const tabNodes = tabs.map((tabProps) => (
-    <TabItem key={tabProps.id} {...tabProps} onActivate={props.onChange} />
+    <TabItem key={tabProps.id + ''} {...tabProps} />
   ));
 
-  return (
+  return render(
     <Wrapper reverse={reverse}>
       <NodeList {...tabListProps}>{tabNodes}</NodeList>
       <Row style={styles.tabChildren}>{props.children}</Row>
     </Wrapper>
   );
-});
+};

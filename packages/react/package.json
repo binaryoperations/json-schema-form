@@ -19,6 +19,9 @@
   "repository": "https://github.com/binaryoperations/json-schema-form",
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
+  "imports": {
+    "#*": "./*"
+  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix ."

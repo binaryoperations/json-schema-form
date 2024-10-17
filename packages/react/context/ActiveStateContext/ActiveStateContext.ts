@@ -1,20 +1,20 @@
 import { useCallback } from 'react';
 
+import useSafeCallback from '#core/hooks/useSafeCallback';
+
 import { createFastContext } from '../../core/fast-context';
-import { ID } from '../../type';
 import { ActiveStateType } from './types';
 
 const ActiveStateContext = createFastContext<ActiveStateType>(true);
 
 export const ActiveStateProvider = ActiveStateContext.Provider;
-export const useActiveState = ActiveStateContext.useContext;
 export const useActiveStateValue = ActiveStateContext.useContextValue;
 
-export function useActiveStateChange() {
+export function useActiveStateChange<T>() {
   const { set } = ActiveStateContext.useStoreRef();
 
   return useCallback(
-    (id: ID) => {
+    (id: T) => {
       set((previous: ActiveStateType) => {
         switch (true) {
           case !previous.multiple:
@@ -34,6 +34,12 @@ export function useActiveStateChange() {
   );
 }
 
-export function useIsActive(id: ID) {
+export function useIsActive<T>(id: T) {
   return useActiveStateValue((state) => state.activeState.includes(id));
+}
+
+export function useActiveState<T>(id: T) {
+  const isActive = useIsActive(id);
+  const onActivate = useActiveStateChange<T>();
+  return [isActive, useSafeCallback(() => onActivate(id))] as const;
 }
