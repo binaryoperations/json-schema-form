@@ -8,7 +8,7 @@ export interface NumberProps extends InputProps {
   type?: 'number';
 }
 
-const Number = forwardRef<HTMLInputElement, NumberProps>(
+export const Number = forwardRef<HTMLInputElement, NumberProps>(
   function Number(props, ref) {
     return <Input {...props} type="number" ref={ref} />;
   }
