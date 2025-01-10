@@ -9,15 +9,18 @@ import {
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import resolvers from '@binaryoperations/json-forms-internals/resolvers';
-import { Checkbox } from '@binaryoperations/json-forms-react/components/Checkbox';
+import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
 import {
-  Date as DateComponent,
-  DateTime,
-  Time,
-} from '@binaryoperations/json-forms-react/components/DateTime';
-import { Input } from '@binaryoperations/json-forms-react/components/Input';
-import { Number as NumberComponent } from '@binaryoperations/json-forms-react/components/Number';
-import { Radio } from '@binaryoperations/json-forms-react/components/Radio';
+  DateControl,
+  DateTimeControl,
+  TimeControl,
+} from '@binaryoperations/json-forms-react/components/Controls/DateTime';
+import {
+  Number as NumberInput,
+  NumberControl,
+} from '@binaryoperations/json-forms-react/components/Controls/Number';
+import { RadioControl } from '@binaryoperations/json-forms-react/components/Controls/Radio';
+import { TextInputControl } from '@binaryoperations/json-forms-react/components/Controls/TextInput';
 import {
   Column,
   Row,
@@ -33,16 +36,16 @@ const defaultStyles = {
 };
 
 const controlTypes = {
-  date: DateComponent,
-  datetime: DateTime,
-  time: Time,
-  string: Input,
-  number: NumberComponent,
-  checkbox: Checkbox,
-  radio: Radio,
+  date: DateControl,
+  datetime: DateTimeControl,
+  time: TimeControl,
+  string: TextInputControl,
+  number: NumberControl,
+  checkbox: CheckboxControl,
+  radio: RadioControl,
   computedDate: createControl(
     (
-      props: ComponentProps<typeof NumberComponent.Control> & {
+      props: ComponentProps<typeof NumberInput> & {
         deriveFrom?: string;
       }
     ) => {
@@ -50,7 +53,7 @@ const controlTypes = {
       const value = useFormDataContext((data) =>
         deriveFrom ? computeAge(resolvers.resolvePath(data, deriveFrom)) : ''
       );
-      return <NumberComponent.Control {...componentProps} value={value} />;
+      return <NumberInput {...componentProps} value={value} />;
     },
     () => {},
     createRankedTester((_, uischema) =>

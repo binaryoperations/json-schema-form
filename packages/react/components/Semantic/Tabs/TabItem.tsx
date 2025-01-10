@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 
-import { Button, type ButtonProps } from '#/components/Button';
+import { Button, type ButtonProps } from '#components/Button';
 import { useActiveState } from '#context/ActiveStateContext';
 
 export interface TabItemProps<T = unknown>
