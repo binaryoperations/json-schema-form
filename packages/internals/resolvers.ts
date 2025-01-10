@@ -1,4 +1,5 @@
 import isEmpty from 'lodash/isEmpty';
+
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
 
 function resolvePath<T = any>(data: any, path: string): T {

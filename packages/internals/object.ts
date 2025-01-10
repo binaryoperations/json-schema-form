@@ -1,9 +1,10 @@
 import get from 'lodash/get';
+import maxBy from 'lodash/maxBy';
 import fpSet from 'lodash/fp/set';
 import type _set from 'lodash/set';
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
 
-export { get };
+export { get, maxBy };
 
 export const set: typeof _set = (data: object, path: string, value: any) => {
   if (Object.is(get(data, path), value)) return data;

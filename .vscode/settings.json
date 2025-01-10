@@ -1,6 +1,10 @@
 {
-    "editor.formatOnPaste": false,
-    "editor.formatOnSave": true,
-    "eslint.debug": true,
-    "eslint.codeActionsOnSave.mode": "all"
+  "editor.formatOnPaste": false,
+  "editor.formatOnSave": true,
+  "eslint.debug": true,
+  "editor.codeActionsOnSave": {
+    "mode": "explicit",
+    "source.fixAll.eslint": "explicit"
+  },
+  "dart.flutterCreateOrganization": null
 }

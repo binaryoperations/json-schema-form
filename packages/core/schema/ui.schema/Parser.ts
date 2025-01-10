@@ -1,5 +1,6 @@
 import orderBy from 'lodash/orderBy';
-import { UiSchema, FieldsetNode } from '../../models/UiSchema';
+
+import { FieldsetNode, UiSchema } from '../../models/UiSchema';
 import { UiStore } from './UiStore';
 
 export class UiSchemaParser {
