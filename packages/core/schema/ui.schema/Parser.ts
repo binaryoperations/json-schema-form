@@ -21,20 +21,20 @@ export class UiSchemaParser {
 
     this.store.keyMap[id] = uiSchema;
 
-    if ('nodes' in uiSchema) {
-      const treeNodes: string[] = [];
+    if (!('nodes' in uiSchema)) return id;
 
-      const nodes = uiSchema.nodes.filter(Boolean);
-      for (const nextUiSchema of nodes) {
-        treeNodes.push(this.traverse(nextUiSchema, id));
-      }
+    const treeNodes: string[] = [];
 
-      this.store.tree[id] = orderBy(
-        treeNodes,
-        (nodeId) => this.store.keyMap[nodeId].id ?? 0,
-        'asc'
-      );
+    const nodes = (uiSchema as FieldsetNode).nodes.filter(Boolean);
+    for (const nextUiSchema of nodes) {
+      treeNodes.push(this.traverse(nextUiSchema, id));
     }
+
+    this.store.tree[id] = orderBy(
+      treeNodes,
+      (nodeId) => this.store.keyMap[nodeId].id ?? 0,
+      'asc'
+    );
 
     return id;
   }

@@ -1,0 +1,2 @@
+"use strict";Object.defineProperties(exports,{__esModule:{value:!0},[Symbol.toStringTag]:{value:"Module"}});const o=require("../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js"),s=require("./useLatest.js"),a=t=>{const e=s.useLatest(t);if(typeof t!="function")throw new Error("useSafeCallback accepts exactly one argument of type function");return o.reactExports.useCallback((...u)=>{var r;return(r=e.current)==null?void 0:r.call(e,...u)},[e])};exports.default=a;exports.useSafeCallback=a;
+//# sourceMappingURL=useSafeCallback.js.map

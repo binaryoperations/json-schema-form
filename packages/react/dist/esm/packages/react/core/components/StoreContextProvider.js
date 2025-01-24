@@ -1,0 +1,2 @@
+import{j as o}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js";import i from"../../../core/schema/ui.schema/index.js";import{r as e}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js";import{UiStoreContextProvider as m}from"../context/StoreContext.js";const c=e.memo(function(r){const t=e.useMemo(()=>({uiContext:i.parse(JSON.parse(JSON.stringify(r.uiSchema)))}),[r.uiSchema]);return o.jsx(m,{value:t,children:r.children})});export{c as StoreContextProvider};
+//# sourceMappingURL=StoreContextProvider.js.map

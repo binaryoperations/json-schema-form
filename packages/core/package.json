@@ -24,7 +24,8 @@
   },
   "dependencies": {
     "@binaryoperations/json-forms-internals": "workspace:^",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "ajv": "^8.6.0"
   },
   "devDependencies": {
     "@types/lodash": "^4.17.7",

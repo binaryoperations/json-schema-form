@@ -118,10 +118,11 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
   ) => SelectorResult;
 };
 
+let counter = 0;
 export const createFastContext = <T extends StoreDataType = StoreDataType>(
   config?: CreateFastContextConfig
 ) => {
-  const { watch = false, debugName } =
+  const { watch = false, debugName = `fast-context-${++counter}` } =
     typeof config !== 'object' ? { watch: config } : config;
 
   const context = createContext<UseStoreDataReturnType<T> | null>(null);
