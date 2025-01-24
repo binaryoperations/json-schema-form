@@ -29,7 +29,7 @@
     "ajv": "^8.6.0",
     "lodash": "^4.17.21",
     "@types/lodash": "^4.17.7",
-    "eslint": "^9.11.1",
+    "eslint": "^9.19.0",
     "typescript-eslint": "^8.21.0"
   }
 }
