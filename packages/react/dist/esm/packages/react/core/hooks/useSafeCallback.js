@@ -1,0 +1,2 @@
+import{r as o}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js";import{useLatest as c}from"./useLatest.js";const f=r=>{const e=c(r);if(typeof r!="function")throw new Error("useSafeCallback accepts exactly one argument of type function");return o.useCallback((...a)=>{var t;return(t=e.current)==null?void 0:t.call(e,...a)},[e])};export{f as default,f as useSafeCallback};
+//# sourceMappingURL=useSafeCallback.js.map

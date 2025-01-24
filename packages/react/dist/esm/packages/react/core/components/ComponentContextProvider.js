@@ -1,0 +1,2 @@
+import{j as r}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js";import{r as t}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js";import{RendererContextProvider as n}from"../context/RendererContext.js";const u=t.memo(function(o){const e=t.useMemo(()=>({layout:o.layout,controls:o.controls}),[o.controls,o.layout]);return r.jsx(n,{value:e,children:o.children})});export{u as ComponentContextProvider};
+//# sourceMappingURL=ComponentContextProvider.js.map

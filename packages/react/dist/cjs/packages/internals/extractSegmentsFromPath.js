@@ -1,0 +1,2 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const c=require("./isNaN.js");function m(e){return a(e.replaceAll(/#|properties|items\/?/g,""))}function a(e){return e.replaceAll(/#\/?/g,"").split("/").reduce((r,t)=>t?r.concat(c(t)?t:+t):r,[])}exports.extractSchmeaSegmentsFromPath=a;exports.extractSegmentsFromPath=m;
+//# sourceMappingURL=extractSegmentsFromPath.js.map

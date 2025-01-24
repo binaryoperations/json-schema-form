@@ -1,0 +1,2 @@
+"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const r=require("../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js"),n=require("../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js"),u=require("./withLabel.js"),i=u.withLabel(n.reactExports.forwardRef(function(t,e){return r.jsxRuntimeExports.jsx("input",{...t,ref:e})}));exports.Input=i;
+//# sourceMappingURL=Input.js.map

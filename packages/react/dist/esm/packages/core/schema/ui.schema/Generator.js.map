@@ -1,0 +1,1 @@
+{"version":3,"file":"Generator.js","sources":["../../../../../../../core/schema/ui.schema/Generator.ts"],"sourcesContent":["export class UiSchemaGenerator {\n  static generate() {}\n}\n"],"names":["UiSchemaGenerator"],"mappings":"AAAO,MAAMA,CAAkB,CAC7B,OAAO,UAAW,CAAC,CACrB"}
