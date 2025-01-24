@@ -1,1 +1,0 @@
-{"version":3,"file":"useStore.js","sources":["../../../../../../core/hooks/useStore.ts"],"sourcesContent":["import { useUiStoreContext } from '../context/StoreContext';\n\nexport const useStore = useUiStoreContext;\n"],"names":["useStore","useUiStoreContext"],"mappings":"8HAEaA,EAAWC,EAAAA"}

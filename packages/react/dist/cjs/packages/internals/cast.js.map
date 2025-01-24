@@ -1,1 +1,0 @@
-{"version":3,"file":"cast.js","sources":["../../../../../internals/cast.ts"],"sourcesContent":["export const cast = <T = any>(dirty: any) => dirty as T;\n"],"names":["cast","dirty"],"mappings":"gFAAa,MAAAA,EAAiBC,GAAeA"}

@@ -23,11 +23,11 @@
     "lint": "eslint ."
   },
   "dependencies": {
-    "@binaryoperations/json-forms-internals": "workspace:^",
-    "lodash": "^4.17.21",
-    "ajv": "^8.6.0"
+    "@binaryoperations/json-forms-internals": "workspace:^"
   },
   "devDependencies": {
+    "ajv": "^8.6.0",
+    "lodash": "^4.17.21",
     "@types/lodash": "^4.17.7",
     "eslint": "^9.11.1",
     "typescript-eslint": "^8.8.0"

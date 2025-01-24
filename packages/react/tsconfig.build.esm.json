@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "outDir": "dist/esm",
+    "composite": false,
+    "declaration": false,
+    "declarationMap": false,
+    "sourceMap": true
+  }
+}

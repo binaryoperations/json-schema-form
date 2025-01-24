@@ -1,2 +1,0 @@
-import{j as r}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js";import{r as t}from"../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js";function c(s){return t.memo(t.forwardRef((e,i)=>{const l=t.useId(),n=e.id??l,{label:o,...m}=e;return r.jsxs(r.Fragment,{children:[o?r.jsx("label",{htmlFor:n,children:o}):null,r.jsx(s,{...m,ref:i,id:n})]})}))}export{c as withLabel};
-//# sourceMappingURL=withLabel.js.map

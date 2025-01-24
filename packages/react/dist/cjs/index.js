@@ -1,2 +1,6 @@
-"use strict";Object.defineProperty(exports,Symbol.toStringTag,{value:"Module"});const e=require("./packages/internals/cast.js"),t=require("./packages/react/core/hoc/createRenderer.js"),r=require("./packages/react/components/Controls/Input.js"),o=require("./packages/react/core/components/Form.js");globalThis.createControl=e.cast(t.createControl);exports.Input=r.Input;exports.Bootstrap=o.Bootstrap;
+import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { createControl } from './core/hoc/createRenderer';
+globalThis.createControl = cast(createControl);
+export * from './components/Controls/Input';
+export { Bootstrap } from './core/components/Form';
 //# sourceMappingURL=index.js.map

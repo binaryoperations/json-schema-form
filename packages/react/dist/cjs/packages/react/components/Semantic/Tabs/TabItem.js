@@ -1,2 +1,0 @@
-"use strict";const u=require("../../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/jsx-runtime.js"),l=require("../../../../../node_modules/.pnpm/react@18.3.1/node_modules/react/index.js"),m=require("../../Button.js"),v=require("../../../context/ActiveStateContext/ActiveStateContext.js");l.reactExports.memo(function(s){const{id:n,label:c,className:t="",...o}=s,[i,r]=v.useActiveState(n),e=i?"active":"not-active",a=t?`${t} ${e}`:e;return u.jsxRuntimeExports.jsx(m.Button,{className:a,onClick:r,...o,children:c})});
-//# sourceMappingURL=TabItem.js.map

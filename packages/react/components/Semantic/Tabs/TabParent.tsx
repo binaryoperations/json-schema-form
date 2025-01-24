@@ -3,7 +3,7 @@ import { type PropsWithChildren } from 'react';
 import {
   type ActiveStateProps,
   useActiveStateContext,
-} from '#context/ActiveStateContext';
+} from '#/context/ActiveStateContext';
 
 import { Column, ColumnProps } from '../Column';
 import { Row } from '../Row';

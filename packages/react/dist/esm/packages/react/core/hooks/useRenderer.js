@@ -1,2 +1,0 @@
-import{findControl as n}from"../../../core/controls/findControl.js";import u from"../../../internals/invariant.js";import{shallowCompare as m}from"../../../internals/object.js";import{useRendererContext as e}from"../context/RendererContext.js";import{useStore as i}from"./useStore.js";const f=o=>u(e(t=>t.layout[o]),`Layout "${o}" has not been registered`),p=o=>{const t=e(r=>r.controls);return i(r=>n(t,r.uiContext.getNode(o),r.uiContext.deriveNodeSchema(o)),m)};export{p as useControlNode,f as useLayoutNode};
-//# sourceMappingURL=useRenderer.js.map

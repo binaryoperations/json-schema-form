@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 
-import useSafeCallback from '#core/hooks/useSafeCallback';
+import useSafeCallback from '#/core/hooks/useSafeCallback';
 
 import { createFastContext } from '../../core/fast-context';
 import { ActiveStateType } from './types';

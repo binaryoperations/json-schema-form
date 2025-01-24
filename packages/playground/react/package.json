@@ -13,6 +13,9 @@
   "dependencies": {
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "ajv": "^8.6.0",
+    "lodash": "^4.17.21",
+    "use-sync-external-store": "^1.2.2",
     "@binaryoperations/json-forms-core": "workspace:^",
     "@binaryoperations/json-forms-react": "workspace:^",
     "@binaryoperations/json-forms-internals": "workspace:^"

@@ -1,2 +1,6 @@
-import{cast as o}from"./packages/internals/cast.js";import{createControl as r}from"./packages/react/core/hoc/createRenderer.js";import{Input as a}from"./packages/react/components/Controls/Input.js";import{Bootstrap as l}from"./packages/react/core/components/Form.js";globalThis.createControl=o(r);export{l as Bootstrap,a as Input};
+import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { createControl } from './core/hoc/createRenderer';
+globalThis.createControl = cast(createControl);
+export * from './components/Controls/Input';
+export { Bootstrap } from './core/components/Form';
 //# sourceMappingURL=index.js.map

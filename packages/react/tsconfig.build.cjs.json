@@ -1,0 +1,6 @@
+{
+  "extends": "./tsconfig.build.esm",
+  "compilerOptions": {
+    "outDir": "dist/cjs"
+  }
+}
