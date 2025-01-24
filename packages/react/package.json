@@ -20,8 +20,8 @@
   "repository": "https://github.com/binaryoperations/json-schema-form",
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
-  "main": "dist/cjs/index.js",
-  "module": "dist/esm/index.js",
+  "main": "dist/cjs/react/index.js",
+  "module": "dist/esm/react/index.js",
   "types": "index.ts",
   "imports": {
     "#*": "./*"
@@ -31,8 +31,7 @@
     "lint:fix": "eslint --fix .",
     "build:cjs": "tsc --project tsconfig.build.cjs.json && tsc-alias -p tsconfig.build.cjs.json",
     "build:esm": "tsc --project tsconfig.build.esm.json && tsc-alias -p tsconfig.build.esm.json",
-    "build": "concurrently --names \"ESM,CJS\" -c \"bgBlue.bold,bgRed.bold\" \"pnpm build:esm\" \"pnpm build:cjs\""
-  },
+    "build": "concurrently --names \"ESM,CJS\" -c \"bgBlue.bold,bgRed.bold\" \"pnpm build:esm\" \"pnpm build:cjs\""  },
   "peerDependencies": {
     "ajv": "^8.6.0",
     "react": "^18.3.1",

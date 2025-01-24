@@ -5,6 +5,12 @@
     "composite": false,
     "declaration": false,
     "declarationMap": false,
-    "sourceMap": true
-  }
+    "sourceMap": true,
+    "paths": {
+      "@binaryoperations/json-forms-internals": ["../internals"],
+      "@binaryoperations/json-forms-core": ["../core"],
+      "#/*": ["./*"]
+    }
+  },
+  "include": ["../core", "../internals", "."]
 }

@@ -22,9 +22,9 @@
   "license": "ISC",
   "exports": {
     "./react": {
-      "types": "./packages/react",
-      "require": "./packages/react/dist/cjs",
-      "import": "./packages/react/dist/esm"
+      "types": "./packages/react/index.ts",
+      "require": "./packages/react/dist/cjs/index.js",
+      "import": "./packages/react/dist/esm/index.js"
     }
   },
   "scripts": {
