@@ -55,28 +55,28 @@ export interface UiNodeBase {
 }
 
 export interface FieldsetsNode extends UiNodeBase {
-  type: UiNodeType.FIELD_SETS;
+  type: `${UiNodeType.FIELD_SETS}`;
   nodes: ChildNode<FieldsetNode>[];
 }
 
 export interface FieldsetNode extends UiNodeBase {
-  type: UiNodeType.FIELD_SET;
+  type: `${UiNodeType.FIELD_SET}`;
   label?: string;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
 export interface RowsNode extends UiNodeBase {
-  type: UiNodeType.ROWS;
+  type: `${UiNodeType.ROWS}`;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
 export interface ColumnsNode extends UiNodeBase {
-  type: UiNodeType.COLUMNS;
+  type: `${UiNodeType.COLUMNS}`;
   nodes: ChildNode<PossibleRootNodes>[];
 }
 
 export interface ControlNode<T extends object = object> extends UiNodeBase {
-  type: UiNodeType.CONTROL;
+  type: `${UiNodeType.CONTROL}`;
   schema: ControlSchema;
   label?: string;
   path: string;
