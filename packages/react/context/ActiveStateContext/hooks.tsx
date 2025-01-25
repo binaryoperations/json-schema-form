@@ -1,4 +1,4 @@
-import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import type { ReactNode } from 'react';
 import { useMemo } from 'react';
 

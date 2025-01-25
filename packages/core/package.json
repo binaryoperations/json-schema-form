@@ -16,14 +16,17 @@
     "hook-form",
     "headless-form-builder"
   ],
+  "main": "dist/cjs/index.js",
+  "module": "dist/esm/index.js",
+  "types": "dist/types/index.d.ts",
+  "imports": {
+    "#/*": "./*"
+  },
   "repository": "https://github.com/binaryoperations/json-schema-form",
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "scripts": {
     "lint": "eslint ."
-  },
-  "dependencies": {
-    "@binaryoperations/json-forms-internals": "workspace:^"
   },
   "devDependencies": {
     "ajv": "^8.6.0",

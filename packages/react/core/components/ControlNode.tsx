@@ -1,4 +1,4 @@
-import invariant from '@binaryoperations/json-forms-internals/invariant';
+import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 import { ComponentType } from 'react';
 import { useCallback } from 'react';
 import { ChangeEvent } from 'react';

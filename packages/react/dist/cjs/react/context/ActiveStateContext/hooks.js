@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { cast } from '../../../internals/cast';
+import { cast } from '../../../core/internals/cast';
 import { useMemo } from 'react';
 import useRef from '../../core/hooks/useRef';
 import useSafeCallback from '../../core/hooks/useSafeCallback';

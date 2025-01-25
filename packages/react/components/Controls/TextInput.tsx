@@ -1,5 +1,5 @@
 import { createTextControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
   type ChangeEvent,
   forwardRef,

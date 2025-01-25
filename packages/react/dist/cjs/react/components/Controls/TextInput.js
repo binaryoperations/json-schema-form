@@ -1,6 +1,6 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
 import { createTextControl } from '../../../core/controls/createControl';
-import { cast } from '../../../internals/cast';
+import { cast } from '../../../core/internals/cast';
 import { forwardRef, useId, } from 'react';
 import { Input } from './Input';
 /**

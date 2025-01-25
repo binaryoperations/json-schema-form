@@ -8,7 +8,7 @@ import {
   UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
-import resolvers from '@binaryoperations/json-forms-internals/resolvers';
+import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
 import {
   DateControl,

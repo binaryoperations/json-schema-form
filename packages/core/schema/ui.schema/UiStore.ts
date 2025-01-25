@@ -1,4 +1,4 @@
-import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { cast } from '#/internals/cast';
 
 import {
   ControlNode,

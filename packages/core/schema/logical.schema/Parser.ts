@@ -1,4 +1,4 @@
-import resolvers from '@binaryoperations/json-forms-internals/resolvers';
+import resolvers from '#/internals/resolvers';
 
 import { ArrayJsonSchema, ObjectJsonSchema, Schema } from '../../models';
 

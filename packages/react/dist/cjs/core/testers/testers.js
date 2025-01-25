@@ -1,5 +1,5 @@
-import { cast } from '../../internals/cast';
-import { get } from '../../internals/object';
+import { cast } from '../internals/cast';
+import { get } from '../internals/object';
 export const and = (...functions) => {
     return (...arg) => functions.every((func) => func(...arg));
 };

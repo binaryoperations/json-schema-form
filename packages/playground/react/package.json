@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@binaryoperations/json-forms-core": "workspace:^",
-    "@binaryoperations/json-forms-internals": "workspace:^",
     "@binaryoperations/json-forms-react": "workspace:^",
     "ajv": "^8.6.0",
     "lodash": "^4.17.21",

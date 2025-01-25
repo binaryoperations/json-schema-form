@@ -1,4 +1,4 @@
-import invariant from '../../../internals/invariant';
+import invariant from '../../../core/internals/invariant';
 import { useContext } from 'react';
 export function useInvariantContext(Context, message) {
     const value = useContext(Context);

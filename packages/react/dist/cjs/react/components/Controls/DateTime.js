@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createDateControl, createTimeControl, } from '../../../core/controls/createControl';
-import { cast } from '../../../internals/cast';
+import { cast } from '../../../core/internals/cast';
 import { forwardRef } from 'react';
 import { Input } from './Input';
 export const Date = forwardRef(function Date(props, ref) {

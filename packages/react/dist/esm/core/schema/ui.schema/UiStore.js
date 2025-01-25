@@ -1,4 +1,4 @@
-import { cast } from '../../../internals/cast';
+import { cast } from '../../internals/cast';
 import { UiNodeType, } from '../../models/UiSchema';
 export class UiStore {
     keyMap = {};

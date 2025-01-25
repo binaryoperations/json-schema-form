@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createNumberControl } from '../../../core/controls/createControl';
-import { cast } from '../../../internals/cast';
+import { cast } from '../../../core/internals/cast';
 import { forwardRef } from 'react';
 import { Input } from './Input';
 export const Number = forwardRef(function Number(props, ref) {

@@ -1,6 +1,6 @@
 import { findControl } from '../../../core/controls/findControl';
-import invariant from '../../../internals/invariant';
-import { shallowCompare } from '../../../internals/object';
+import invariant from '../../../core/internals/invariant';
+import { shallowCompare } from '../../../core/internals/object';
 import { useRendererContext } from '../context/RendererContext';
 import { useStore } from './useStore';
 export const useLayoutNode = (type) => {

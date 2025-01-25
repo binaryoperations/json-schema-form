@@ -1,6 +1,6 @@
-import { cast } from '../../../internals/cast';
-import { set, shallowCompare, } from '../../../internals/object';
-import resolvers from '../../../internals/resolvers';
+import { cast } from '../../../core/internals/cast';
+import { set, shallowCompare, } from '../../../core/internals/object';
+import resolvers from '../../../core/internals/resolvers';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
 import { useFormDataContext, useStoreContextRef, } from '../context/FormDataContext';

@@ -1,4 +1,4 @@
-import { shallowCompare } from '@binaryoperations/json-forms-internals/object';
+import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
 import { memo } from 'react';
 
 import { useStore } from '../hooks';

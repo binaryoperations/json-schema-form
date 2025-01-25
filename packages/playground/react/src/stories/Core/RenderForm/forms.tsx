@@ -3,7 +3,7 @@ import {
   UiNodeType,
   UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
-import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 
 export type FormConfig = {
   data: object;

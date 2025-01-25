@@ -23,8 +23,9 @@
   "main": "dist/cjs/react/index.js",
   "module": "dist/esm/react/index.js",
   "types": "dist/types/react/index.d.ts",
+  "typings": "dist/types/react/index.d.ts",
   "imports": {
-    "#*": "./*"
+    "#/*": "./*"
   },
   "scripts": {
     "lint": "eslint .",
@@ -40,7 +41,7 @@
   },
   "dependencies": {
     "@binaryoperations/json-forms-core": "workspace:^",
-    "@binaryoperations/json-forms-internals": "workspace:^"
+    "@binaryoperations/json-forms-core/internals": "workspace:^"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^12.1.2",

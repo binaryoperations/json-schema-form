@@ -1,5 +1,5 @@
-import { cast } from '@binaryoperations/json-forms-internals/cast';
-import { get } from '@binaryoperations/json-forms-internals/object';
+import { cast } from '#/internals/cast';
+import { get } from '#/internals/object';
 
 import type {
   ArrayJsonSchema,

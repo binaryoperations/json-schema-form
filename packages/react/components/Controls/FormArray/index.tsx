@@ -1,4 +1,4 @@
-import { generateId } from '@binaryoperations/json-forms-internals/generateId';
+import { generateId } from '@binaryoperations/json-forms-core/internals/generateId';
 import React, { Fragment } from 'react';
 
 interface FormArrayProps {

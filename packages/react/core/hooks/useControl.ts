@@ -3,12 +3,12 @@ import type {
   ControlSchema,
 } from '@binaryoperations/json-forms-core/models';
 import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
-import { cast } from '@binaryoperations/json-forms-internals/cast';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
   set,
   shallowCompare,
-} from '@binaryoperations/json-forms-internals/object';
-import resolvers from '@binaryoperations/json-forms-internals/resolvers';
+} from '@binaryoperations/json-forms-core/internals/object';
+import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';

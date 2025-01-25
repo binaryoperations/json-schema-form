@@ -1,5 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import { shallowCompare } from '../../../internals/object';
+import { shallowCompare } from '../../../core/internals/object';
 import { createContext, memo, useCallback, useEffect, useMemo, useRef, } from 'react';
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 import { useInvariantContext } from '../hooks/useInvariantContext';

@@ -1,4 +1,4 @@
-import { cast } from '../internals/cast';
+import { cast } from '../core/internals/cast';
 import { createControl } from './core/hoc/createRenderer';
 globalThis.createControl = cast(createControl);
 export * from './components/Controls/Input';

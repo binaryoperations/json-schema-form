@@ -1,4 +1,4 @@
-import resolvers from '../../../internals/resolvers';
+import resolvers from '../../internals/resolvers';
 const arrayProperties = ['allOf', 'anyOf', 'oneOf'];
 const objectProperties = [
     'contains',

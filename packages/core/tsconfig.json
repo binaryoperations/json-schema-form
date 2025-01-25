@@ -1,0 +1,14 @@
+{
+  "extends": "../configs/tsconfig.react.json",
+  "compilerOptions": {
+    "composite": true,
+    "paths": {
+      "#/*": ["./*"]
+    }
+  }
+  ,
+  "include": [
+    "./**/*.ts",
+    "./**/*.tsx"
+  ]
+}
