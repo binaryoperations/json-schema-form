@@ -15,7 +15,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const uiContext = useMemo(() => {
       return {
         uiContext: UiSchemaPrepare.parse(
-          JSON.parse(JSON.stringify(props.uiSchema))
+          JSON.parse(JSON.stringify(props.uiSchema)),
         ),
       };
     }, [props.uiSchema]);

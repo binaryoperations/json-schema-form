@@ -192,6 +192,7 @@ export const customerWizard: FormConfig = {
         label: '',
         type: UiNodeType.FIELD_SET,
         nodes: [
+
           {
             type: UiNodeType.ROWS,
             nodes: [

@@ -4,6 +4,7 @@ import { shallowCompare } from '@binaryoperations/json-forms-core/internals/obje
 
 import { useRendererContext } from '../context/RendererContext';
 import { useStore } from './useStore';
+import type { ComponentType } from 'react';
 
 export const useLayoutNode = (type: string) => {
   return invariant(
@@ -11,6 +12,15 @@ export const useLayoutNode = (type: string) => {
       return store.layout[type];
     }),
     `Layout "${type}" has not been registered`
+  );
+};
+
+export const useCustomLayoutNode = (type: string | ComponentType<object>) => {
+  return invariant(
+    useRendererContext((store) => {
+      return typeof type === 'string' ? store.layout[type] : type;
+    }),
+    `Custom Layout "${type}" has not been registered`
   );
 };
 

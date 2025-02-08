@@ -4,9 +4,12 @@ import type {
 } from '@binaryoperations/json-forms-core/controls/createControl';
 import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
 import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import type { ComponentType } from 'react';
+import type { ComponentType, PropsWithChildren } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
+import { useStore } from '../hooks';
+import type { CustomNode } from '@binaryoperations/json-forms-core/models';
+import { useCustomLayoutNode } from '../hooks/useRenderer';
 
 export const createLayoutRenderer = <P extends object>(
   Component: ComponentType<P>
@@ -15,6 +18,25 @@ export const createLayoutRenderer = <P extends object>(
     return (
       <Component {...props}>
         <LayoutChildren id={props.id} />
+      </Component>
+    );
+  };
+};
+
+export const createCustomLayoutRenderer = <P extends object>(
+  Component: ComponentType<PropsWithChildren>
+): ComponentType<{ id: string } & P> => {
+  return function CustomLayoutRenderer(props) {
+    const { renderer, options } = useStore((store) => {
+      const node = store.uiContext.getNode(props.id) as CustomNode;
+      return node
+    });
+
+    const LayoutNode = useCustomLayoutNode(renderer);
+
+    return (
+      <Component {...props}>
+        <LayoutNode id={props.id} {...options} />
       </Component>
     );
   };

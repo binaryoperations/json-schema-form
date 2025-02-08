@@ -1,3 +1,4 @@
+import { ComponentType } from 'react';
 import { ControlSchema } from './ControlSchema';
 
 export enum UiNodeType {
@@ -6,6 +7,7 @@ export enum UiNodeType {
   ROWS = 'rows',
   COLUMNS = 'columns',
   CONTROL = 'control',
+  CUSTOM = 'custom',
 }
 
 /**
@@ -83,6 +85,12 @@ export interface ControlNode<T extends object = object> extends UiNodeBase {
   options?: T;
 }
 
-type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;
+export interface CustomNode<T extends object = object> extends UiNodeBase {
+  type: `${UiNodeType.CUSTOM}`;
+  renderer: ComponentType<T> | string;
+  options?: T;
+}
+
+type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode | CustomNode;
 
 export type UiSchema = PossibleRootNodes;
