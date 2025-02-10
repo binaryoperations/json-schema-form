@@ -15,7 +15,7 @@ export default tseslint.config(
     extends: [
       js.configs.recommended,
       ...tseslint.configs.recommended,
-      tseslint.configs.reactHooks,
+      ...(tseslint.configs.reactHooks ? [tseslint.configs.reactHooks] : []),
     ],
     files: ['**/*.{ts,tsx,mjs}'],
     languageOptions: {

@@ -13,13 +13,13 @@ import { cast } from '#/internals/cast';
 
 export type GetValueFromEvent<Output = any> = <T extends ChangeEvent>(e: T) => Output;
 
-export type RankedControl<C extends any, Props extends { value: any }> = {
+export type RankedControl<C extends unknown, Props extends { value: any }> = {
   Control: C;
   getValueFromEvent: GetValueFromEvent<Props['value']>;
   deriveRank: Ranker;
 };
 
-export default function createControl<C extends any, P extends { value: any }>(
+export default function createControl<C extends unknown, P extends { value: any }>(
   Control: C,
   getValueFromEvent: GetValueFromEvent<P['value']>,
   deriveRank: Ranker
@@ -61,7 +61,7 @@ export const createBooleanControl = <T>(
 
 
 interface CreateControl {
-  <C extends any, Props extends { value: any }>(
+  <C extends unknown, Props extends { value: any }>(
     Control: C,
     getValueFromEvent: GetValueFromEvent,
     deriveRank: Ranker
