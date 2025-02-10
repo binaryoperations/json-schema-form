@@ -22,7 +22,17 @@ const hasWalkableProperties = <T extends object>(
   return !walkableProperties.some((prop) => hasPropertyValue(node, prop));
 };
 
+/**
+ *
+ * Normalise references into objects from definitions
+ *
+ * TODO:
+ * 1. Nested definitions
+ * 2. Circular references
+ *
+ */
 export class JsonSchemaParser {
+  // definitions: Record<string, Schema> = {};
   constructor(private rootSchema: Schema) {}
 
   static parse(object: Schema) {
@@ -36,49 +46,6 @@ export class JsonSchemaParser {
       throw new Error(`Invalid definition: "${ref}"`);
 
     return this.walk(schema);
-  }
-
-  walk(node: Schema): Schema {
-    if (node.$ref) {
-      return this.explodeRef(node.$ref);
-    }
-
-    const type = node.type;
-
-    node = !hasWalkableProperties(
-      [...arrayProperties, ...objectProperties],
-      node
-    )
-      ? node
-      : Object.entries(node).reduce(
-          (preparedNode: Schema, [nextKey, nextValue]) => {
-            const typedKey = nextKey as keyof Schema;
-            if (!hasPropertyValue(node, typedKey)) return preparedNode;
-            if (arrayProperties.includes(typedKey))
-              return Object.assign(preparedNode, {
-                [nextKey]: [].concat(nextValue).map(this.walk.bind(this)),
-              });
-
-            if (objectProperties.includes(typedKey))
-              return Object.assign(preparedNode, {
-                [nextKey]: this.walk(nextValue),
-              });
-
-            return Object.assign(preparedNode, {
-              [nextKey]: nextValue,
-            });
-          },
-          {}
-        );
-
-    switch (type) {
-      case 'array':
-        return this.walkArray(node as ArrayJsonSchema);
-      case 'object':
-        return this.walkObject(node as ObjectJsonSchema);
-      default:
-        return node;
-    }
   }
 
   // TODO: flatten schema from "allOf" | "oneOf" | "anyOf"
@@ -102,7 +69,8 @@ export class JsonSchemaParser {
         return node;
       },
       definitions: (node: ObjectJsonSchema) => {
-        node.definitions = walkObjectValues(node.definitions!);
+        const nextDefinitions = walkObjectValues(node.definitions!);
+        Object.keys(nextDefinitions)
         return node;
       },
       properties: (node: ObjectJsonSchema) => {
@@ -155,5 +123,49 @@ export class JsonSchemaParser {
 
     node.items = Array.isArray(node.items) ? items : items.at(0);
     return node;
+  }
+
+
+  walk(node: Schema): Schema {
+    if (node.$ref) {
+      return this.explodeRef(node.$ref);
+    }
+
+    const type = node.type;
+
+    node = !hasWalkableProperties(
+      [...arrayProperties, ...objectProperties],
+      node
+    )
+      ? node
+      : Object.entries(node).reduce(
+          (preparedNode: Schema, [nextKey, nextValue]) => {
+            const typedKey = nextKey as keyof Schema;
+            if (!hasPropertyValue(node, typedKey)) return preparedNode;
+            if (arrayProperties.includes(typedKey))
+              return Object.assign(preparedNode, {
+                [nextKey]: [].concat(nextValue).map(this.walk.bind(this)),
+              });
+
+            if (objectProperties.includes(typedKey))
+              return Object.assign(preparedNode, {
+                [nextKey]: this.walk(nextValue),
+              });
+
+            return Object.assign(preparedNode, {
+              [nextKey]: nextValue,
+            });
+          },
+          {}
+        );
+
+    switch (type) {
+      case 'array':
+        return this.walkArray(node as ArrayJsonSchema);
+      case 'object':
+        return this.walkObject(node as ObjectJsonSchema);
+      default:
+        return node;
+    }
   }
 }
