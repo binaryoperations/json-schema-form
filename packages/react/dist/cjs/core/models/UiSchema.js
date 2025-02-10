@@ -5,6 +5,7 @@ export var UiNodeType;
     UiNodeType["ROWS"] = "rows";
     UiNodeType["COLUMNS"] = "columns";
     UiNodeType["CONTROL"] = "control";
+    UiNodeType["CUSTOM"] = "custom";
 })(UiNodeType || (UiNodeType = {}));
 /**
  *

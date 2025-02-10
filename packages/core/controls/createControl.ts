@@ -59,11 +59,14 @@ export const createBooleanControl = <T>(
   getValueFromEvent: GetValueFromEvent
 ) => createControl(Control, getValueFromEvent, isArrayRanked);
 
+declare global {
+  interface CreateControl {
+    <C extends unknown, Props extends { value: any }>(
+      Control: C,
+      getValueFromEvent: GetValueFromEvent,
+      deriveRank: Ranker
+    ): RankedControl<C, Props>;
+  }
 
-interface CreateControl {
-  <C extends unknown, Props extends { value: any }>(
-    Control: C,
-    getValueFromEvent: GetValueFromEvent,
-    deriveRank: Ranker
-  ): RankedControl<C, Props>;
+  var createControl: CreateControl;
 }

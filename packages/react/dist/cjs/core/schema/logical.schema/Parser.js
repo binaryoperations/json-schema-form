@@ -12,8 +12,18 @@ const hasPropertyValue = (node, segment) => segment in node && node[segment] !==
 const hasWalkableProperties = (walkableProperties, node) => {
     return !walkableProperties.some((prop) => hasPropertyValue(node, prop));
 };
+/**
+ *
+ * Normalise references into objects from definitions
+ *
+ * TODO:
+ * 1. Nested definitions
+ * 2. Circular references
+ *
+ */
 export class JsonSchemaParser {
     rootSchema;
+    // definitions: Record<string, Schema> = {};
     constructor(rootSchema) {
         this.rootSchema = rootSchema;
     }
@@ -26,38 +36,6 @@ export class JsonSchemaParser {
         if (!schema || typeof schema !== 'object' || Array.isArray(schema))
             throw new Error(`Invalid definition: "${ref}"`);
         return this.walk(schema);
-    }
-    walk(node) {
-        if (node.$ref) {
-            return this.explodeRef(node.$ref);
-        }
-        const type = node.type;
-        node = !hasWalkableProperties([...arrayProperties, ...objectProperties], node)
-            ? node
-            : Object.entries(node).reduce((preparedNode, [nextKey, nextValue]) => {
-                const typedKey = nextKey;
-                if (!hasPropertyValue(node, typedKey))
-                    return preparedNode;
-                if (arrayProperties.includes(typedKey))
-                    return Object.assign(preparedNode, {
-                        [nextKey]: [].concat(nextValue).map(this.walk.bind(this)),
-                    });
-                if (objectProperties.includes(typedKey))
-                    return Object.assign(preparedNode, {
-                        [nextKey]: this.walk(nextValue),
-                    });
-                return Object.assign(preparedNode, {
-                    [nextKey]: nextValue,
-                });
-            }, {});
-        switch (type) {
-            case 'array':
-                return this.walkArray(node);
-            case 'object':
-                return this.walkObject(node);
-            default:
-                return node;
-        }
     }
     // TODO: flatten schema from "allOf" | "oneOf" | "anyOf"
     walkObject(node) {
@@ -73,7 +51,8 @@ export class JsonSchemaParser {
                 return node;
             },
             definitions: (node) => {
-                node.definitions = walkObjectValues(node.definitions);
+                const nextDefinitions = walkObjectValues(node.definitions);
+                Object.keys(nextDefinitions);
                 return node;
             },
             properties: (node) => {
@@ -114,6 +93,38 @@ export class JsonSchemaParser {
         const items = [].concat(node.items).map(this.walk.bind(this));
         node.items = Array.isArray(node.items) ? items : items.at(0);
         return node;
+    }
+    walk(node) {
+        if (node.$ref) {
+            return this.explodeRef(node.$ref);
+        }
+        const type = node.type;
+        node = !hasWalkableProperties([...arrayProperties, ...objectProperties], node)
+            ? node
+            : Object.entries(node).reduce((preparedNode, [nextKey, nextValue]) => {
+                const typedKey = nextKey;
+                if (!hasPropertyValue(node, typedKey))
+                    return preparedNode;
+                if (arrayProperties.includes(typedKey))
+                    return Object.assign(preparedNode, {
+                        [nextKey]: [].concat(nextValue).map(this.walk.bind(this)),
+                    });
+                if (objectProperties.includes(typedKey))
+                    return Object.assign(preparedNode, {
+                        [nextKey]: this.walk(nextValue),
+                    });
+                return Object.assign(preparedNode, {
+                    [nextKey]: nextValue,
+                });
+            }, {});
+        switch (type) {
+            case 'array':
+                return this.walkArray(node);
+            case 'object':
+                return this.walkObject(node);
+            default:
+                return node;
+        }
     }
 }
 //# sourceMappingURL=Parser.js.map

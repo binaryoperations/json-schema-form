@@ -1185,6 +1185,8 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onTransitionEndCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
-}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>>;
+}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, {
+    value: any;
+}>;
 export {};
 //# sourceMappingURL=TextInput.d.ts.map

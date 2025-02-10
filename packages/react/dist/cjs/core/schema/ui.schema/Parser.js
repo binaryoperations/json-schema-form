@@ -1,4 +1,5 @@
 import orderBy from 'lodash/orderBy';
+import { UiNodeType } from '../../models/UiSchema';
 import { UiStore } from './UiStore';
 export class UiSchemaParser {
     counter = 0;
@@ -13,6 +14,8 @@ export class UiSchemaParser {
         const nextCount = ++this.counter;
         const id = idRoot + '/' + (uiSchema.id ?? nextCount);
         this.store.keyMap[id] = uiSchema;
+        if (uiSchema.type === UiNodeType.CUSTOM)
+            return id;
         if (!('nodes' in uiSchema))
             return id;
         const treeNodes = [];

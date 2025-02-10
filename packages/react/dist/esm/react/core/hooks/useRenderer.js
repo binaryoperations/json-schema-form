@@ -8,6 +8,11 @@ export const useLayoutNode = (type) => {
         return store.layout[type];
     }), `Layout "${type}" has not been registered`);
 };
+export const useCustomLayoutNode = (type) => {
+    return invariant(useRendererContext((store) => {
+        return typeof type === 'string' ? store.layout[type] : type;
+    }), `Custom Layout "${type}" has not been registered`);
+};
 export const useControlNode = (id) => {
     const controls = useRendererContext((store) => store.controls);
     return useStore((store) => {

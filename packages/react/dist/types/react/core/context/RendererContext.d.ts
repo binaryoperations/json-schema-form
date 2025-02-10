@@ -2,8 +2,8 @@ import type { RankedControl } from '../../../core/controls/createControl';
 import type { BaseControlProps } from '../../../core/types/control';
 import type { ComponentType } from 'react';
 import type { PropsWithChildren } from 'react';
-export type RendererContextType<T extends BaseControlProps<any> = BaseControlProps<any>> = {
-    controls: RankedControl<ComponentType<T>>[];
+export type RendererContextType<Props extends BaseControlProps<any> = BaseControlProps<any>> = {
+    controls: RankedControl<ComponentType<Props>, Props>[];
     layout: Record<string, ComponentType<PropsWithChildren<{
         id: string;
     }>>>;

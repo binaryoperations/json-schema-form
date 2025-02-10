@@ -1,10 +1,12 @@
+import { ComponentType } from 'react';
 import { ControlSchema } from './ControlSchema';
 export declare enum UiNodeType {
     FIELD_SETS = "fieldsets",
     FIELD_SET = "fieldset",
     ROWS = "rows",
     COLUMNS = "columns",
-    CONTROL = "control"
+    CONTROL = "control",
+    CUSTOM = "custom"
 }
 /**
  *
@@ -69,7 +71,12 @@ export interface ControlNode<T extends object = object> extends UiNodeBase {
     path: string;
     options?: T;
 }
-type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode;
+export interface CustomNode<T extends object = object> extends UiNodeBase {
+    type: `${UiNodeType.CUSTOM}`;
+    renderer: ComponentType<T> | string;
+    options?: T;
+}
+type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode | CustomNode;
 export type UiSchema = PossibleRootNodes;
 export {};
 //# sourceMappingURL=UiSchema.d.ts.map

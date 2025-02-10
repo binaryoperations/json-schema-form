@@ -1,8 +1,9 @@
 import { isArrayRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
+import { cast } from '../internals/cast';
 export default function createControl(Control, getValueFromEvent, deriveRank) {
     if (!('createControl' in globalThis))
         throw Error(`Attempted to "createControl" before registration`);
-    return globalThis.createControl(Control, getValueFromEvent, deriveRank);
+    return cast(globalThis).createControl(Control, getValueFromEvent, deriveRank);
 }
 export const createDateControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isDateRanked);
 export const createTimeControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isTimeRanked);
