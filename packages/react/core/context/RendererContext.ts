@@ -6,9 +6,9 @@ import type { PropsWithChildren } from 'react';
 import { createFastContext } from '../fast-context';
 
 export type RendererContextType<
-  T extends BaseControlProps<any> = BaseControlProps<any>,
+  Props extends BaseControlProps<any> = BaseControlProps<any>,
 > = {
-  controls: RankedControl<ComponentType<T>>[];
+  controls: RankedControl<ComponentType<Props>, Props>[];
   layout: Record<string, ComponentType<PropsWithChildren<{ id: string }>>>;
 };
 

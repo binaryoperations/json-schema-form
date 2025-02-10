@@ -29,6 +29,7 @@ import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Fo
 import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
 import { createLayoutRenderer } from '@binaryoperations/json-forms-react/core/hoc/createRenderer';
 import { ComponentProps, useCallback, useState } from 'react';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 
 const defaultStyles = {
   gap: 8,
@@ -55,7 +56,7 @@ const controlTypes = {
       );
       return <NumberInput {...componentProps} value={value} />;
     },
-    () => {},
+    (e) => cast<{ value: string }>(e.target).value,
     createRankedTester((_, uischema) =>
       'deriveFrom' in ((uischema as ControlNode).options ?? {}) ? 100 : -1
     )

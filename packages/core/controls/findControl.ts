@@ -3,8 +3,8 @@ import { maxBy } from 'lodash';
 import type { ControlSchema, FieldsetNode, UiSchema } from '../models';
 import type { RankedControl } from './createControl';
 
-export const findControl = <T>(
-  controls: RankedControl<T>[],
+export const findControl = <C, Props extends { value: any }>(
+  controls: RankedControl<C, Props>[],
   node: UiSchema | FieldsetNode,
   schema: ControlSchema
 ) => {

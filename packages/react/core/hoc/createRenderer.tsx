@@ -4,7 +4,7 @@ import type {
 } from '@binaryoperations/json-forms-core/controls/createControl';
 import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
 import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import type { ComponentType, PropsWithChildren } from 'react';
+import type { ComponentProps, ComponentType, PropsWithChildren } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
 import { useStore } from '../hooks';
@@ -46,7 +46,7 @@ export const createControl = <P extends ComponentType<BaseControlProps>>(
   Component: P,
   getValueFromEvent: GetValueFromEvent,
   deriveRank: Ranker
-): RankedControl<P> => {
+): RankedControl<P, ComponentProps<P>> => {
   return {
     Control: Component,
     deriveRank,
