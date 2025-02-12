@@ -1,10 +1,10 @@
-import { ComponentType, Fragment, memo, PropsWithChildren, useMemo } from 'react';
+import { UiNodeType } from '@binaryoperations/json-forms-core/models';
+import { ComponentType, memo, PropsWithChildren, useMemo } from 'react';
 
 import {
   RendererContextProvider,
   type RendererContextType,
 } from '../context/RendererContext';
-import { UiNodeType } from '@binaryoperations/json-forms-core/models';
 import { createCustomLayoutRenderer } from '../hoc/createRenderer';
 
 export type ComponentContextProviderProps =
@@ -13,23 +13,23 @@ export type ComponentContextProviderProps =
 export type ComponentContextProvider =
   ComponentType<ComponentContextProviderProps>;
 
-const CustomLayoutRenderer = createCustomLayoutRenderer(Fragment);
+const CustomLayoutRenderer = createCustomLayoutRenderer((props) => (
+  <>{props.children}</>
+));
 
 export const ComponentContextProvider: ComponentContextProvider = memo(
   function ComponentContextProvider(props) {
-    const contextValue = useMemo(
-      () => {
-        const layout = (UiNodeType['CUSTOM'] in props.layout)
+    const contextValue = useMemo(() => {
+      const layout =
+        UiNodeType['CUSTOM'] in props.layout
           ? props.layout
           : { ...props.layout, [UiNodeType['CUSTOM']]: CustomLayoutRenderer };
 
-        return ({
-          layout,
-          controls: props.controls,
-        })
-      },
-      [props.controls, props.layout]
-    );
+      return {
+        layout,
+        controls: props.controls,
+      };
+    }, [props.controls, props.layout]);
 
     return (
       <RendererContextProvider value={contextValue} children={props.children} />

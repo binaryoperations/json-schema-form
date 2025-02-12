@@ -1,10 +1,10 @@
 import { findControl } from '@binaryoperations/json-forms-core/controls/findControl';
 import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
+import type { ComponentType } from 'react';
 
 import { useRendererContext } from '../context/RendererContext';
 import { useStore } from './useStore';
-import type { ComponentType } from 'react';
 
 export const useLayoutNode = (type: string) => {
   return invariant(

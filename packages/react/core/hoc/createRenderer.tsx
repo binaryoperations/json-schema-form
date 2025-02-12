@@ -2,13 +2,13 @@ import type {
   GetValueFromEvent,
   RankedControl,
 } from '@binaryoperations/json-forms-core/controls/createControl';
+import type { CustomNode } from '@binaryoperations/json-forms-core/models';
 import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
 import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
 import type { ComponentProps, ComponentType, PropsWithChildren } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
 import { useStore } from '../hooks';
-import type { CustomNode } from '@binaryoperations/json-forms-core/models';
 import { useCustomLayoutNode } from '../hooks/useRenderer';
 
 export const createLayoutRenderer = <P extends object>(
@@ -29,7 +29,7 @@ export const createCustomLayoutRenderer = <P extends object>(
   return function CustomLayoutRenderer(props) {
     const { renderer, options } = useStore((store) => {
       const node = store.uiContext.getNode(props.id) as CustomNode;
-      return node
+      return node;
     });
 
     const LayoutNode = useCustomLayoutNode(renderer);
