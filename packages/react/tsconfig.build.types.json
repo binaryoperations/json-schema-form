@@ -2,10 +2,16 @@
   "extends": "./tsconfig.build.esm",
   "compilerOptions": {
     "outDir": "dist/types",
+    "composite": false,
     "noEmit": false,
     "emitDeclarationOnly": true,
     "declarationMap": true,
     "declaration": true,
     "sourceMap": false,
-  }
+    "paths": {
+      "@binaryoperations/json-forms-core": ["../core"],
+      "#/*": ["./*", "../core/*"]
+    }
+  },
+  "include": ["../core", "."]
 }

@@ -8,7 +8,7 @@
     "sourceMap": true,
     "paths": {
       "@binaryoperations/json-forms-core": ["../core"],
-      "#/*": ["./*", "../core/*"],
+      "#/*": ["./*", "../core/*"]
     }
   },
   "include": ["../core", "."]
