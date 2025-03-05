@@ -21,10 +21,20 @@
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "exports": {
+    "./react": {
+      "types": "./packages/react/dist/types/react/index.d.ts",
+      "require": "./packages/react/dist/cjs/react/index.js",
+      "import": "./packages/react/dist/esm/react/index.js"
+    },
     "./react/*": {
-      "types": "./packages/react/dist/types/react/*",
-      "require": "./packages/react/dist/cjs/react/*",
-      "import": "./packages/react/dist/esm/react/*"
+      "types": "./packages/react/dist/types/react",
+      "require": "./packages/react/dist/cjs/react",
+      "import": "./packages/react/dist/esm/react"
+    },
+    "./core": {
+      "types": "./packages/react/dist/types/core/index.d.ts",
+      "require": "./packages/react/dist/cjs/core/index.js",
+      "import": "./packages/react/dist/esm/core/index.js"
     },
     "./core/*": {
       "types": "./packages/react/dist/types/core/*",
