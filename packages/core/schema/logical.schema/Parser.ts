@@ -70,7 +70,7 @@ export class JsonSchemaParser {
       },
       definitions: (node: ObjectJsonSchema) => {
         const nextDefinitions = walkObjectValues(node.definitions!);
-        Object.keys(nextDefinitions)
+        Object.keys(nextDefinitions);
         return node;
       },
       properties: (node: ObjectJsonSchema) => {
@@ -124,7 +124,6 @@ export class JsonSchemaParser {
     node.items = Array.isArray(node.items) ? items : items.at(0);
     return node;
   }
-
 
   walk(node: Schema): Schema {
     if (node.$ref) {

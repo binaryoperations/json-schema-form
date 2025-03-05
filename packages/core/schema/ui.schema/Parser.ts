@@ -16,7 +16,6 @@ export class UiSchemaParser {
   // Do I need to prepare the tree in ahead-of-time?
   // can the child nodes be derived just-in-time?
   private traverse(uiSchema: UiSchema | FieldsetNode, idRoot: string) {
-
     const nextCount = ++this.counter;
     const id = idRoot + '/' + (uiSchema.id ?? nextCount);
 
