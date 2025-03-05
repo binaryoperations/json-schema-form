@@ -1,4 +1,5 @@
 import type {
+  CreateControl as CreateControlType,
   GetValueFromEvent,
   RankedControl,
 } from '@binaryoperations/json-forms-core/controls/createControl';
@@ -41,6 +42,8 @@ export const createCustomLayoutRenderer = <P extends object>(
     );
   };
 };
+
+export type CreateControl = CreateControlType<ComponentType<BaseControlProps>>;
 
 export const createControl = <P extends ComponentType<BaseControlProps>>(
   Component: P,

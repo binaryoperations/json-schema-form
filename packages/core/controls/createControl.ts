@@ -1,4 +1,4 @@
-import type { ChangeEvent } from 'react';
+import type { ChangeEvent, ComponentType } from 'react';
 
 import { cast } from '#/internals/cast';
 
@@ -65,15 +65,18 @@ export const createBooleanControl = <T>(
   getValueFromEvent: GetValueFromEvent
 ) => createControl(Control, getValueFromEvent, isArrayRanked);
 
+export type CreateControl<T = unknown> = {
+  <C = T, Props extends { value: any } = { value: any }>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent,
+    deriveRank: Ranker
+  ): RankedControl<C, Props>;
+};
+
 declare global {
-  interface CreateControl {
-    <C, Props extends { value: any }>(
-      Control: C,
-      getValueFromEvent: GetValueFromEvent,
-      deriveRank: Ranker
-    ): RankedControl<C, Props>;
-  }
+  interface ControlCreator
+    extends CreateControl<ComponentType<{ value: any }>> {}
 
   // eslint-disable-next-line no-var
-  var createControl: CreateControl;
+  var createControl: ControlCreator;
 }
