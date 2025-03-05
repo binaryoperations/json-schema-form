@@ -4,7 +4,7 @@ export declare const useLayoutNode: (type: string) => import("react").ComponentC
 }>, any> | import("react").FunctionComponent<import("react").PropsWithChildren<{
     id: string;
 }>>;
-export declare const useCustomLayoutNode: (type: string | ComponentType<object>) => import("react").FunctionComponent<object> | import("react").ComponentClass<import("react").PropsWithChildren<{
+export declare const useCustomLayoutNode: (type: string | ComponentType<object>) => import("react").ComponentClass<import("react").PropsWithChildren<{
     id: string;
 }>, any> | import("react").FunctionComponent<import("react").PropsWithChildren<{
     id: string;

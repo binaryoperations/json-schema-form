@@ -1,14 +1,14 @@
 import type { ChangeEvent } from 'react';
 import { type Ranker } from '../testers/testers';
 export type GetValueFromEvent<Output = any> = <T extends ChangeEvent>(e: T) => Output;
-export type RankedControl<C extends unknown, Props extends {
+export type RankedControl<C, Props extends {
     value: any;
 }> = {
     Control: C;
     getValueFromEvent: GetValueFromEvent<Props['value']>;
     deriveRank: Ranker;
 };
-export default function createControl<C extends unknown, P extends {
+export default function createControl<C, P extends {
     value: any;
 }>(Control: C, getValueFromEvent: GetValueFromEvent<P['value']>, deriveRank: Ranker): RankedControl<C, {
     value: any;
@@ -33,7 +33,7 @@ export declare const createBooleanControl: <T>(Control: T, getValueFromEvent: Ge
 }>;
 declare global {
     interface CreateControl {
-        <C extends unknown, Props extends {
+        <C, Props extends {
             value: any;
         }>(Control: C, getValueFromEvent: GetValueFromEvent, deriveRank: Ranker): RankedControl<C, Props>;
     }

@@ -1,7 +1,6 @@
-import { type ComponentType, type ReactNode } from 'react';
+import { ComponentType, type ReactNode } from 'react';
 export declare function withLabel<P extends {
     id?: string;
-}>(Component: ComponentType<P>): import("react").MemoExoticComponent<import("react").ForwardRefExoticComponent<import("react").PropsWithoutRef<P & {
     label?: ReactNode;
-}> & import("react").RefAttributes<unknown>>>;
+}, R = HTMLElement>(Component: ComponentType<Omit<P, 'label'>>): import("react").NamedExoticComponent<import("react").PropsWithoutRef<P> & import("react").RefAttributes<R>>;
 //# sourceMappingURL=withLabel.d.ts.map

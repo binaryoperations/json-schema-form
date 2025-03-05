@@ -17,8 +17,8 @@ export declare class ErrorBoundary extends PureComponent<ErrorBoundaryProps, Err
         error: Error;
     };
     retry: () => void;
-    renderErrored(): string | number | boolean | Iterable<ReactNode> | import("react/jsx-runtime").JSX.Element | null | undefined;
-    render(): string | number | boolean | Iterable<ReactNode> | import("react/jsx-runtime").JSX.Element | null | undefined;
+    renderErrored(): string | number | bigint | boolean | Iterable<ReactNode> | Promise<string | number | bigint | boolean | import("react").ReactPortal | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | import("react/jsx-runtime").JSX.Element | null | undefined;
+    render(): string | number | bigint | boolean | Iterable<ReactNode> | Promise<string | number | bigint | boolean | import("react").ReactPortal | import("react").ReactElement<unknown, string | import("react").JSXElementConstructor<any>> | Iterable<ReactNode> | null | undefined> | import("react/jsx-runtime").JSX.Element | null | undefined;
 }
 export declare const withErrorBoundary: <Props extends object>(Component: ComponentType<Props>, Fallback?: ErrorBoundaryProps['Fallback']) => (props: Props) => import("react/jsx-runtime").JSX.Element;
 export {};

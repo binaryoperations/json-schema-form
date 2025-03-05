@@ -1,5 +1,5 @@
-import { isArrayRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
 import { cast } from '../internals/cast';
+import { isArrayRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
 export default function createControl(Control, getValueFromEvent, deriveRank) {
     if (!('createControl' in globalThis))
         throw Error(`Attempted to "createControl" before registration`);

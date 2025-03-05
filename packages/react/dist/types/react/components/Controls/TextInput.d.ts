@@ -1,4 +1,5 @@
 /// <reference types="react" />
+/// <reference types="react" />
 import type { Merge } from 'type-fest';
 import { type InputProps } from './Input';
 type InputBaseProps = {
@@ -8,12 +9,12 @@ type InputBaseProps = {
 export type SingleLineTextInputProps = Merge<InputProps, Merge<InputBaseProps, {
     multiline?: false;
 }>>;
-export type TextAreaProps = Merge<JSX.IntrinsicElements['textarea'], Merge<InputBaseProps, {
+export type TextAreaProps = Merge<React.JSX.IntrinsicElements['textarea'], Merge<InputBaseProps, {
     multiline: true;
 }>>;
 export type TextInputProps = InputBaseProps & (TextAreaProps | SingleLineTextInputProps);
 export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<InputBaseProps & {
-    ref?: import("react").LegacyRef<HTMLInputElement> | undefined;
+    ref?: import("react").Ref<HTMLInputElement> | undefined;
     key?: import("react").Key | null | undefined;
     accept?: string | undefined;
     alt?: string | undefined;
@@ -22,7 +23,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     checked?: boolean | undefined;
     disabled?: boolean | undefined;
     form?: string | undefined;
-    formAction?: string | undefined;
+    formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
     formEncType?: string | undefined;
     formMethod?: string | undefined;
     formNoValidate?: boolean | undefined;
@@ -93,6 +94,10 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     results?: number | undefined;
     security?: string | undefined;
     unselectable?: "off" | "on" | undefined;
+    popover?: "" | "auto" | "manual" | undefined;
+    popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
+    popoverTarget?: string | undefined;
+    inert?: boolean | undefined;
     inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
@@ -309,12 +314,20 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     onAnimationEndCapture?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
     onAnimationIteration?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
     onAnimationIterationCapture?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
+    onToggle?: import("react").ToggleEventHandler<HTMLInputElement> | undefined;
+    onBeforeToggle?: import("react").ToggleEventHandler<HTMLInputElement> | undefined;
+    onTransitionCancel?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionCancelCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     onTransitionEnd?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     onTransitionEndCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionRun?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionRunCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionStart?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     label?: string | undefined;
     multiline?: false | undefined;
 }, "ref"> | Omit<InputBaseProps & {
-    ref?: import("react").LegacyRef<HTMLTextAreaElement> | undefined;
+    ref?: import("react").Ref<HTMLTextAreaElement> | undefined;
     key?: import("react").Key | null | undefined;
     autoComplete?: string | undefined;
     cols?: number | undefined;
@@ -378,6 +391,10 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     results?: number | undefined;
     security?: string | undefined;
     unselectable?: "off" | "on" | undefined;
+    popover?: "" | "auto" | "manual" | undefined;
+    popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
+    popoverTarget?: string | undefined;
+    inert?: boolean | undefined;
     inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
@@ -594,13 +611,21 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     onAnimationEndCapture?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
     onAnimationIteration?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
     onAnimationIterationCapture?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
+    onToggle?: import("react").ToggleEventHandler<HTMLTextAreaElement> | undefined;
+    onBeforeToggle?: import("react").ToggleEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionCancel?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionCancelCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     onTransitionEnd?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     onTransitionEndCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionRun?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionRunCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionStart?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
 }, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
 export declare const TextInputControl: import("../../../core/controls/createControl").RankedControl<import("react").ForwardRefExoticComponent<(Omit<InputBaseProps & {
-    ref?: import("react").LegacyRef<HTMLInputElement> | undefined;
+    ref?: import("react").Ref<HTMLInputElement> | undefined;
     key?: import("react").Key | null | undefined;
     accept?: string | undefined;
     alt?: string | undefined;
@@ -609,7 +634,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     checked?: boolean | undefined;
     disabled?: boolean | undefined;
     form?: string | undefined;
-    formAction?: string | undefined;
+    formAction?: string | ((formData: FormData) => void | Promise<void>) | undefined;
     formEncType?: string | undefined;
     formMethod?: string | undefined;
     formNoValidate?: boolean | undefined;
@@ -680,6 +705,10 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     results?: number | undefined;
     security?: string | undefined;
     unselectable?: "off" | "on" | undefined;
+    popover?: "" | "auto" | "manual" | undefined;
+    popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
+    popoverTarget?: string | undefined;
+    inert?: boolean | undefined;
     inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
@@ -896,12 +925,20 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onAnimationEndCapture?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
     onAnimationIteration?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
     onAnimationIterationCapture?: import("react").AnimationEventHandler<HTMLInputElement> | undefined;
+    onToggle?: import("react").ToggleEventHandler<HTMLInputElement> | undefined;
+    onBeforeToggle?: import("react").ToggleEventHandler<HTMLInputElement> | undefined;
+    onTransitionCancel?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionCancelCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     onTransitionEnd?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     onTransitionEndCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionRun?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionRunCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionStart?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
+    onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     label?: string | undefined;
     multiline?: false | undefined;
 }, "ref"> | Omit<InputBaseProps & {
-    ref?: import("react").LegacyRef<HTMLTextAreaElement> | undefined;
+    ref?: import("react").Ref<HTMLTextAreaElement> | undefined;
     key?: import("react").Key | null | undefined;
     autoComplete?: string | undefined;
     cols?: number | undefined;
@@ -965,6 +1002,10 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     results?: number | undefined;
     security?: string | undefined;
     unselectable?: "off" | "on" | undefined;
+    popover?: "" | "auto" | "manual" | undefined;
+    popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
+    popoverTarget?: string | undefined;
+    inert?: boolean | undefined;
     inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
@@ -1181,8 +1222,16 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onAnimationEndCapture?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
     onAnimationIteration?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
     onAnimationIterationCapture?: import("react").AnimationEventHandler<HTMLTextAreaElement> | undefined;
+    onToggle?: import("react").ToggleEventHandler<HTMLTextAreaElement> | undefined;
+    onBeforeToggle?: import("react").ToggleEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionCancel?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionCancelCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     onTransitionEnd?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     onTransitionEndCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionRun?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionRunCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionStart?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
+    onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
 }, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, {

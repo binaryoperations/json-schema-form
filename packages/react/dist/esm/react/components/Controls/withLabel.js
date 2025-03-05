@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { forwardRef, memo, useId, } from 'react';
+import { forwardRef, memo, useId } from 'react';
 export function withLabel(Component) {
     return memo(forwardRef((props, ref) => {
         const inputId = useId();
