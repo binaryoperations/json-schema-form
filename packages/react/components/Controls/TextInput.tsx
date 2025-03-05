@@ -21,7 +21,7 @@ export type SingleLineTextInputProps = Merge<
 >;
 
 export type TextAreaProps = Merge<
-  JSX.IntrinsicElements['textarea'],
+  React.JSX.IntrinsicElements['textarea'],
   Merge<InputBaseProps, { multiline: true }>
 >;
 

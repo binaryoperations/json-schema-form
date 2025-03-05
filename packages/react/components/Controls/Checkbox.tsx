@@ -4,7 +4,7 @@ import type { ChangeEvent, SyntheticEvent } from 'react';
 
 import { withLabel } from './withLabel';
 
-type CheckboxAttributes = JSX.IntrinsicElements['input'];
+type CheckboxAttributes = React.JSX.IntrinsicElements['input'];
 
 export interface CheckboxProps extends CheckboxAttributes {
   type?: 'checkbox';

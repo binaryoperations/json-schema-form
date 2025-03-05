@@ -2,7 +2,7 @@ import type { FC } from 'react';
 
 import { styles } from './styles';
 
-type DivProps = JSX.IntrinsicElements['div'];
+type DivProps = React.JSX.IntrinsicElements['div'];
 export interface ColumnProps extends DivProps {
   reverse?: boolean;
 }

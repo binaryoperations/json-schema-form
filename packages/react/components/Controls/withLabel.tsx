@@ -1,16 +1,11 @@
-import {
-  type ComponentType,
-  forwardRef,
-  memo,
-  type ReactNode,
-  useId,
-} from 'react';
+import { ComponentType, forwardRef, memo, type ReactNode, useId } from 'react';
 
-export function withLabel<P extends { id?: string }>(
-  Component: ComponentType<P>
-) {
+export function withLabel<
+  P extends { id?: string; label?: ReactNode },
+  R = HTMLElement,
+>(Component: ComponentType<Omit<P, 'label'>>) {
   return memo(
-    forwardRef((props: P & { label?: ReactNode }, ref) => {
+    forwardRef<R, P>((props, ref) => {
       const inputId = useId();
       const id = props.id ?? inputId;
 
@@ -18,7 +13,7 @@ export function withLabel<P extends { id?: string }>(
       return (
         <>
           {!label ? null : <label htmlFor={id}>{label}</label>}
-          <Component {...(inputProps as P)} ref={ref} id={id} />
+          <Component {...(inputProps as Omit<P, 'label'>)} ref={ref} id={id} />
         </>
       );
     })

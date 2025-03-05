@@ -1,9 +1,9 @@
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import { StringJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   UiNodeType,
-  UiSchema,
+  type UiSchema,
 } from '@binaryoperations/json-forms-core/models/UiSchema';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 
 export type FormConfig = {
   data: object;
@@ -192,7 +192,6 @@ export const customerWizard: FormConfig = {
         label: '',
         type: UiNodeType.FIELD_SET,
         nodes: [
-
           {
             type: UiNodeType.ROWS,
             nodes: [

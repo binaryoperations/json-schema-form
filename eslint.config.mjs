@@ -10,7 +10,7 @@ import eslintPluginPrettierRecommended from 'eslint-plugin-prettier/recommended'
 import _ from 'lodash';
 
 export default tseslint.config(
-  { ignores: ['dist'] },
+  { ignores: ['**/dist'] },
   {
     extends: [
       js.configs.recommended,
@@ -41,6 +41,7 @@ export default tseslint.config(
         'warn',
         { allowConstantExport: true },
       ],
+      '@typescript-eslint/no-empty-object-type': ['off'],
     },
   },
   _.merge({ files: ['**/*.{ts,tsx,json}'] }, eslintPluginPrettierRecommended, {
@@ -53,7 +54,7 @@ export default tseslint.config(
         {
           singleQuote: true,
           jsxSingleQuote: false,
-          endOfLine: 'auto',
+          endOfLine: 'lf',
           semi: true,
           trailingComma: 'es5',
         },

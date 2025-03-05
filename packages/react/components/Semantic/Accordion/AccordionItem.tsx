@@ -2,7 +2,7 @@ import { FC, memo, ReactNode } from 'react';
 
 import { useActiveState } from '#/context/ActiveStateContext';
 
-export type DetailsProp = JSX.IntrinsicElements['details'];
+export type DetailsProp = React.JSX.IntrinsicElements['details'];
 
 export interface AccordionItemProps<T = unknown>
   extends Omit<DetailsProp, 'onClick' | 'children' | 'id'> {

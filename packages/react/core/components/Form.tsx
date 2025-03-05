@@ -16,7 +16,7 @@ import { StoreContextProvider } from './StoreContextProvider';
 export type FormProps = Omit<ComponentContextProviderProps, 'children'> & {
   uiSchema: UiSchema;
   data: object;
-  style?: JSX.IntrinsicElements['form']['style'];
+  style?: React.JSX.IntrinsicElements['form']['style'];
   onDataChange?: FormDataProviderProps['onChange'];
 };
 

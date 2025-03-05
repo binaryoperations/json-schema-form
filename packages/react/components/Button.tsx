@@ -1,6 +1,6 @@
 import type { FC } from 'react';
 
-export type ButtonProps = JSX.IntrinsicElements['button'];
+export type ButtonProps = React.JSX.IntrinsicElements['button'];
 
 export type Button = FC<ButtonProps>;
 
