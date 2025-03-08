@@ -4,8 +4,8 @@ export declare class UiStore {
     tree: Record<string, string[]>;
     constructor();
     getChildren(key: string): string[];
-    getNode(key: string): FieldsetNode | (import("../../models/UiSchema").FieldsetsNode | import("../../models/UiSchema").RowsNode | import("../../models/UiSchema").ColumnsNode | ControlNode<object> | import("../../models/UiSchema").CustomNode<object>);
-    getChildNodes(key: string): (FieldsetNode | (import("../../models/UiSchema").FieldsetsNode | import("../../models/UiSchema").RowsNode | import("../../models/UiSchema").ColumnsNode | ControlNode<object> | import("../../models/UiSchema").CustomNode<object>))[];
+    getNode(key: string): FieldsetNode | (import("../../models/UiSchema").FieldsetsNode | import("../../models/UiSchema").RowsNode | import("../../models/UiSchema").ColumnsNode | ControlNode<object> | import("../../models/UiSchema").CustomNode<any>);
+    getChildNodes(key: string): (FieldsetNode | (import("../../models/UiSchema").FieldsetsNode | import("../../models/UiSchema").RowsNode | import("../../models/UiSchema").ColumnsNode | ControlNode<object> | import("../../models/UiSchema").CustomNode<any>))[];
     getNodeType(key: string): "fieldsets" | "fieldset" | "rows" | "columns" | "control" | "custom";
     isControl(key: string): boolean;
     setRoot(key: string): void;

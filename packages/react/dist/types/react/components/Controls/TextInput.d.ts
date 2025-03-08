@@ -55,7 +55,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     autoCapitalize?: (string & {}) | "off" | "on" | "none" | "sentences" | "words" | "characters" | undefined;
     autoFocus?: boolean | undefined;
     className?: string | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -98,7 +98,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
     popoverTarget?: string | undefined;
     inert?: boolean | undefined;
-    inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
+    inputMode?: "search" | "email" | "tel" | "text" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
     "aria-atomic"?: (boolean | "true" | "false") | undefined;
@@ -122,7 +122,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     "aria-expanded"?: (boolean | "true" | "false") | undefined;
     "aria-flowto"?: string | undefined;
     "aria-grabbed"?: (boolean | "true" | "false") | undefined;
-    "aria-haspopup"?: boolean | "tree" | "dialog" | "menu" | "true" | "false" | "grid" | "listbox" | undefined;
+    "aria-haspopup"?: boolean | "tree" | "true" | "false" | "dialog" | "grid" | "listbox" | "menu" | undefined;
     "aria-hidden"?: (boolean | "true" | "false") | undefined;
     "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling" | undefined;
     "aria-keyshortcuts"?: string | undefined;
@@ -352,7 +352,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     autoCapitalize?: (string & {}) | "off" | "on" | "none" | "sentences" | "words" | "characters" | undefined;
     autoFocus?: boolean | undefined;
     className?: string | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -395,7 +395,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
     popoverTarget?: string | undefined;
     inert?: boolean | undefined;
-    inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
+    inputMode?: "search" | "email" | "tel" | "text" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
     "aria-atomic"?: (boolean | "true" | "false") | undefined;
@@ -419,7 +419,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     "aria-expanded"?: (boolean | "true" | "false") | undefined;
     "aria-flowto"?: string | undefined;
     "aria-grabbed"?: (boolean | "true" | "false") | undefined;
-    "aria-haspopup"?: boolean | "tree" | "dialog" | "menu" | "true" | "false" | "grid" | "listbox" | undefined;
+    "aria-haspopup"?: boolean | "tree" | "true" | "false" | "dialog" | "grid" | "listbox" | "menu" | undefined;
     "aria-hidden"?: (boolean | "true" | "false") | undefined;
     "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling" | undefined;
     "aria-keyshortcuts"?: string | undefined;
@@ -666,7 +666,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     autoCapitalize?: (string & {}) | "off" | "on" | "none" | "sentences" | "words" | "characters" | undefined;
     autoFocus?: boolean | undefined;
     className?: string | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -709,7 +709,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
     popoverTarget?: string | undefined;
     inert?: boolean | undefined;
-    inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
+    inputMode?: "search" | "email" | "tel" | "text" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
     "aria-atomic"?: (boolean | "true" | "false") | undefined;
@@ -733,7 +733,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     "aria-expanded"?: (boolean | "true" | "false") | undefined;
     "aria-flowto"?: string | undefined;
     "aria-grabbed"?: (boolean | "true" | "false") | undefined;
-    "aria-haspopup"?: boolean | "tree" | "dialog" | "menu" | "true" | "false" | "grid" | "listbox" | undefined;
+    "aria-haspopup"?: boolean | "tree" | "true" | "false" | "dialog" | "grid" | "listbox" | "menu" | undefined;
     "aria-hidden"?: (boolean | "true" | "false") | undefined;
     "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling" | undefined;
     "aria-keyshortcuts"?: string | undefined;
@@ -963,7 +963,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     autoCapitalize?: (string & {}) | "off" | "on" | "none" | "sentences" | "words" | "characters" | undefined;
     autoFocus?: boolean | undefined;
     className?: string | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -1006,7 +1006,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     popoverTargetAction?: "hide" | "show" | "toggle" | undefined;
     popoverTarget?: string | undefined;
     inert?: boolean | undefined;
-    inputMode?: "search" | "text" | "email" | "tel" | "url" | "none" | "numeric" | "decimal" | undefined;
+    inputMode?: "search" | "email" | "tel" | "text" | "url" | "none" | "numeric" | "decimal" | undefined;
     is?: string | undefined;
     "aria-activedescendant"?: string | undefined;
     "aria-atomic"?: (boolean | "true" | "false") | undefined;
@@ -1030,7 +1030,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     "aria-expanded"?: (boolean | "true" | "false") | undefined;
     "aria-flowto"?: string | undefined;
     "aria-grabbed"?: (boolean | "true" | "false") | undefined;
-    "aria-haspopup"?: boolean | "tree" | "dialog" | "menu" | "true" | "false" | "grid" | "listbox" | undefined;
+    "aria-haspopup"?: boolean | "tree" | "true" | "false" | "dialog" | "grid" | "listbox" | "menu" | undefined;
     "aria-hidden"?: (boolean | "true" | "false") | undefined;
     "aria-invalid"?: boolean | "true" | "false" | "grammar" | "spelling" | undefined;
     "aria-keyshortcuts"?: string | undefined;
@@ -1234,8 +1234,6 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
-}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, {
-    value: any;
-}>;
+}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, unknown, import("../../../core/controls/createControl").GetValueFromEvent<unknown>>;
 export {};
 //# sourceMappingURL=TextInput.d.ts.map

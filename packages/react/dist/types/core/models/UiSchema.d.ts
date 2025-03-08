@@ -1,5 +1,4 @@
-import { ComponentType } from 'react';
-import { ControlSchema } from './ControlSchema';
+import type { ControlSchema } from './ControlSchema';
 export declare enum UiNodeType {
     FIELD_SETS = "fieldsets",
     FIELD_SET = "fieldset",
@@ -71,9 +70,9 @@ export interface ControlNode<T extends object = object> extends UiNodeBase {
     path: string;
     options?: T;
 }
-export interface CustomNode<T extends object = object> extends UiNodeBase {
+export interface CustomNode<T = any> extends UiNodeBase {
     type: `${UiNodeType.CUSTOM}`;
-    renderer: ComponentType<T> | string;
+    renderer: T | string;
     options?: T;
 }
 type PossibleRootNodes = FieldsetsNode | RowsNode | ColumnsNode | ControlNode | CustomNode;

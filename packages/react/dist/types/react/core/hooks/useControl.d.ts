@@ -17,5 +17,5 @@ export declare function useControlSchema<SelectorOutput>(selector: Selector<Cont
  * Read the schema of the control
  *
  */
-export declare function useControlValue(path: string): any[];
+export declare function useControlValue<V = unknown>(path: string): [value: V, set: (value: V) => void];
 //# sourceMappingURL=useControl.d.ts.map

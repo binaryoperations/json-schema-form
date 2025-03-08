@@ -1,14 +1,30 @@
-import { cast } from '../internals/cast';
-import { isArrayRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
-export default function createControl(Control, getValueFromEvent, deriveRank) {
-    if (!('createControl' in globalThis))
-        throw Error(`Attempted to "createControl" before registration`);
-    return cast(globalThis).createControl(Control, getValueFromEvent, deriveRank);
+import { isArrayRanked, isBooleanRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
+export class ControlCreator {
+    constructor() { }
+    create(Control, getValueFromEvent, deriveRank) {
+        return {
+            Control,
+            deriveRank,
+            getValueFromEvent,
+        };
+    }
+    DateControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isDateRanked);
+    }
+    TimeControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isTimeRanked);
+    }
+    TextControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isTextRanked);
+    }
+    NumberControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isNumberRanked);
+    }
+    ArrayControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isArrayRanked);
+    }
+    BooleanControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isBooleanRanked);
+    }
 }
-export const createDateControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isDateRanked);
-export const createTimeControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isTimeRanked);
-export const createTextControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isTextRanked);
-export const createNumberControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isNumberRanked);
-export const createArrayControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isArrayRanked);
-export const createBooleanControl = (Control, getValueFromEvent) => createControl(Control, getValueFromEvent, isArrayRanked);
 //# sourceMappingURL=createControl.js.map

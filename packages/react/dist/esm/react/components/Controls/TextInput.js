@@ -1,7 +1,6 @@
 import { jsx as _jsx, Fragment as _Fragment, jsxs as _jsxs } from "react/jsx-runtime";
-import { createTextControl } from '../../../core/controls/createControl';
-import { cast } from '../../../core/internals/cast';
 import { forwardRef, useId, } from 'react';
+import { createControl } from './createControl';
 import { Input } from './Input';
 /**
  *
@@ -22,5 +21,5 @@ export const TextInput = forwardRef(function TextInput(props, ref) {
     const { multiline: _, ...textInputProps } = props;
     return _jsx(Input, { ...textInputProps, type: "text", id: id, ref: ref });
 });
-export const TextInputControl = createTextControl(TextInput, (event) => cast(event).target.value);
+export const TextInputControl = createControl.TextControl(TextInput, (event) => event.nativeEvent.target.value);
 //# sourceMappingURL=TextInput.js.map

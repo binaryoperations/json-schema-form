@@ -17,11 +17,4 @@ export const createCustomLayoutRenderer = (Component) => {
         return (_jsx(Component, { ...props, children: _jsx(LayoutNode, { id: props.id, ...options }) }));
     };
 };
-export const createControl = (Component, getValueFromEvent, deriveRank) => {
-    return {
-        Control: Component,
-        deriveRank,
-        getValueFromEvent,
-    };
-};
 //# sourceMappingURL=createRenderer.js.map
