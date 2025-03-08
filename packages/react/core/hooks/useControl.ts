@@ -1,14 +1,14 @@
-import type {
-  ControlNode,
-  ControlSchema,
-} from '@binaryoperations/json-forms-core/models';
-import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
   set,
   shallowCompare,
 } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
+import type {
+  ControlNode,
+  ControlSchema,
+} from '@binaryoperations/json-forms-core/models';
+import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
 import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
@@ -67,7 +67,7 @@ export function useControlSchema<SelectorOutput>(
  * Read the schema of the control
  *
  */
-export function useControlValue(path: string) {
+export function useControlValue<V = unknown>(path: string) {
   const value = useFormDataContext(
     (data) => resolvers.resolvePath(data, path),
     shallowCompare
@@ -78,12 +78,12 @@ export function useControlValue(path: string) {
   return [
     value,
     useCallback(
-      (value: unknown) => {
+      (value: V) => {
         store.set((oldValue) => {
           return set(oldValue, path, value);
         });
       },
       [path, store]
     ),
-  ];
+  ] as [value: V, set: (value: V) => void];
 }

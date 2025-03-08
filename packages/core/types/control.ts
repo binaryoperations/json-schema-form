@@ -1,8 +1,21 @@
-import { ChangeEvent, SyntheticEvent } from "react";
-
-export interface BaseControlProps<Value = unknown>
-  extends Record<string, unknown> {
+export interface BaseControlProps<
+  Value = unknown,
+  ChangesMeta = unknown,
+  EventType = Event,
+> extends Record<string, unknown> {
   label?: string;
-  value: Value;
-  onChange: (nextValue: Value, originalEvent: SyntheticEvent<ChangeEvent>) => void;
+  value?: Value;
+
+  /**
+   *
+   * @param Value value of the control
+   * @param Changes onUpdate, the control will emit the changes.
+   * A control has the ability to send
+   *
+   */
+  onChange?: (
+    originalEvent: EventType,
+    nextValue?: Value,
+    changes?: ChangesMeta
+  ) => void;
 }

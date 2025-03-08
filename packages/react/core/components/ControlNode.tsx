@@ -1,7 +1,6 @@
 import invariant from '@binaryoperations/json-forms-core/internals/invariant';
-import { ComponentType } from 'react';
+import { ComponentType, SyntheticEvent } from 'react';
 import { useCallback } from 'react';
-import { ChangeEvent } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
 import { useControl, useControlValue } from '../hooks';
@@ -49,7 +48,7 @@ export const ControlNode = withControlContext(
     const [value, setValue] = useControlValue(path);
 
     const handleSetValue = useCallback(
-      (e: ChangeEvent) => {
+      (e: SyntheticEvent) => {
         setValue(getValueFromEvent(e));
       },
       [getValueFromEvent, setValue]

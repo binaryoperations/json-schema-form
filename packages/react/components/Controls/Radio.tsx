@@ -1,7 +1,6 @@
-import { createBooleanControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import { type ChangeEvent, forwardRef, type SyntheticEvent } from 'react';
 
+import { createControl } from './createControl';
 import { Input, type InputProps } from './Input';
 
 export interface RadioProps extends InputProps {
@@ -14,8 +13,8 @@ const Radio = forwardRef<HTMLInputElement, RadioProps>(
   }
 );
 
-export const RadioControl = createBooleanControl(
+export const RadioControl = createControl.BooleanControl(
   Radio,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.checked
 );

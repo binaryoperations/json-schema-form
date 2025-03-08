@@ -1,10 +1,11 @@
 import { maxBy } from 'lodash';
+import { ComponentType, SyntheticEvent } from 'react';
 
 import type { ControlSchema, FieldsetNode, UiSchema } from '../models';
 import type { RankedControl } from './createControl';
 
-export const findControl = <C, Props extends { value: any }>(
-  controls: RankedControl<C, Props>[],
+export const findControl = <C extends ComponentType, Value>(
+  controls: RankedControl<ComponentType | C, Value>[],
   node: UiSchema | FieldsetNode,
   schema: ControlSchema
 ) => {
@@ -16,5 +17,5 @@ export const findControl = <C, Props extends { value: any }>(
   const rankedControl = maxBy(ranked, 'rank')!;
   if (!rankedControl || rankedControl.rank <= 0) return null;
 
-  return rankedControl;
+  return rankedControl as RankedControl<C, Value, (e: SyntheticEvent) => Value>;
 };

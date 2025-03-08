@@ -1,10 +1,6 @@
-import {
-  createDateControl,
-  createTimeControl,
-} from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import { type ChangeEvent, forwardRef, type SyntheticEvent } from 'react';
 
+import { createControl } from './createControl';
 import { Input, type InputProps } from './Input';
 
 /**
@@ -21,10 +17,10 @@ export const Date = forwardRef<HTMLInputElement, DateInputProps>(
   }
 );
 
-export const DateControl = createDateControl(
+export const DateControl = createControl.DateControl(
   Date,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.value
 );
 
 /**
@@ -41,10 +37,10 @@ export const DateTime = forwardRef<HTMLInputElement, DateTimeProps>(
   }
 );
 
-export const DateTimeControl = createDateControl(
+export const DateTimeControl = createControl.DateControl(
   DateTime,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.value
 );
 
 /**
@@ -59,8 +55,8 @@ export const Time = forwardRef<HTMLInputElement, TimeProps>(
     return <Input {...props} type="time" ref={ref} />;
   }
 );
-export const TimeControl = createTimeControl(
+export const TimeControl = createControl.TimeControl(
   Time,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.value
 );

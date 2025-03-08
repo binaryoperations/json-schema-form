@@ -1,12 +1,5 @@
-import type {
-  CreateControl as CreateControlType,
-  GetValueFromEvent,
-  RankedControl,
-} from '@binaryoperations/json-forms-core/controls/createControl';
 import type { CustomNode } from '@binaryoperations/json-forms-core/models';
-import type { Ranker } from '@binaryoperations/json-forms-core/testers/testers';
-import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import type { ComponentProps, ComponentType, PropsWithChildren } from 'react';
+import type { ComponentType, PropsWithChildren } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
 import { useStore } from '../hooks';
@@ -40,19 +33,5 @@ export const createCustomLayoutRenderer = <P extends object>(
         <LayoutNode id={props.id} {...options} />
       </Component>
     );
-  };
-};
-
-export type CreateControl = CreateControlType<ComponentType<BaseControlProps>>;
-
-export const createControl = <P extends ComponentType<BaseControlProps>>(
-  Component: P,
-  getValueFromEvent: GetValueFromEvent,
-  deriveRank: Ranker
-): RankedControl<P, ComponentProps<P>> => {
-  return {
-    Control: Component,
-    deriveRank,
-    getValueFromEvent,
   };
 };

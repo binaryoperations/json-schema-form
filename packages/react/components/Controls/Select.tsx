@@ -10,7 +10,10 @@ export type OptionGroupProps = {
   options: OptionProps[];
 };
 
-export type SelectProps = Omit<React.JSX.IntrinsicElements['select'], 'children'> & {
+export type SelectProps = Omit<
+  React.JSX.IntrinsicElements['select'],
+  'children'
+> & {
   options: (OptionProps | OptionGroupProps)[];
   label: string;
 };

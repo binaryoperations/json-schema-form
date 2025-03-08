@@ -1,7 +1,6 @@
-import { createNumberControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import { type ChangeEvent, forwardRef, type SyntheticEvent } from 'react';
 
+import { createControl } from './createControl';
 import { Input, type InputProps } from './Input';
 
 export interface NumberProps extends InputProps {
@@ -14,8 +13,8 @@ export const Number = forwardRef<HTMLInputElement, NumberProps>(
   }
 );
 
-export const NumberControl = createNumberControl(
+export const NumberControl = createControl.NumberControl(
   Number,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.value
 );

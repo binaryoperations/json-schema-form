@@ -28,14 +28,13 @@
   "scripts": {
     "lint": "eslint ."
   },
-  "peerDependencies": {
-    "react": "^19.0.0"
+  "dependencies": {
+    "json-schema-library": "^10.0.0-rc8"
   },
   "devDependencies": {
     "ajv": "^8.6.0",
     "lodash": "^4.17.21",
     "@types/lodash": "^4.17.7",
-    "@types/react": "^19.0.10",
     "eslint": "^9.21.0",
     "typescript-eslint": "^8.26.0"
   }

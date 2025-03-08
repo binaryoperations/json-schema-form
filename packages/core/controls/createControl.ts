@@ -1,9 +1,6 @@
-import type { ChangeEvent, ComponentType } from 'react';
-
-import { cast } from '#/internals/cast';
-
 import {
   isArrayRanked,
+  isBooleanRanked,
   isDateRanked,
   isNumberRanked,
   isTextRanked,
@@ -11,72 +8,68 @@ import {
   type Ranker,
 } from '../testers/testers';
 
-export type GetValueFromEvent<Output = any> = <T extends ChangeEvent>(
-  e: T
-) => Output;
+export type GetValueFromEvent<Output = any> = (...arg: any[]) => Output;
 
-export type RankedControl<C, Props extends { value: any }> = {
+export type RankedControl<C, Value, ValueGetType = GetValueFromEvent<Value>> = {
   Control: C;
-  getValueFromEvent: GetValueFromEvent<Props['value']>;
+  getValueFromEvent: ValueGetType;
   deriveRank: Ranker;
 };
 
-export default function createControl<C, P extends { value: any }>(
-  Control: C,
-  getValueFromEvent: GetValueFromEvent<P['value']>,
-  deriveRank: Ranker
-) {
-  if (!('createControl' in globalThis))
-    throw Error(`Attempted to "createControl" before registration`);
-  return cast<{ createControl: CreateControl }>(globalThis).createControl(
-    Control,
-    getValueFromEvent,
-    deriveRank
-  );
-}
+export class ControlCreator<T = unknown> {
+  constructor() {}
 
-export const createDateControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isDateRanked);
-
-export const createTimeControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isTimeRanked);
-
-export const createTextControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isTextRanked);
-
-export const createNumberControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isNumberRanked);
-
-export const createArrayControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isArrayRanked);
-
-export const createBooleanControl = <T>(
-  Control: T,
-  getValueFromEvent: GetValueFromEvent
-) => createControl(Control, getValueFromEvent, isArrayRanked);
-
-export type CreateControl<T = unknown> = {
-  <C = T, Props extends { value: any } = { value: any }>(
+  create<C extends T, Value, ValueGetter extends GetValueFromEvent<Value>>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent,
+    getValueFromEvent: ValueGetter,
     deriveRank: Ranker
-  ): RankedControl<C, Props>;
-};
+  ): RankedControl<C, Value> {
+    return {
+      Control,
+      deriveRank,
+      getValueFromEvent,
+    };
+  }
 
-declare global {
-  interface ControlCreator
-    extends CreateControl<ComponentType<{ value: any }>> {}
+  DateControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<Date | number | string>
+  ) {
+    return this.create(Control, getValueFromEvent, isDateRanked);
+  }
 
-  // eslint-disable-next-line no-var
-  var createControl: ControlCreator;
+  TimeControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<string>
+  ) {
+    return this.create(Control, getValueFromEvent, isTimeRanked);
+  }
+
+  TextControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<string>
+  ) {
+    return this.create(Control, getValueFromEvent, isTextRanked);
+  }
+
+  NumberControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<string | number>
+  ) {
+    return this.create(Control, getValueFromEvent, isNumberRanked);
+  }
+
+  ArrayControl<C extends T, ValueType = unknown>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<ValueType>
+  ) {
+    return this.create(Control, getValueFromEvent, isArrayRanked);
+  }
+
+  BooleanControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<boolean>
+  ) {
+    return this.create(Control, getValueFromEvent, isBooleanRanked);
+  }
 }

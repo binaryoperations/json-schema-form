@@ -1,6 +1,5 @@
 import '@binaryoperations/json-forms-react';
 
-import createControl from '@binaryoperations/json-forms-core/controls/createControl';
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
@@ -11,6 +10,7 @@ import {
 } from '@binaryoperations/json-forms-core/models/UiSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
+import { createControl } from '@binaryoperations/json-forms-react/components/Controls/createControl';
 import {
   DateControl,
   DateTimeControl,
@@ -44,7 +44,7 @@ const controlTypes = {
   number: NumberControl,
   checkbox: CheckboxControl,
   radio: RadioControl,
-  computedDate: createControl(
+  computedDate: createControl.create(
     (
       props: ComponentProps<typeof NumberInput> & {
         deriveFrom?: string;

@@ -1,5 +1,3 @@
-import { createTextControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
   type ChangeEvent,
   forwardRef,
@@ -8,6 +6,7 @@ import {
 } from 'react';
 import type { Merge } from 'type-fest';
 
+import { createControl } from './createControl';
 import { Input, type InputProps } from './Input';
 
 type InputBaseProps = {
@@ -60,8 +59,8 @@ export const TextInput = forwardRef<
   return <Input {...textInputProps} type="text" id={id} ref={ref} />;
 });
 
-export const TextInputControl = createTextControl(
+export const TextInputControl = createControl.TextControl(
   TextInput,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target!.value
 );

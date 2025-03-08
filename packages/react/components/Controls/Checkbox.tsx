@@ -1,7 +1,6 @@
-import { createBooleanControl } from '@binaryoperations/json-forms-core/controls/createControl';
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import type { ChangeEvent, SyntheticEvent } from 'react';
 
+import { createControl } from './createControl';
 import { withLabel } from './withLabel';
 
 type CheckboxAttributes = React.JSX.IntrinsicElements['input'];
@@ -14,8 +13,8 @@ const Checkbox = withLabel<CheckboxProps>(function Checkbox(props) {
   return <input {...props} />;
 });
 
-export const CheckboxControl = createBooleanControl(
+export const CheckboxControl = createControl.BooleanControl(
   Checkbox,
-  (event: SyntheticEvent) =>
-    cast<ChangeEvent<HTMLInputElement>>(event).target.checked
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
+    event.nativeEvent.target.checked
 );
