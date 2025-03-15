@@ -21,7 +21,7 @@ export const createCustomLayoutRenderer = <P extends object>(
   Component: ComponentType<PropsWithChildren>
 ): ComponentType<{ id: string } & P> => {
   return function CustomLayoutRenderer(props) {
-    const { renderer, options } = useStore((store) => {
+    const [{ renderer, options }] = useStore((store) => {
       const node = store.uiContext.getNode(props.id) as CustomNode;
       return node;
     });

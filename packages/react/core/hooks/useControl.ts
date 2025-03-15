@@ -59,9 +59,9 @@ export function useControlSchema<SelectorOutput>(
 
   return useStore((store) => {
     return selector(
-      store.uiContext.deriveNodeSchema(currentControl, storeRef.current)
+      store.uiContext.deriveNodeSchema(currentControl, storeRef.current)!
     );
-  }, equalityCheck);
+  }, equalityCheck)[0];
 }
 
 /**

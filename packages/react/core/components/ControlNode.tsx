@@ -9,7 +9,7 @@ import { useControlNode } from '../hooks/useRenderer';
 import { withErrorBoundary } from './ErrorBoundary';
 
 const Unhandled = () => {
-  const control = useControl((control) => control);
+  const [control] = useControl((control) => control);
   const [value] = useControlValue(control.path);
 
   return useMaybeDevValue(
@@ -37,7 +37,7 @@ const withControlContext = <Props extends { id: string }>(
 
 export const ControlNode = withControlContext(
   withErrorBoundary(function ControlNode(props: { id: string }) {
-    const control = useControl((control) => control);
+    const [control] = useControl((control) => control);
 
     const { Control, getValueFromEvent } = invariant(
       useControlNode(props.id),

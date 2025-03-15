@@ -11,11 +11,11 @@ export const ActiveStateProvider = ActiveStateContext.Provider;
 export const useActiveStateValue = ActiveStateContext.useContextValue;
 
 export function useActiveStateChange<T>() {
-  const { set } = ActiveStateContext.useStoreRef();
+  const setStore = ActiveStateContext.useSetStore();
 
   return useCallback(
     (id: T) => {
-      set((previous: ActiveStateType) => {
+      setStore((previous: ActiveStateType) => {
         switch (true) {
           case !previous.multiple:
             return { activeState: [id] };
@@ -30,7 +30,7 @@ export function useActiveStateChange<T>() {
         }
       });
     },
-    [set]
+    [setStore]
   );
 }
 
@@ -39,7 +39,7 @@ export function useIsActive<T>(id: T) {
 }
 
 export function useActiveState<T>(id: T) {
-  const isActive = useIsActive(id);
+  const [isActive] = useIsActive(id);
   const onActivate = useActiveStateChange<T>();
   return [isActive, useSafeCallback(() => onActivate(id))] as const;
 }

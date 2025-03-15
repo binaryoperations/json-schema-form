@@ -33,5 +33,5 @@ export const useControlNode = (id: string) => {
       store.uiContext.getNode(id),
       store.uiContext.deriveNodeSchema(id)!
     );
-  }, shallowCompare);
+  }, shallowCompare)[0];
 };
