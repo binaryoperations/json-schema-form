@@ -4,6 +4,7 @@
   "description": "",
   "main": "index.ts",
   "private": false,
+  "packageManager": "pnpm@10.0.0",
   "keywords": [
     "form",
     "json-schema",
@@ -69,7 +70,6 @@
     "eslint-config-turbo": "^2.1.3",
     "lodash": "^4.17.21"
   },
-  "packageManager": "pnpm@9.3.0",
   "resolutions": {
     "cross-spawn": "~7.0.5"
   }

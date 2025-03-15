@@ -41,7 +41,8 @@
     "use-sync-external-store": "^1.4.0"
   },
   "dependencies": {
-    "@binaryoperations/json-forms-core": "workspace:^"
+    "@binaryoperations/json-forms-core": "workspace:^",
+    "json-schema-library": "catalog:"
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^12.1.2",
