@@ -4,11 +4,7 @@ export type FormDataProviderProps = ComponentProps<ReturnType<CreateFastContext<
 export declare const FormDataProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<object>> & {
     displayName: string | undefined;
 };
-export declare const useStoreContextRef: () => {
-    get: () => object;
-    set: (value: (prev: object) => object) => void;
-    store: import("react").MutableRefObject<object>;
-    subscribe: (callback: () => void) => () => void;
-};
-export declare const useFormDataContext: <SelectorOutput>(selector: (store: object) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => SelectorOutput;
+export declare const useSetFormData: () => (value: (prev: object) => object) => void;
+export declare const useFormDataContextRef: () => import("react").RefObject<object>;
+export declare const useFormDataContext: <SelectorOutput>(selector: (store: object) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: object) => object) => void];
 //# sourceMappingURL=FormDataContext.d.ts.map

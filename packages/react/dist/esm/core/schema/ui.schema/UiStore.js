@@ -1,9 +1,12 @@
 import { cast } from '../../internals/cast';
-import { UiNodeType, } from '../../models/UiSchema';
+import { UiNodeType, } from '../../models/LayoutSchema';
 export class UiStore {
+    draftSchema;
     keyMap = {};
     tree = {};
-    constructor() { }
+    constructor(draftSchema) {
+        this.draftSchema = draftSchema;
+    }
     getChildren(key) {
         return this.tree[key];
     }
@@ -34,10 +37,13 @@ export class UiStore {
         this.keyMap = Object.freeze(this.keyMap);
         this.tree = Object.freeze(this.tree);
     }
-    deriveNodeSchema(key) {
+    deriveNodeSchema(key, data) {
         if (!this.isControl(key))
             return null;
         const node = cast(this.getNode(key));
+        if (!node.schema) {
+            return cast(this.draftSchema.getSchemaOf(node.path, data));
+        }
         return node.schema;
     }
 }

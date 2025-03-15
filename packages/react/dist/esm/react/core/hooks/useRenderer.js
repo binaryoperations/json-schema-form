@@ -6,17 +6,17 @@ import { useStore } from './useStore';
 export const useLayoutNode = (type) => {
     return invariant(useRendererContext((store) => {
         return store.layout[type];
-    }), `Layout "${type}" has not been registered`);
+    })[0], `Layout "${type}" has not been registered`);
 };
 export const useCustomLayoutNode = (type) => {
     return invariant(useRendererContext((store) => {
         return typeof type === 'string' ? store.layout[type] : type;
-    }), `Custom Layout "${type}" has not been registered`);
+    })[0], `Custom Layout "${type}" has not been registered`);
 };
 export const useControlNode = (id) => {
-    const controls = useRendererContext((store) => store.controls);
+    const [controls] = useRendererContext((store) => store.controls);
     return useStore((store) => {
         return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveNodeSchema(id));
-    }, shallowCompare);
+    }, shallowCompare)[0];
 };
 //# sourceMappingURL=useRenderer.js.map

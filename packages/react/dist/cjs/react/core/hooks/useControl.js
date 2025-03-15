@@ -3,7 +3,7 @@ import { set, shallowCompare, } from '../../../core/internals/object';
 import resolvers from '../../../core/internals/resolvers';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
-import { useFormDataContext, useStoreContextRef, } from '../context/FormDataContext';
+import { useFormDataContext, useFormDataContextRef, } from '../context/FormDataContext';
 import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
@@ -25,9 +25,10 @@ export function useControl(selector, equalityCheck = Object.is) {
  */
 export function useControlSchema(selector, equalityCheck) {
     const currentControl = useInvariantControl('useControlSchema can only be called inside ControlContext');
+    const storeRef = useFormDataContextRef();
     return useStore((store) => {
-        return selector(cast(store.uiContext.getNode(currentControl)).schema);
-    }, equalityCheck);
+        return selector(store.uiContext.deriveNodeSchema(currentControl, storeRef.current));
+    }, equalityCheck)[0];
 }
 /**
  *
@@ -35,15 +36,12 @@ export function useControlSchema(selector, equalityCheck) {
  *
  */
 export function useControlValue(path) {
-    const value = useFormDataContext((data) => resolvers.resolvePath(data, path), shallowCompare);
-    const store = useStoreContextRef();
+    const [value, setFormData] = useFormDataContext((data) => resolvers.resolvePath(data, path), shallowCompare);
     return [
         value,
         useCallback((value) => {
-            store.set((oldValue) => {
-                return set(oldValue, path, value);
-            });
-        }, [path, store]),
+            setFormData((oldValue) => set(oldValue, path, value));
+        }, [path, setFormData]),
     ];
 }
 //# sourceMappingURL=useControl.js.map

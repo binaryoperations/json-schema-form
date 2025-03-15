@@ -5,9 +5,9 @@ const ActiveStateContext = createFastContext(true);
 export const ActiveStateProvider = ActiveStateContext.Provider;
 export const useActiveStateValue = ActiveStateContext.useContextValue;
 export function useActiveStateChange() {
-    const { set } = ActiveStateContext.useStoreRef();
+    const setStore = ActiveStateContext.useSetStore();
     return useCallback((id) => {
-        set((previous) => {
+        setStore((previous) => {
             switch (true) {
                 case !previous.multiple:
                     return { activeState: [id] };
@@ -21,13 +21,13 @@ export function useActiveStateChange() {
                     };
             }
         });
-    }, [set]);
+    }, [setStore]);
 }
 export function useIsActive(id) {
     return useActiveStateValue((state) => state.activeState.includes(id));
 }
 export function useActiveState(id) {
-    const isActive = useIsActive(id);
+    const [isActive] = useIsActive(id);
     const onActivate = useActiveStateChange();
     return [isActive, useSafeCallback(() => onActivate(id))];
 }

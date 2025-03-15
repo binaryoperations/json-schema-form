@@ -9,7 +9,7 @@ export const createLayoutRenderer = (Component) => {
 };
 export const createCustomLayoutRenderer = (Component) => {
     return function CustomLayoutRenderer(props) {
-        const { renderer, options } = useStore((store) => {
+        const [{ renderer, options }] = useStore((store) => {
             const node = store.uiContext.getNode(props.id);
             return node;
         });

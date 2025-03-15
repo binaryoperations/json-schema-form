@@ -1,3 +1,3 @@
 export * from './ControlSchema';
-export * from './UiSchemaType';
+export * from './LayoutSchema';
 //# sourceMappingURL=index.d.ts.map

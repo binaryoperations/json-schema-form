@@ -1,7 +1,7 @@
 import { UiSchemaGenerator } from './Generator';
-import { UiSchemaParser } from './Parser';
+import { UiSchemaPreparer } from './Preparer';
 export default {
-    parse: UiSchemaParser.parse.bind(UiSchemaParser),
+    prepare: UiSchemaPreparer.prepare.bind(UiSchemaPreparer),
     generate: UiSchemaGenerator.generate.bind(UiSchemaGenerator),
 };
 export { UiStore } from './UiStore';

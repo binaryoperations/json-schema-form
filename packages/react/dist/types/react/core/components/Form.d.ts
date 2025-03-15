@@ -1,9 +1,10 @@
-import { UiSchema } from '../../../core/models';
+import { LayoutSchema, ObjectJsonSchema } from '../../../core/models';
 import { ComponentType } from 'react';
 import { FormDataProviderProps } from '../context/FormDataContext';
 import { ComponentContextProviderProps } from './ComponentContextProvider';
 export type FormProps = Omit<ComponentContextProviderProps, 'children'> & {
-    uiSchema: UiSchema;
+    uiSchema: LayoutSchema;
+    schema: ObjectJsonSchema;
     data: object;
     style?: React.JSX.IntrinsicElements['form']['style'];
     onDataChange?: FormDataProviderProps['onChange'];

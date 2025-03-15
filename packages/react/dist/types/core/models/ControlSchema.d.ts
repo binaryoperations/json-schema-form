@@ -137,7 +137,10 @@ export interface NullJsonSchema extends ControlSchemaBase<null> {
 export interface BooleanJsonSchema extends ControlSchemaBase<boolean> {
     type: 'boolean';
 }
-export type ControlSchema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema;
-export type Schema = ControlSchema | ControlSchemaBase;
+export interface OneOfRootSchema extends ControlSchemaBase<boolean> {
+    oneOf: Schema[];
+}
+export type ControlSchema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema | OneOfRootSchema;
+export type Schema = ControlSchema;
 export {};
 //# sourceMappingURL=ControlSchema.d.ts.map

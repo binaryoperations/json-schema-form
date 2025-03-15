@@ -56,11 +56,12 @@ export const createFastContext = (config) => {
     const { watch = false, debugName = `fast-context-${++counter}` } = typeof config !== 'object' ? { watch: config } : config;
     const context = createContext(null);
     context.displayName = debugName;
+    const useStoreRef = createUseRefContext(context);
     return {
         /**
          * using the value from here will never cause a rerender as context is based on refs.
          */
-        useStoreRef: createUseRefContext(context),
+        useStoreRef: () => useStoreRef().store,
         /**
          *
          * the value is memoized and thus changing the value will have no effect.
@@ -84,6 +85,8 @@ export const createFastContext = (config) => {
          *
          */
         useContextValue: (selector, equalityCheck = shallowCompare) => useStoreValue(context, selector, equalityCheck),
+        /** Returns the setter method */
+        useSetStore: () => useStoreRef().set,
         /**
          * context of the store. Useful for ContextBridge
          */
@@ -111,6 +114,6 @@ export const useFastContextStore = (_Context, selector, equalityFn = Object.is) 
     return [state, store.set];
 };
 export const useStoreValue = (_Context, selector, equalityFn = Object.is) => {
-    return useFastContextStore(_Context, selector, equalityFn)[0];
+    return useFastContextStore(_Context, selector, equalityFn);
 };
 //# sourceMappingURL=index.js.map

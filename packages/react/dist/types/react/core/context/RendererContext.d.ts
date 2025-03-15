@@ -11,5 +11,5 @@ export type RendererContextType<Props extends BaseControlProps<any, unknown, Syn
 export declare const RendererContextProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>>> & {
     displayName: string | undefined;
 };
-export declare const useRendererContext: <SelectorOutput>(selector: (store: RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => SelectorOutput;
+export declare const useRendererContext: <SelectorOutput>(selector: (store: RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>) => Partial<RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>>) => void];
 //# sourceMappingURL=RendererContext.d.ts.map

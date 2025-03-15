@@ -7,5 +7,9 @@ export declare const UiStoreContextProvider: import("react").NamedExoticComponen
 };
 export declare const useUiStoreContext: <SelectorOutput>(selector: (store: {
     uiContext: UiStore;
-}) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => SelectorOutput;
+}) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: {
+    uiContext: UiStore;
+}) => Partial<{
+    uiContext: UiStore;
+}>) => void];
 //# sourceMappingURL=StoreContext.d.ts.map

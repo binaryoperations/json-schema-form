@@ -1,11 +1,11 @@
-import { type ComponentType, type Context, type MutableRefObject, PropsWithChildren } from 'react';
+import { type ComponentType, type Context, PropsWithChildren, type RefObject } from 'react';
 type StoreDataType = NonNullable<object>;
 type Selector<IStore, SelectorOutput> = (store: IStore) => SelectorOutput;
 type EqualityCheck = (prev: any, next: any) => boolean;
 type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
     get: () => IStore;
     set: (value: (prev: IStore) => Partial<IStore>) => void;
-    store: MutableRefObject<IStore>;
+    store: RefObject<IStore>;
     subscribe: (callback: () => void) => () => void;
 };
 export type ProviderProps<T> = PropsWithChildren<{
@@ -17,19 +17,20 @@ type CreateFastContextConfig = boolean | {
     debugName?: string;
 };
 export type CreateFastContext<T extends StoreDataType = StoreDataType> = (config?: CreateFastContextConfig) => {
-    useStoreRef: ReturnType<typeof createUseRefContext<T>>;
+    useStoreRef: () => RefObject<T>;
     Provider: ComponentType<ProviderProps<T>>;
     useContext: <SelectorResult>(selector: Selector<T, SelectorResult>, equalityCheck: EqualityCheck) => [
         selectedResult: SelectorResult,
         setValue: UseStoreDataReturnType<T>['set']
     ];
-    useContextValue: <SelectorResult>(selector: Selector<T, SelectorResult>, equalityCheck: EqualityCheck) => SelectorResult;
+    useContextValue: <SelectorResult>(selector: Selector<T, SelectorResult>, equalityCheck: EqualityCheck) => [SelectorResult, UseStoreDataReturnType<T>['set']];
+    useSetStore: () => UseStoreDataReturnType<T>['set'];
 };
 export declare const createFastContext: <T extends object = object>(config?: CreateFastContextConfig) => {
     /**
      * using the value from here will never cause a rerender as context is based on refs.
      */
-    useStoreRef: () => UseStoreDataReturnType<T>;
+    useStoreRef: () => RefObject<T>;
     /**
      *
      * the value is memoized and thus changing the value will have no effect.
@@ -54,7 +55,9 @@ export declare const createFastContext: <T extends object = object>(config?: Cre
      * @returns return value of the selector
      *
      */
-    useContextValue: <SelectorOutput_1>(selector: Selector<T, SelectorOutput_1>, equalityCheck?: EqualityCheck) => SelectorOutput_1;
+    useContextValue: <SelectorOutput_1>(selector: Selector<T, SelectorOutput_1>, equalityCheck?: EqualityCheck) => [value: SelectorOutput_1, set: (value: (prev: T) => Partial<T>) => void];
+    /** Returns the setter method */
+    useSetStore: () => (value: (prev: T) => Partial<T>) => void;
     /**
      * context of the store. Useful for ContextBridge
      */
@@ -65,6 +68,6 @@ export declare const createProvider: <T extends object = object>(StoreContext: C
 };
 export declare const createUseRefContext: <T extends object = object>(_Context: Context<UseStoreDataReturnType<T> | null>) => () => UseStoreDataReturnType<T>;
 export declare const useFastContextStore: <IStore extends object, SelectorOutput>(_Context: Context<UseStoreDataReturnType<IStore> | null>, selector: Selector<IStore, SelectorOutput>, equalityFn?: (value1: any, value2: any) => boolean) => [value: SelectorOutput, set: (value: (prev: IStore) => Partial<IStore>) => void];
-export declare const useStoreValue: <IStore extends object, SelectorOutput>(_Context: Context<UseStoreDataReturnType<IStore> | null>, selector: Selector<IStore, SelectorOutput>, equalityFn?: (value1: any, value2: any) => boolean) => SelectorOutput;
+export declare const useStoreValue: <IStore extends object, SelectorOutput>(_Context: Context<UseStoreDataReturnType<IStore> | null>, selector: Selector<IStore, SelectorOutput>, equalityFn?: (value1: any, value2: any) => boolean) => [value: SelectorOutput, set: (value: (prev: IStore) => Partial<IStore>) => void];
 export {};
 //# sourceMappingURL=index.d.ts.map

@@ -4,6 +4,7 @@ const FormDataContext = createFastContext({
     debugName: 'FormDataContext',
 });
 export const FormDataProvider = FormDataContext.Provider;
-export const useStoreContextRef = FormDataContext.useStoreRef;
+export const useSetFormData = FormDataContext.useSetStore;
+export const useFormDataContextRef = FormDataContext.useStoreRef;
 export const useFormDataContext = FormDataContext.useContextValue;
 //# sourceMappingURL=FormDataContext.js.map

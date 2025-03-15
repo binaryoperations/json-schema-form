@@ -1,9 +1,9 @@
 import type { Schema } from '../models/ControlSchema';
-import { FieldsetNode, type UiSchema } from '../models/UiSchemaType';
-export type Tester = (schema: Schema, uiSchema: UiSchema | FieldsetNode, context: {
+import { FieldsetNode, type LayoutSchema } from '../models/LayoutSchema';
+export type Tester = (schema: Schema, uiSchema: LayoutSchema | FieldsetNode, context: {
     rootSchema: Schema;
 }) => boolean;
-export type Ranker = (schema: Schema, uiSchema: UiSchema | FieldsetNode, context: {
+export type Ranker = (schema: Schema, uiSchema: LayoutSchema | FieldsetNode, context: {
     rootSchema: Schema;
 }) => number;
 export declare const and: (...functions: Tester[]) => Tester;
@@ -13,7 +13,7 @@ export declare const ranked: (...functions: (Tester | Ranker)[]) => Ranker;
  *
  * Ui Schema Tester
  */
-export declare const uiSchemaMatches: (predicate: (uiSchema: UiSchema | FieldsetNode) => boolean) => Tester;
+export declare const uiSchemaMatches: (predicate: (uiSchema: LayoutSchema | FieldsetNode) => boolean) => Tester;
 export declare const hasFieldSets: Tester;
 export declare const isFieldSet: Tester;
 export declare const hasRows: Tester;
