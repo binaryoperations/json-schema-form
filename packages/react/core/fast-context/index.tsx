@@ -4,8 +4,8 @@ import {
   type Context,
   createContext,
   memo,
-  type MutableRefObject,
   PropsWithChildren,
+  type RefObject,
   useCallback,
   useEffect,
   useMemo,
@@ -25,7 +25,7 @@ type EqualityCheck = (prev: any, next: any) => boolean;
 type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
   get: () => IStore;
   set: (value: (prev: IStore) => Partial<IStore>) => void;
-  store: MutableRefObject<IStore>;
+  store: RefObject<IStore>;
   subscribe: (callback: () => void) => () => void;
 };
 
@@ -103,7 +103,7 @@ type CreateFastContextConfig =
 export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
   config?: CreateFastContextConfig
 ) => {
-  useStoreRef: ReturnType<typeof createUseRefContext<T>>;
+  useStoreRef: () => RefObject<T>;
   Provider: ComponentType<ProviderProps<T>>;
   useContext: <SelectorResult>(
     selector: Selector<T, SelectorResult>,
@@ -115,7 +115,9 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
   useContextValue: <SelectorResult>(
     selector: Selector<T, SelectorResult>,
     equalityCheck: EqualityCheck
-  ) => SelectorResult;
+  ) => [SelectorResult, UseStoreDataReturnType<T>['set']];
+
+  useSetStore: () => UseStoreDataReturnType<T>['set'];
 };
 
 let counter = 0;
@@ -128,11 +130,13 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
   const context = createContext<UseStoreDataReturnType<T> | null>(null);
   context.displayName = debugName;
 
+  const useStoreRef = createUseRefContext(context);
+
   return {
     /**
      * using the value from here will never cause a rerender as context is based on refs.
      */
-    useStoreRef: createUseRefContext(context),
+    useStoreRef: () => useStoreRef().store,
 
     /**
      *
@@ -168,6 +172,9 @@ export const createFastContext = <T extends StoreDataType = StoreDataType>(
       selector: Selector<T, SelectorOutput>,
       equalityCheck: EqualityCheck = shallowCompare
     ) => useStoreValue(context, selector, equalityCheck),
+
+    /** Returns the setter method */
+    useSetStore: () => useStoreRef().set,
 
     /**
      * context of the store. Useful for ContextBridge
@@ -238,5 +245,5 @@ export const useStoreValue = <IStore extends StoreDataType, SelectorOutput>(
   selector: Selector<IStore, SelectorOutput>,
   equalityFn = Object.is
 ) => {
-  return useFastContextStore(_Context, selector, equalityFn)[0];
+  return useFastContextStore(_Context, selector, equalityFn);
 };

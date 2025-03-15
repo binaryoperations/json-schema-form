@@ -14,7 +14,7 @@ import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
 import {
   useFormDataContext,
-  useStoreContextRef,
+  useFormDataContextRef,
 } from '../context/FormDataContext';
 import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
@@ -55,9 +55,11 @@ export function useControlSchema<SelectorOutput>(
     'useControlSchema can only be called inside ControlContext'
   );
 
+  const storeRef = useFormDataContextRef();
+
   return useStore((store) => {
     return selector(
-      cast<ControlNode>(store.uiContext.getNode(currentControl)).schema
+      store.uiContext.deriveNodeSchema(currentControl, storeRef.current)
     );
   }, equalityCheck);
 }
@@ -68,22 +70,18 @@ export function useControlSchema<SelectorOutput>(
  *
  */
 export function useControlValue<V = unknown>(path: string) {
-  const value = useFormDataContext(
-    (data) => resolvers.resolvePath(data, path),
+  const [value, setFormData] = useFormDataContext(
+    (data) => resolvers.resolvePath<V>(data, path),
     shallowCompare
   );
-
-  const store = useStoreContextRef();
 
   return [
     value,
     useCallback(
       (value: V) => {
-        store.set((oldValue) => {
-          return set(oldValue, path, value);
-        });
+        setFormData((oldValue) => set(oldValue, path, value));
       },
-      [path, store]
+      [path, setFormData]
     ),
   ] as [value: V, set: (value: V) => void];
 }
