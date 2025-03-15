@@ -9,5 +9,5 @@ export declare const useCustomLayoutNode: (type: string | ComponentType<object>)
 }>, any> | import("react").FunctionComponent<import("react").PropsWithChildren<{
     id: string;
 }>> | import("react").ComponentClass<object, any>;
-export declare const useControlNode: (id: string) => import("../../../core/controls/createControl").RankedControl<ComponentType<import("../../../core/types/control").BaseControlProps<any, unknown, import("react").SyntheticEvent<Element, Event>>>, unknown, (e: import("react").SyntheticEvent<Element, Event>) => unknown> | null;
+export declare const useControlNode: (id: string) => import("../../../core/controls/createControl").RankedControl<ComponentType<import("../../../core/types/control").BaseControlProps<any, unknown, import("react").SyntheticEvent<Element, Event>>>, unknown, (e: unknown) => unknown> | null;
 //# sourceMappingURL=useRenderer.d.ts.map

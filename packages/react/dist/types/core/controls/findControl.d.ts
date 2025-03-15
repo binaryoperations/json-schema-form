@@ -1,5 +1,4 @@
-import { ComponentType, SyntheticEvent } from 'react';
 import type { ControlSchema, FieldsetNode, LayoutSchema } from '../models';
 import type { RankedControl } from './createControl';
-export declare const findControl: <C extends ComponentType, Value>(controls: RankedControl<C | ComponentType, Value>[], node: LayoutSchema | FieldsetNode, schema: ControlSchema) => RankedControl<C, Value, (e: SyntheticEvent) => Value> | null;
+export declare const findControl: <C, EventType, Value>(controls: RankedControl<C, Value>[], node: LayoutSchema | FieldsetNode, schema: ControlSchema) => RankedControl<C, Value, (e: EventType) => Value> | null;
 //# sourceMappingURL=findControl.d.ts.map
