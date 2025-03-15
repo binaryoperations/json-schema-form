@@ -10,7 +10,7 @@ export const useLayoutNode = (type: string) => {
   return invariant(
     useRendererContext((store) => {
       return store.layout[type];
-    }),
+    })[0],
     `Layout "${type}" has not been registered`
   );
 };
@@ -19,13 +19,13 @@ export const useCustomLayoutNode = (type: string | ComponentType<object>) => {
   return invariant(
     useRendererContext((store) => {
       return typeof type === 'string' ? store.layout[type] : type;
-    }),
+    })[0],
     `Custom Layout "${type}" has not been registered`
   );
 };
 
 export const useControlNode = (id: string) => {
-  const controls = useRendererContext((store) => store.controls);
+  const [controls] = useRendererContext((store) => store.controls);
 
   return useStore((store) => {
     return findControl(

@@ -53,7 +53,7 @@ export class UiStore {
     this.tree = Object.freeze(this.tree);
   }
 
-  deriveNodeSchema(key: string, data: object) {
+  deriveNodeSchema(key: string, data?: object) {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNode>(this.getNode(key));
