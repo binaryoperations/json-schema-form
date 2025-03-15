@@ -10,17 +10,21 @@ import type {
   Schema,
   StringJsonSchema,
 } from '../models/ControlSchema';
-import { ControlNode, FieldsetNode, type UiSchema } from '../models/UiSchema';
+import {
+  ControlNode,
+  FieldsetNode,
+  type LayoutSchema,
+} from '../models/LayoutSchema';
 
 export type Tester = (
   schema: Schema,
-  uiSchema: UiSchema | FieldsetNode,
+  uiSchema: LayoutSchema | FieldsetNode,
   context: { rootSchema: Schema }
 ) => boolean;
 
 export type Ranker = (
   schema: Schema,
-  uiSchema: UiSchema | FieldsetNode,
+  uiSchema: LayoutSchema | FieldsetNode,
   context: { rootSchema: Schema }
 ) => number;
 
@@ -52,7 +56,7 @@ export const ranked = (...functions: (Tester | Ranker)[]): Ranker => {
  */
 
 export const uiSchemaMatches = (
-  predicate: (uiSchema: UiSchema | FieldsetNode) => boolean
+  predicate: (uiSchema: LayoutSchema | FieldsetNode) => boolean
 ): Tester => {
   return (_, uiSchema) => predicate(uiSchema);
 };

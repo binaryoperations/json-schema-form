@@ -2,12 +2,12 @@ import '@binaryoperations/json-forms-react';
 
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
-import { Schema } from '@binaryoperations/json-forms-core/models/ControlSchema';
+import { ObjectJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   ControlNode,
+  LayoutSchema,
   UiNodeType,
-  UiSchema,
-} from '@binaryoperations/json-forms-core/models/UiSchema';
+} from '@binaryoperations/json-forms-core/models/LayoutSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
 import { createControl } from '@binaryoperations/json-forms-react/components/Controls/createControl';
@@ -44,6 +44,17 @@ const controlTypes = {
   number: NumberControl,
   checkbox: CheckboxControl,
   radio: RadioControl,
+  array: createControl.ArrayControl(
+    (props) => (
+      <div>
+        {props.label}:
+        {props.value.map((v: any, i: number) => {
+          return <div key={i}>{v}</div>;
+        })}
+      </div>
+    ),
+    () => []
+  ),
   computedDate: createControl.create(
     (
       props: ComponentProps<typeof NumberInput> & {
@@ -116,7 +127,11 @@ function computeAge(date: string) {
   return datediff(resolvedTime, Date.now());
 }
 
-function App(props: { uiSchema: UiSchema; schema?: Schema; data: object }) {
+function App(props: {
+  uiSchema: LayoutSchema;
+  schema: ObjectJsonSchema;
+  data: object;
+}) {
   const [data, setData] = useState(props.data);
 
   const onChange = useCallback((next: object) => {

@@ -1,7 +1,8 @@
+import fpSet from 'lodash/fp/set';
 import get from 'lodash/get';
 import maxBy from 'lodash/maxBy';
-import fpSet from 'lodash/fp/set';
 import type _set from 'lodash/set';
+
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
 
 export { get, maxBy };

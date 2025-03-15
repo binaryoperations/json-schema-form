@@ -1,5 +1,5 @@
 import type { Schema } from '../models/ControlSchema';
-import { FieldsetNode, type UiSchema } from '../models/UiSchema';
+import { FieldsetNode, type UiSchema } from '../models/UiSchemaType';
 export type Tester = (schema: Schema, uiSchema: UiSchema | FieldsetNode, context: {
     rootSchema: Schema;
 }) => boolean;

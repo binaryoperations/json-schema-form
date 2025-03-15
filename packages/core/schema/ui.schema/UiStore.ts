@@ -3,15 +3,16 @@ import { cast } from '#/internals/cast';
 import {
   ControlNode,
   FieldsetNode,
+  LayoutSchema,
   UiNodeType,
-  UiSchema,
-} from '../../models/UiSchema';
+} from '../../models/LayoutSchema';
+import { LogicalSchema } from '../logical.schema/Parser';
 
 export class UiStore {
-  keyMap: Record<string, UiSchema | FieldsetNode> = {};
+  keyMap: Record<string, LayoutSchema | FieldsetNode> = {};
   tree: Record<string, string[]> = {};
 
-  constructor() {}
+  constructor(private draftSchema: LogicalSchema) {}
 
   getChildren(key: string) {
     return this.tree[key];
@@ -56,6 +57,10 @@ export class UiStore {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNode>(this.getNode(key));
+
+    if (!node.schema) {
+      return this.draftSchema.getSchemaOf(node.path);
+    }
 
     return node.schema;
   }

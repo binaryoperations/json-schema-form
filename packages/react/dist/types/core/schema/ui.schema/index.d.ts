@@ -1,5 +1,5 @@
 import { UiSchemaGenerator } from './Generator';
-import { UiSchemaParser } from './Parser';
+import { UiSchemaParser } from './Preparer';
 declare const _default: {
     parse: typeof UiSchemaParser.parse;
     generate: typeof UiSchemaGenerator.generate;

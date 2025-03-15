@@ -1,4 +1,4 @@
-import { UiSchema } from '../../models/UiSchema';
+import { UiSchema } from '../../models/UiSchemaType';
 import { UiStore } from './UiStore';
 export declare class UiSchemaParser {
     private counter;

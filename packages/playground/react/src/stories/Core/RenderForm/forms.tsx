@@ -1,16 +1,21 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { StringJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
+  ObjectJsonSchema,
+  Schema,
+  StringJsonSchema,
+} from '@binaryoperations/json-forms-core/models/ControlSchema';
+import {
+  type LayoutSchema,
   UiNodeType,
-  type UiSchema,
-} from '@binaryoperations/json-forms-core/models/UiSchema';
+} from '@binaryoperations/json-forms-core/models/LayoutSchema';
 
 export type FormConfig = {
   data: object;
-  uiSchema?: UiSchema;
+  schema: ObjectJsonSchema;
+  uiSchema?: LayoutSchema;
 };
 
-const schema = {
+const schema: Record<string, Schema> = {
   phone: {
     type: 'object',
     properties: {
@@ -63,9 +68,14 @@ const schema = {
       enum: ['football', 'basketball', 'volleyball'],
     },
   },
-} as const;
+};
 
 export const signinForm: FormConfig = {
+  schema: {
+    type: 'object',
+    properties: { userName: schema.email, password: schema.email },
+    required: ['userName', 'password'],
+  },
   data: {
     userName: '',
     password: '',
@@ -73,6 +83,11 @@ export const signinForm: FormConfig = {
 };
 
 export const newsLetterForm: FormConfig = {
+  schema: {
+    type: 'object',
+    properties: schema,
+    required: ['email', 'fullName'],
+  },
   data: {
     email: '',
     fullName: '',
@@ -80,6 +95,7 @@ export const newsLetterForm: FormConfig = {
 };
 
 const customerData: FormConfig = {
+  schema: { type: 'object', properties: schema },
   data: {
     email: 'forms@binaryoperation.io', // email field
     firstName: 'Form', // string
@@ -116,12 +132,10 @@ export const customer: FormConfig = {
           {
             type: UiNodeType.CONTROL,
             path: 'phone/countryCode',
-            schema: schema.phone.properties.countryCode,
           },
           {
             type: UiNodeType.CONTROL,
             path: 'phone/number',
-            schema: schema.phone.properties.number,
           },
         ],
       },
@@ -154,27 +168,22 @@ export const customer: FormConfig = {
           {
             type: UiNodeType.CONTROL,
             path: 'address/lineOne',
-            schema: schema.address.properties.lineOne,
           },
           {
             type: UiNodeType.CONTROL,
             path: 'address/lineTwo',
-            schema: schema.address.properties.lineTwo,
           },
           {
             type: UiNodeType.CONTROL,
             path: 'address/postalCode',
-            schema: schema.address.properties.postalCode,
           },
           {
             type: UiNodeType.CONTROL,
             path: 'address/city',
-            schema: schema.address.properties.city,
           },
           {
             type: UiNodeType.CONTROL,
             path: 'address/country',
-            schema: schema.address.properties.country,
           },
         ],
       },
@@ -212,12 +221,10 @@ export const customerWizard: FormConfig = {
                   {
                     type: UiNodeType.CONTROL,
                     path: 'phone/countryCode',
-                    schema: schema.phone.properties.countryCode,
                   },
                   {
                     type: UiNodeType.CONTROL,
                     path: 'phone/number',
-                    schema: schema.phone.properties.number,
                   },
                 ],
               },
@@ -272,12 +279,10 @@ export const customerWizard: FormConfig = {
                   {
                     type: UiNodeType.CONTROL,
                     path: 'address/lineOne',
-                    schema: schema.address.properties.lineOne,
                   },
                   {
                     type: UiNodeType.CONTROL,
                     path: 'address/lineTwo',
-                    schema: schema.address.properties.lineTwo,
                   },
                   {
                     type: UiNodeType.COLUMNS,
@@ -285,17 +290,14 @@ export const customerWizard: FormConfig = {
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/postalCode',
-                        schema: schema.address.properties.postalCode,
                       },
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/city',
-                        schema: schema.address.properties.city,
                       },
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/country',
-                        schema: schema.address.properties.country,
                       },
                     ],
                   },
@@ -312,13 +314,13 @@ export const customerWizard: FormConfig = {
                   {
                     type: UiNodeType.CONTROL,
                     path: 'address/lineOne',
-                    schema: schema.address.properties.lineOne,
+
                     options: { readOnly: true },
                   },
                   {
                     type: UiNodeType.CONTROL,
                     path: 'address/lineTwo',
-                    schema: schema.address.properties.lineTwo,
+
                     options: { readOnly: true },
                   },
                   {
@@ -327,19 +329,19 @@ export const customerWizard: FormConfig = {
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/postalCode',
-                        schema: schema.address.properties.postalCode,
+
                         options: { readOnly: true },
                       },
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/city',
-                        schema: schema.address.properties.city,
+
                         options: { readOnly: true },
                       },
                       {
                         type: UiNodeType.CONTROL,
                         path: 'address/country',
-                        schema: schema.address.properties.country,
+
                         options: { readOnly: true },
                       },
                     ],

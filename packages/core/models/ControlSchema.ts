@@ -175,12 +175,17 @@ export interface BooleanJsonSchema extends ControlSchemaBase<boolean> {
   type: 'boolean';
 }
 
+export interface OneOfRootSchema extends ControlSchemaBase<boolean> {
+  oneOf: Schema[];
+}
+
 export type ControlSchema =
   | StringJsonSchema
   | NumberJsonSchema
   | ArrayJsonSchema
   | ObjectJsonSchema
   | NullJsonSchema
-  | BooleanJsonSchema;
+  | BooleanJsonSchema
+  | OneOfRootSchema;
 
-export type Schema = ControlSchema | ControlSchemaBase;
+export type Schema = ControlSchema;

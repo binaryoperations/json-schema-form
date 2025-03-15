@@ -1,21 +1,26 @@
 import orderBy from 'lodash/orderBy';
 
-import { FieldsetNode, UiNodeType, UiSchema } from '../../models/UiSchema';
+import {
+  type FieldsetNode,
+  type LayoutSchema,
+  UiNodeType,
+} from '../../models/LayoutSchema';
+import { LogicalSchema } from '../logical.schema/Parser';
 import { UiStore } from './UiStore';
 
-export class UiSchemaParser {
+export class UiSchemaPreparer {
   private counter = 0;
 
   store!: UiStore;
 
-  constructor() {
-    this.store = new UiStore();
+  constructor(draftSchema: LogicalSchema) {
+    this.store = new UiStore(draftSchema);
   }
 
   // reconsider:
   // Do I need to prepare the tree in ahead-of-time?
   // can the child nodes be derived just-in-time?
-  private traverse(uiSchema: UiSchema | FieldsetNode, idRoot: string) {
+  private traverse(uiSchema: LayoutSchema | FieldsetNode, idRoot: string) {
     const nextCount = ++this.counter;
     const id = idRoot + '/' + (uiSchema.id ?? nextCount);
 
@@ -41,9 +46,9 @@ export class UiSchemaParser {
     return id;
   }
 
-  static parse(uiSchema: UiSchema) {
-    const ClassConstructor: typeof UiSchemaParser = Object.assign(this);
-    const parser = new ClassConstructor();
+  static prepare(uiSchema: LayoutSchema, draftSchema: LogicalSchema) {
+    const ClassConstructor: typeof UiSchemaPreparer = Object.assign(this);
+    const parser = new ClassConstructor(draftSchema);
 
     const id = parser.traverse(uiSchema, 'root');
 

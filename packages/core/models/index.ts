@@ -1,2 +1,2 @@
 export * from './ControlSchema';
-export * from './UiSchema';
+export * from './LayoutSchema';
