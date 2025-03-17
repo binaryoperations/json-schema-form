@@ -6,6 +6,7 @@ import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.sche
 import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
 import type { ComponentType, PropsWithChildren } from 'react';
 import { memo, useMemo } from 'react';
+import { useCallback } from 'react';
 
 import { UiStoreContextProvider } from '../context/StoreContext';
 
@@ -22,14 +23,20 @@ export const StoreContextProvider: StoreContextProvider = memo(
       [props.schema]
     );
 
+    const validate = useCallback(
+      (value: any) => schemaDraft.validate(value),
+      [schemaDraft]
+    );
+
     const uiContext = useMemo(
       () => ({
         uiContext: UiSchema.prepare(
           JSON.parse(JSON.stringify(props.uiSchema)),
           schemaDraft
         ),
+        validate,
       }),
-      [props.uiSchema, schemaDraft]
+      [props.uiSchema, schemaDraft, validate]
     );
 
     return (

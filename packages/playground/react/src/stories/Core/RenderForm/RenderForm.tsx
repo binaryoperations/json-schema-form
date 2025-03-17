@@ -2,10 +2,10 @@ import '@binaryoperations/json-forms-react';
 
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
-import { ObjectJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
+import type { ObjectJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
-  ControlNode,
-  LayoutSchema,
+  type ControlNode,
+  type LayoutSchema,
   UiNodeType,
 } from '@binaryoperations/json-forms-core/models/LayoutSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
@@ -26,10 +26,19 @@ import {
   Column,
   Row,
 } from '@binaryoperations/json-forms-react/components/Semantic';
-import { Bootstrap } from '@binaryoperations/json-forms-react/core/components/Form';
+import {
+  Bootstrap,
+  type FormProps,
+} from '@binaryoperations/json-forms-react/core/components/Form';
 import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
 import { createLayoutRenderer } from '@binaryoperations/json-forms-react/core/hoc/createRenderer';
-import { ComponentProps, useCallback, useState } from 'react';
+import {
+  type ComponentProps,
+  useCallback,
+  useEffect,
+  useRef,
+  useState,
+} from 'react';
 
 const defaultStyles = {
   gap: 8,
@@ -138,6 +147,12 @@ function App(props: {
     setData(next);
   }, []);
 
+  const validatorRef = useRef<Required<FormProps>['ref']['current']>(null);
+
+  useEffect(() => {
+    console.log({ validatorRef: validatorRef.current });
+  }, []);
+
   return (
     <Bootstrap
       {...props}
@@ -146,6 +161,7 @@ function App(props: {
       style={defaultStyles}
       data={data}
       onDataChange={onChange}
+      ref={validatorRef}
     >
       {/* <FormDataProvider value={data} onChange={onChange}>
         <UiStoreContextProvider value={context}>
