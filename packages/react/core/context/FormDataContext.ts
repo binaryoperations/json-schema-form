@@ -2,9 +2,8 @@ import { ComponentProps } from 'react';
 
 import { CreateFastContext, createFastContext } from '../fast-context';
 
-const FormDataContext = createFastContext<object>({
+const FormDataContext = createFastContext<object>('FormDataContext', {
   watch: true,
-  debugName: 'FormDataContext',
 });
 
 export type FormDataProviderProps = ComponentProps<

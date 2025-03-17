@@ -5,7 +5,10 @@ import useSafeCallback from '#/core/hooks/useSafeCallback';
 import { createFastContext } from '../../core/fast-context';
 import { ActiveStateType } from './types';
 
-const ActiveStateContext = createFastContext<ActiveStateType>(true);
+const ActiveStateContext = createFastContext<ActiveStateType>(
+  'ActiveStateContext',
+  true
+);
 
 export const ActiveStateProvider = ActiveStateContext.Provider;
 export const useActiveStateValue = ActiveStateContext.useContextValue;

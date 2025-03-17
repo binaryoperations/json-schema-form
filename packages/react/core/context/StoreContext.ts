@@ -30,8 +30,7 @@ export type UiStoreContextType = {
   resetErrors: () => void;
 };
 
-const StoreContext = createFastContext<UiStoreContextType>({
-  debugName: 'StoreContext',
+const StoreContext = createFastContext<UiStoreContextType>('StoreContext', {
   watch: true,
 });
 

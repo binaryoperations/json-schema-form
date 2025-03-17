@@ -34,7 +34,7 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
       <StoreContextProvider
         uiSchema={props.uiSchema}
         schema={props.schema}
-        validationMode={props.validationMode ?? 'onChange'}
+        validationMode={props.validationMode ?? 'onBlur'}
         initialData={initialData}
       >
         <FormDataProvider

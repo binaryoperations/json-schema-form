@@ -96,11 +96,10 @@ export type ProviderProps<T> = PropsWithChildren<{
   onChange?: (nextValue: T) => void;
 }>;
 
-type CreateFastContextConfig =
-  | boolean
-  | { watch?: boolean; debugName?: string };
+type CreateFastContextConfig = boolean | { watch?: boolean };
 
 export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
+  name: string,
   config?: CreateFastContextConfig
 ) => {
   useStoreRef: () => RefObject<T>;
@@ -122,9 +121,10 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (
 
 let counter = 0;
 export const createFastContext = <T extends StoreDataType = StoreDataType>(
+  debugName: string = `fast-context-${++counter}`,
   config?: CreateFastContextConfig
 ) => {
-  const { watch = false, debugName = `fast-context-${++counter}` } =
+  const { watch = false } =
     typeof config !== 'object' ? { watch: config } : config;
 
   const context = createContext<UseStoreDataReturnType<T> | null>(null);
