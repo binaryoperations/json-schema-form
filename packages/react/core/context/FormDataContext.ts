@@ -13,5 +13,5 @@ export type FormDataProviderProps = ComponentProps<
 
 export const FormDataProvider = FormDataContext.Provider;
 export const useSetFormData = FormDataContext.useSetStore;
-export const useFormDataContextRef = FormDataContext.useStoreRef;
+export const useFormDataRef = FormDataContext.useStoreRef;
 export const useFormDataContext = FormDataContext.useContextValue;

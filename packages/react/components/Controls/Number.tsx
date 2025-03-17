@@ -5,6 +5,7 @@ import { Input, type InputProps } from './Input';
 
 export interface NumberProps extends InputProps {
   type?: 'number';
+  value?: number | '';
 }
 
 export const Number = forwardRef<HTMLInputElement, NumberProps>(
@@ -15,6 +16,8 @@ export const Number = forwardRef<HTMLInputElement, NumberProps>(
 
 export const NumberControl = createControl.NumberControl(
   Number,
-  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
-    event.nativeEvent.target.value
+  (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) => {
+    const value = event.currentTarget.value;
+    return value === '' || isNaN(+value) ? '' : +value;
+  }
 );

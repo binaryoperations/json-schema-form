@@ -19,7 +19,7 @@ const schema: Record<string, Schema> = {
   phone: {
     type: 'object',
     properties: {
-      countryCode: { type: 'number' },
+      countryCode: { type: 'number', maximum: 2 },
       number: { type: 'number' },
       extension: { type: 'number' },
     },
@@ -100,7 +100,7 @@ const customerData: FormConfig = {
     email: 'forms@binaryoperation.io', // email field
     firstName: 'Form', // string
     lastName: 'Hero', // string
-    phone: '007', // custom?
+    phone: { number: '007' }, // custom?
     dateOfBirth: '', // date input/ date picker
     computedAge: '', // computed field? hide if date of birth is invalid
     rating: '7', // would be a number // slider/number field + steps

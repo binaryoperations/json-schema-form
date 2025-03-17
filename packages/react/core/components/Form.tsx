@@ -1,8 +1,4 @@
-import {
-  LayoutSchema,
-  ObjectJsonSchema,
-} from '@binaryoperations/json-forms-core/models';
-import { ComponentType, memo } from 'react';
+import { ComponentType, memo, useState } from 'react';
 
 import { Row } from '../../components/Semantic';
 import {
@@ -14,23 +10,33 @@ import {
   type FormDataProviderProps,
 } from './FormDataProvider';
 import { LayoutChildren } from './LayoutNode';
-import { StoreContextProvider } from './StoreContextProvider';
+import {
+  StoreContextProvider,
+  type StoreContextProviderProps,
+} from './StoreContextProvider';
 
-export type FormProps = Omit<ComponentContextProviderProps, 'children'> & {
-  uiSchema: LayoutSchema;
-  schema: ObjectJsonSchema;
-  data: object;
-  style?: React.JSX.IntrinsicElements['form']['style'];
-  onDataChange?: FormDataProviderProps['onChange'];
-  ref?: FormDataProviderProps['ref'];
-};
+export type FormProps = Omit<ComponentContextProviderProps, 'children'> &
+  Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & {
+    data: object;
+    style?: React.JSX.IntrinsicElements['form']['style'];
+    onDataChange?: FormDataProviderProps['onChange'];
+    ref?: FormDataProviderProps['ref'];
+    validationMode?: StoreContextProviderProps['validationMode'];
+  };
 
 export type Bootstrap = ComponentType<FormProps>;
 
 export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
+  const [initialData] = useState(props.data);
+
   return (
     <ComponentContextProvider layout={props.layout} controls={props.controls}>
-      <StoreContextProvider uiSchema={props.uiSchema} schema={props.schema}>
+      <StoreContextProvider
+        uiSchema={props.uiSchema}
+        schema={props.schema}
+        validationMode={props.validationMode ?? 'onChange'}
+        initialData={initialData}
+      >
         <FormDataProvider
           value={props.data}
           onChange={props.onDataChange}

@@ -3,7 +3,7 @@ import { ComponentType, SyntheticEvent } from 'react';
 import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
-import { useControl, useControlValue } from '../hooks';
+import { useControl, useControlProps, useControlValue } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { withErrorBoundary } from './ErrorBoundary';
@@ -45,7 +45,10 @@ export const ControlNode = withControlContext(
     );
 
     const path = control.path;
-    const [value, setValue] = useControlValue(path);
+    const { value, setValue, meta, onBlur, onFocus } = useControlProps(
+      path,
+      props
+    );
 
     const handleSetValue = useCallback(
       (e: SyntheticEvent) => {
@@ -57,9 +60,12 @@ export const ControlNode = withControlContext(
     return (
       <Control
         {...control.options}
+        error={meta?.error}
         label={path}
         value={(value ?? '') as any}
         onChange={handleSetValue}
+        onBlur={onBlur}
+        onFocus={onFocus}
       />
     );
   }, Unhandled)

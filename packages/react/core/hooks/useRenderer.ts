@@ -31,7 +31,7 @@ export const useControlNode = (id: string) => {
     return findControl(
       controls,
       store.uiContext.getNode(id),
-      store.uiContext.deriveNodeSchema(id)!
+      store.uiContext.deriveSchemaAtPointer(id)!
     );
   }, shallowCompare)[0];
 };

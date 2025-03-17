@@ -1,7 +1,7 @@
 import { ComponentType, forwardRef, memo, type ReactNode, useId } from 'react';
 
 export function withLabel<
-  P extends { id?: string; label?: ReactNode },
+  P extends { id?: string; label?: ReactNode; error?: string },
   R = HTMLElement,
 >(Component: ComponentType<Omit<P, 'label'>>) {
   return memo(
@@ -9,10 +9,12 @@ export function withLabel<
       const inputId = useId();
       const id = props.id ?? inputId;
 
-      const { label, ...inputProps } = props;
+      const { label, error, ...inputProps } = props;
       return (
         <>
-          {!label ? null : <label htmlFor={id}>{label}</label>}
+          {!error && !label ? null : (
+            <label htmlFor={id}>{error || label}</label>
+          )}
           <Component {...(inputProps as Omit<P, 'label'>)} ref={ref} id={id} />
         </>
       );

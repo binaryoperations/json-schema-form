@@ -6,16 +6,24 @@ import {
 } from '../context/FormDataContext';
 import { useUiStoreRef, type ValidateData } from '../context/StoreContext';
 
+type FormDataRef = {
+  validate: ValidateData;
+  resetErrors: () => void;
+};
+
 export type FormDataProviderProps = FormProviderProps & {
-  ref?: RefObject<{ validate: ValidateData } | null>;
+  ref?: RefObject<FormDataRef | null>;
 };
 
 export const FormDataProvider = (props: FormDataProviderProps) => {
   const { ref, ...rest } = props;
 
-  const validate = useUiStoreRef().current.validate;
+  const { validate, resetErrors } = useUiStoreRef().current;
 
-  useImperativeHandle(ref, () => ({ validate }), [validate]);
+  useImperativeHandle(ref, () => ({ validate, resetErrors }), [
+    validate,
+    resetErrors,
+  ]);
 
   return <FormProvider {...rest} />;
 };

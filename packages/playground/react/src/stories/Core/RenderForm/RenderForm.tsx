@@ -71,7 +71,7 @@ const controlTypes = {
       }
     ) => {
       const { deriveFrom, ...componentProps } = props;
-      const value = useFormDataContext((data) =>
+      const [value] = useFormDataContext((data) =>
         deriveFrom ? computeAge(resolvers.resolvePath(data, deriveFrom)) : ''
       );
       return <NumberInput {...componentProps} value={value} />;

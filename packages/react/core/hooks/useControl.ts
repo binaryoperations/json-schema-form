@@ -12,11 +12,14 @@ import type { Selector } from '@binaryoperations/json-forms-core/types/reducers'
 import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
+import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';
 import {
-  useFormDataContext,
-  useFormDataContextRef,
-} from '../context/FormDataContext';
+  UiStoreContextType,
+  useUiStoreContext,
+  useUiStoreRef,
+} from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
+import useLatest from './useLatest';
 import { useStore } from './useStore';
 
 const useInvariantControl = (message: string) =>
@@ -55,11 +58,14 @@ export function useControlSchema<SelectorOutput>(
     'useControlSchema can only be called inside ControlContext'
   );
 
-  const storeRef = useFormDataContextRef();
+  const formDataRef = useFormDataRef();
 
   return useStore((store) => {
     return selector(
-      store.uiContext.deriveNodeSchema(currentControl, storeRef.current)!
+      store.uiContext.deriveSchemaAtPointer(
+        currentControl,
+        formDataRef.current
+      )!
     );
   }, equalityCheck)[0];
 }
@@ -75,13 +81,110 @@ export function useControlValue<V = unknown>(path: string) {
     shallowCompare
   );
 
+  const setDirty = useUiStoreRef().current.setDirty;
+
+  const validate = useValidateData(path, 'onChange');
+
   return [
     value,
     useCallback(
       (value: V) => {
         setFormData((oldValue) => set(oldValue, path, value));
+        setDirty(path, value);
+        validate(value);
       },
-      [path, setFormData]
+      [validate, path, setFormData, setDirty]
     ),
   ] as [value: V, set: (value: V) => void];
+}
+
+type ControlProps = {
+  onBlur?: (e: any) => void;
+  onFocus?: (e: any) => void;
+  value: any;
+  setValue: (value: any) => void;
+  meta?: {
+    touched: boolean;
+    dirty: boolean;
+    error?: string;
+  };
+};
+
+export function useControlProps<
+  P extends Record<string, any> & Pick<ControlProps, 'onBlur' | 'onFocus'> = {},
+>(path: string, props: P): Required<ControlProps> {
+  const { onBlur, onFocus } = props;
+  const validate = useValidateData(path, 'onBlur');
+  const setTouched = useUiStoreRef().current.setTouched;
+
+  const [value, setValue] = useControlValue(path);
+
+  const latestValueRef = useLatest(value);
+
+  const [meta] = useUiStoreContext((state) => {
+    const schemaNodePointer =
+      state.uiContext.deriveSchemaNodeAtPointer(path)?.pointer;
+
+    return {
+      touched: state.touchedControlPaths.has(schemaNodePointer),
+      dirty: state.dirtyControlPaths.has(schemaNodePointer),
+      error: state.errors.get(schemaNodePointer)?.at(0)?.message,
+    };
+  }, shallowCompare);
+
+  return {
+    onBlur: useCallback<Required<ControlProps>['onBlur']>(
+      (e) => {
+        onBlur?.(e);
+        validate(latestValueRef.current);
+      },
+      [onBlur, validate, latestValueRef]
+    ),
+    onFocus: useCallback<Required<ControlProps>['onFocus']>(
+      (e) => {
+        onFocus?.(e);
+        setTouched(path);
+      },
+      [onFocus, setTouched, path]
+    ),
+
+    value,
+    setValue,
+
+    meta,
+  };
+}
+
+function useValidateData(
+  path: string,
+  validateOn: UiStoreContextType['validationMode']
+) {
+  const formDataRef = useFormDataRef();
+  const uiStoreRef = useUiStoreRef();
+
+  const [validate] = useUiStoreContext((state) =>
+    state.validationMode === validateOn ? state.validate : undefined
+  );
+
+  return useCallback(
+    (value: any) => {
+      if (!validate) return;
+
+      const shouldReset = validateOn === 'onSubmit';
+
+      const schema =
+        uiStoreRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
+
+      const validateResult = shouldReset
+        ? validate(value ?? formDataRef.current, schema)
+        : validate(value, schema);
+
+      uiStoreRef.current.setErrors(
+        path,
+        validateResult.isValid ? [] : validateResult.errors,
+        shouldReset
+      );
+    },
+    [path, validate, uiStoreRef, validateOn, formDataRef]
+  );
 }
