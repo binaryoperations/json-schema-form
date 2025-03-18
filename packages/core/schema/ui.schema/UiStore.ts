@@ -6,7 +6,9 @@ import {
   LayoutSchema,
   UiNodeType,
 } from '../../models/LayoutSchema';
-import { LogicalSchema } from '../logical.schema/Parser';
+import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
+
+export type { SchemaNode };
 
 export class UiStore {
   keyMap: Record<string, LayoutSchema | FieldsetNode> = {};

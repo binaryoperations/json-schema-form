@@ -3,8 +3,12 @@ import {
   Draft2019,
   type DraftConfig,
   isJsonError,
+  type JsonError,
   type JsonSchema,
+  type SchemaNode,
 } from 'json-schema-library';
+
+export { JsonError, SchemaNode };
 
 type DraftConstructor = {
   new (schema?: JsonSchema, config?: Partial<DraftConfig>): Draft;
