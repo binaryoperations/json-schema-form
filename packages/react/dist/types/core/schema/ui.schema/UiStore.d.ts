@@ -1,5 +1,6 @@
 import { ControlNode, FieldsetNode, LayoutSchema } from '../../models/LayoutSchema';
-import { LogicalSchema } from '../logical.schema/Parser';
+import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
+export type { SchemaNode };
 export declare class UiStore {
     private draftSchema;
     keyMap: Record<string, LayoutSchema | FieldsetNode>;
@@ -11,6 +12,7 @@ export declare class UiStore {
     getNodeType(key: string): "fieldsets" | "fieldset" | "rows" | "columns" | "control" | "custom";
     isControl(key: string): boolean;
     setRoot(key: string): void;
-    deriveNodeSchema(key: string, data?: object): import("../../models").ControlSchema | null;
+    deriveSchemaAtPointer(key: string, data?: object): import("../../models").ControlSchema | null;
+    deriveSchemaNodeAtPointer(key: string, data?: object): SchemaNode;
 }
 //# sourceMappingURL=UiStore.d.ts.map

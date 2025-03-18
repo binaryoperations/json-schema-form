@@ -1,8 +1,11 @@
 import fpSet from 'lodash/fp/set';
 import get from 'lodash/get';
+import groupBy from 'lodash/groupBy';
+import keyBy from 'lodash/keyBy';
 import maxBy from 'lodash/maxBy';
+export { default as fastDeepEqual } from 'fast-deep-equal';
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
-export { get, maxBy };
+export { get, groupBy, keyBy, maxBy };
 export const set = (data, path, value) => {
     if (Object.is(get(data, path), value))
         return data;

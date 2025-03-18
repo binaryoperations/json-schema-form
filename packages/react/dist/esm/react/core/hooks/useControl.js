@@ -3,8 +3,10 @@ import { set, shallowCompare, } from '../../../core/internals/object';
 import resolvers from '../../../core/internals/resolvers';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
-import { useFormDataContext, useFormDataContextRef, } from '../context/FormDataContext';
+import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';
+import { useUiStoreContext, useUiStoreRef, } from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
+import useLatest from './useLatest';
 import { useStore } from './useStore';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
 /**
@@ -25,9 +27,9 @@ export function useControl(selector, equalityCheck = Object.is) {
  */
 export function useControlSchema(selector, equalityCheck) {
     const currentControl = useInvariantControl('useControlSchema can only be called inside ControlContext');
-    const storeRef = useFormDataContextRef();
+    const formDataRef = useFormDataRef();
     return useStore((store) => {
-        return selector(store.uiContext.deriveNodeSchema(currentControl, storeRef.current));
+        return selector(store.uiContext.deriveSchemaAtPointer(currentControl, formDataRef.current));
     }, equalityCheck)[0];
 }
 /**
@@ -37,11 +39,58 @@ export function useControlSchema(selector, equalityCheck) {
  */
 export function useControlValue(path) {
     const [value, setFormData] = useFormDataContext((data) => resolvers.resolvePath(data, path), shallowCompare);
+    const setDirty = useUiStoreRef().current.setDirty;
+    const validate = useValidateData(path, 'onChange');
     return [
         value,
         useCallback((value) => {
             setFormData((oldValue) => set(oldValue, path, value));
-        }, [path, setFormData]),
+            setDirty(path, value);
+            validate(value);
+        }, [validate, path, setFormData, setDirty]),
     ];
+}
+export function useControlProps(path, props) {
+    const { onBlur, onFocus } = props;
+    const validate = useValidateData(path, 'onBlur');
+    const setTouched = useUiStoreRef().current.setTouched;
+    const [value, setValue] = useControlValue(path);
+    const latestValueRef = useLatest(value);
+    const [meta] = useUiStoreContext((state) => {
+        const schemaNodePointer = state.uiContext.deriveSchemaNodeAtPointer(path)?.pointer;
+        return {
+            touched: state.touchedControlPaths.has(schemaNodePointer),
+            dirty: state.dirtyControlPaths.has(schemaNodePointer),
+            error: state.errors.get(schemaNodePointer)?.at(0)?.message,
+        };
+    }, shallowCompare);
+    return {
+        onBlur: useCallback((e) => {
+            onBlur?.(e);
+            validate(latestValueRef.current);
+        }, [onBlur, validate, latestValueRef]),
+        onFocus: useCallback((e) => {
+            onFocus?.(e);
+            setTouched(path);
+        }, [onFocus, setTouched, path]),
+        value,
+        setValue,
+        meta,
+    };
+}
+function useValidateData(path, validateOn) {
+    const formDataRef = useFormDataRef();
+    const uiStoreRef = useUiStoreRef();
+    const [validate] = useUiStoreContext((state) => state.validationMode === validateOn ? state.validate : undefined);
+    return useCallback((value) => {
+        if (!validate)
+            return;
+        const shouldReset = validateOn === 'onSubmit';
+        const schema = uiStoreRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
+        const validateResult = shouldReset
+            ? validate(value ?? formDataRef.current, schema)
+            : validate(value, schema);
+        uiStoreRef.current.setErrors(path, validateResult.isValid ? [] : validateResult.errors, shouldReset);
+    }, [path, validate, uiStoreRef, validateOn, formDataRef]);
 }
 //# sourceMappingURL=useControl.js.map

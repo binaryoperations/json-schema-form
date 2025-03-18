@@ -1,4 +1,5 @@
-import { Draft, type DraftConfig, type JsonSchema } from 'json-schema-library';
+import { Draft, type DraftConfig, type JsonError, type JsonSchema, type SchemaNode } from 'json-schema-library';
+export { JsonError, SchemaNode };
 type DraftConstructor = {
     new (schema?: JsonSchema, config?: Partial<DraftConfig>): Draft;
 };
@@ -7,8 +8,11 @@ export declare class LogicalSchema {
     static prepare(schema: JsonSchema, DraftConstructor?: DraftConstructor): LogicalSchema;
     constructor(schema: JsonSchema, DraftConstructor?: DraftConstructor);
     prepareTemplate<T extends Record<string, any>>(defaultValues: T): any;
-    validate(value: any, schema?: string | JsonSchema | Draft, data?: Record<string, any>): import("json-schema-library").JsonError[];
+    validate(value: any, schema?: JsonSchema | Draft): {
+        isValid: boolean;
+        errors: JsonError[];
+    };
     getSchemaOf(pointer: string, data?: Record<string, any>): JsonSchema;
+    getSchemaNodeOf(pointer: string, data?: Record<string, any>): SchemaNode;
 }
-export {};
 //# sourceMappingURL=Parser.d.ts.map

@@ -11,18 +11,24 @@ export class LogicalSchema {
     prepareTemplate(defaultValues) {
         return this.draft.getTemplate(defaultValues);
     }
-    validate(value, schema = this.draft, data = {}) {
-        if (typeof schema === 'string') {
-            const schemaNode = this.getSchemaOf(schema, data);
-            if (!schemaNode)
-                throw new Error(`Schema not found for pointer: ${schema}`);
-            schema = schemaNode;
-        }
-        schema = schema instanceof Draft ? schema : new Draft2019(schema);
-        return this.draft.validate(value, schema);
+    validate(value, schema = this.draft) {
+        schema = schema instanceof Draft ? schema.getSchema() : schema;
+        const errors = this.draft.validate(value, schema);
+        return {
+            isValid: !errors.length,
+            errors,
+        };
     }
     getSchemaOf(pointer, data = {}) {
         const schemaNode = this.draft.getSchema({ pointer, data });
+        if (!schemaNode)
+            throw new Error(`Schema not found for pointer: ${pointer}`);
+        if (isJsonError(schemaNode))
+            throw new Error(schemaNode.name, { cause: schemaNode });
+        return schemaNode;
+    }
+    getSchemaNodeOf(pointer, data = {}) {
+        const schemaNode = this.draft.getSchemaNode({ pointer, data });
         if (!schemaNode)
             throw new Error(`Schema not found for pointer: ${pointer}`);
         if (isJsonError(schemaNode))

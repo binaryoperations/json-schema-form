@@ -4,8 +4,8 @@ export function withLabel(Component) {
     return memo(forwardRef((props, ref) => {
         const inputId = useId();
         const id = props.id ?? inputId;
-        const { label, ...inputProps } = props;
-        return (_jsxs(_Fragment, { children: [!label ? null : _jsx("label", { htmlFor: id, children: label }), _jsx(Component, { ...inputProps, ref: ref, id: id })] }));
+        const { label, error, ...inputProps } = props;
+        return (_jsxs(_Fragment, { children: [!error && !label ? null : (_jsx("label", { htmlFor: id, children: error || label })), _jsx(Component, { ...inputProps, ref: ref, id: id })] }));
     }));
 }
 //# sourceMappingURL=withLabel.js.map

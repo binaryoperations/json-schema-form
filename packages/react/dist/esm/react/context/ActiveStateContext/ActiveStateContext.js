@@ -1,7 +1,7 @@
 import { useCallback } from 'react';
 import useSafeCallback from '../../core/hooks/useSafeCallback';
 import { createFastContext } from '../../core/fast-context';
-const ActiveStateContext = createFastContext(true);
+const ActiveStateContext = createFastContext('ActiveStateContext', true);
 export const ActiveStateProvider = ActiveStateContext.Provider;
 export const useActiveStateValue = ActiveStateContext.useContextValue;
 export function useActiveStateChange() {

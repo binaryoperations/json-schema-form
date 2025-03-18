@@ -14,9 +14,8 @@ export type ProviderProps<T> = PropsWithChildren<{
 }>;
 type CreateFastContextConfig = boolean | {
     watch?: boolean;
-    debugName?: string;
 };
-export type CreateFastContext<T extends StoreDataType = StoreDataType> = (config?: CreateFastContextConfig) => {
+export type CreateFastContext<T extends StoreDataType = StoreDataType> = (name: string, config?: CreateFastContextConfig) => {
     useStoreRef: () => RefObject<T>;
     Provider: ComponentType<ProviderProps<T>>;
     useContext: <SelectorResult>(selector: Selector<T, SelectorResult>, equalityCheck: EqualityCheck) => [
@@ -26,7 +25,7 @@ export type CreateFastContext<T extends StoreDataType = StoreDataType> = (config
     useContextValue: <SelectorResult>(selector: Selector<T, SelectorResult>, equalityCheck: EqualityCheck) => [SelectorResult, UseStoreDataReturnType<T>['set']];
     useSetStore: () => UseStoreDataReturnType<T>['set'];
 };
-export declare const createFastContext: <T extends object = object>(config?: CreateFastContextConfig) => {
+export declare const createFastContext: <T extends object = object>(debugName?: string, config?: CreateFastContextConfig) => {
     /**
      * using the value from here will never cause a rerender as context is based on refs.
      */

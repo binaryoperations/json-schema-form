@@ -16,7 +16,7 @@ export const useCustomLayoutNode = (type) => {
 export const useControlNode = (id) => {
     const [controls] = useRendererContext((store) => store.controls);
     return useStore((store) => {
-        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveNodeSchema(id));
+        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveSchemaAtPointer(id));
     }, shallowCompare)[0];
 };
 //# sourceMappingURL=useRenderer.js.map

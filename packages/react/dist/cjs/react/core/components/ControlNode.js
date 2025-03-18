@@ -2,7 +2,7 @@ import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import invariant from '../../../core/internals/invariant';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
-import { useControl, useControlValue } from '../hooks';
+import { useControl, useControlProps, useControlValue } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { withErrorBoundary } from './ErrorBoundary';
@@ -20,10 +20,10 @@ export const ControlNode = withControlContext(withErrorBoundary(function Control
     const [control] = useControl((control) => control);
     const { Control, getValueFromEvent } = invariant(useControlNode(props.id), `Cannot find a relevant control for id: ${props.id}`);
     const path = control.path;
-    const [value, setValue] = useControlValue(path);
+    const { value, setValue, meta, onBlur, onFocus } = useControlProps(path, props);
     const handleSetValue = useCallback((e) => {
         setValue(getValueFromEvent(e));
     }, [getValueFromEvent, setValue]);
-    return (_jsx(Control, { ...control.options, label: path, value: (value ?? ''), onChange: handleSetValue }));
+    return (_jsx(Control, { ...control.options, error: meta?.error, label: path, value: (value ?? ''), onChange: handleSetValue, onBlur: onBlur, onFocus: onFocus }));
 }, Unhandled));
 //# sourceMappingURL=ControlNode.js.map

@@ -52,8 +52,8 @@ const useStoreData = (value, onChange, watch = false) => {
     }), [get, set, subscribe]);
 };
 let counter = 0;
-export const createFastContext = (config) => {
-    const { watch = false, debugName = `fast-context-${++counter}` } = typeof config !== 'object' ? { watch: config } : config;
+export const createFastContext = (debugName = `fast-context-${++counter}`, config) => {
+    const { watch = false } = typeof config !== 'object' ? { watch: config } : config;
     const context = createContext(null);
     context.displayName = debugName;
     const useStoreRef = createUseRefContext(context);

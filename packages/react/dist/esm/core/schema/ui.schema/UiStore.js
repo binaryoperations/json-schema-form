@@ -37,7 +37,7 @@ export class UiStore {
         this.keyMap = Object.freeze(this.keyMap);
         this.tree = Object.freeze(this.tree);
     }
-    deriveNodeSchema(key, data) {
+    deriveSchemaAtPointer(key, data) {
         if (!this.isControl(key))
             return null;
         const node = cast(this.getNode(key));
@@ -45,6 +45,9 @@ export class UiStore {
             return cast(this.draftSchema.getSchemaOf(node.path, data));
         }
         return node.schema;
+    }
+    deriveSchemaNodeAtPointer(key, data) {
+        return this.draftSchema.getSchemaNodeOf(key, data);
     }
 }
 //# sourceMappingURL=UiStore.js.map

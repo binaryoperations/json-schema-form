@@ -1,8 +1,2 @@
-export declare const useStore: <SelectorOutput>(selector: (store: {
-    uiContext: import("../../../core/schema/ui.schema").UiStore;
-}) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: {
-    uiContext: import("../../../core/schema/ui.schema").UiStore;
-}) => Partial<{
-    uiContext: import("../../../core/schema/ui.schema").UiStore;
-}>) => void];
+export declare const useStore: <SelectorOutput>(selector: (store: import("../context/StoreContext").UiStoreContextType) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: import("../context/StoreContext").UiStoreContextType) => Partial<import("../context/StoreContext").UiStoreContextType>) => void];
 //# sourceMappingURL=useStore.d.ts.map

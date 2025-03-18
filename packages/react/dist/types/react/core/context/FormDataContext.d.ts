@@ -5,6 +5,6 @@ export declare const FormDataProvider: import("react").NamedExoticComponent<impo
     displayName: string | undefined;
 };
 export declare const useSetFormData: () => (value: (prev: object) => object) => void;
-export declare const useFormDataContextRef: () => import("react").RefObject<object>;
+export declare const useFormDataRef: () => import("react").RefObject<object>;
 export declare const useFormDataContext: <SelectorOutput>(selector: (store: object) => SelectorOutput, equalityCheck?: (prev: any, next: any) => boolean) => [value: SelectorOutput, set: (value: (prev: object) => object) => void];
 //# sourceMappingURL=FormDataContext.d.ts.map
