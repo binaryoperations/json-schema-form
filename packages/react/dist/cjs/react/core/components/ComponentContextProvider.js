@@ -3,7 +3,9 @@ import { UiNodeType } from '../../../core/models';
 import { memo, useMemo } from 'react';
 import { RendererContextProvider, } from '../context/RendererContext';
 import { createCustomLayoutRenderer } from '../hoc/createRenderer';
-const CustomLayoutRenderer = createCustomLayoutRenderer((props) => (_jsx(_Fragment, { children: props.children })));
+const CustomLayoutRenderer = createCustomLayoutRenderer(function CustomLayoutRendererRoot(props) {
+    return _jsx(_Fragment, { children: props.children });
+});
 export const ComponentContextProvider = memo(function ComponentContextProvider(props) {
     const contextValue = useMemo(() => {
         const layout = UiNodeType['CUSTOM'] in props.layout
