@@ -30,9 +30,7 @@ export const createCustomLayoutRenderer = <P extends object>(
       return node;
     });
 
-    const LayoutNode =
-      useCustomLayoutNode(renderer) ??
-      (renderer as string | ComponentType<PropsWithChildren>);
+    const LayoutNode = useCustomLayoutNode(renderer);
 
     const nodesArray = [nodes ?? []].flat();
     const children = !nodesArray.length ? null : (

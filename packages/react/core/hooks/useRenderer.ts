@@ -18,10 +18,9 @@ export const useLayoutNode = (type: string) => {
 export const useCustomLayoutNode = (type: string | ComponentType<object>) => {
   return invariant(
     useRendererContext((store) => {
-      return typeof type === 'string' ? store.layout[type] : null;
+      return typeof type === 'string' ? store.layout[type] : type;
     })[0],
-    `Custom Layout "${type}" has not been registered`,
-    true
+    `Custom Layout "${type}" has not been registered`
   );
 };
 
