@@ -19,7 +19,9 @@ export const createLayoutRenderer = <P extends object>(
 
 export const createCustomLayoutRenderer = <P extends object>(
   Component: ComponentType<PropsWithChildren>
-): ComponentType<{ id: string } & P> => {
+): ComponentType<
+  { id: string; children?: PropsWithChildren['children'] } & P
+> => {
   CustomLayoutRenderer.displayName = `CustomLayoutRenderer${Component.displayName ?? Component.name ?? 'UnknownComponent'}`;
 
   return CustomLayoutRenderer;
