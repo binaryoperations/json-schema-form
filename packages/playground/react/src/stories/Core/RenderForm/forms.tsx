@@ -12,7 +12,7 @@ import {
 export type FormConfig = {
   data: object;
   schema: ObjectJsonSchema;
-  uiSchema?: LayoutSchema;
+  uiSchema: LayoutSchema;
 };
 
 const schema: Record<string, Schema> = {
@@ -70,7 +70,7 @@ const schema: Record<string, Schema> = {
   },
 };
 
-export const signinForm: FormConfig = {
+export const signinForm: Omit<FormConfig, 'uiSchema'> = {
   schema: {
     type: 'object',
     properties: { userName: schema.email, password: schema.email },
@@ -82,7 +82,7 @@ export const signinForm: FormConfig = {
   },
 };
 
-export const newsLetterForm: FormConfig = {
+export const newsLetterForm: Omit<FormConfig, 'uiSchema'> = {
   schema: {
     type: 'object',
     properties: schema,
@@ -94,7 +94,7 @@ export const newsLetterForm: FormConfig = {
   },
 };
 
-const customerData: FormConfig = {
+const customerData: Omit<FormConfig, 'uiSchema'> = {
   schema: { type: 'object', properties: schema },
   data: {
     email: 'forms@binaryoperation.io', // email field

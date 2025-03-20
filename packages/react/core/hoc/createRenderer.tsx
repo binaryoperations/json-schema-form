@@ -20,13 +20,19 @@ export const createLayoutRenderer = <P extends object>(
 export const createCustomLayoutRenderer = <P extends object>(
   Component: ComponentType<PropsWithChildren>
 ): ComponentType<{ id: string } & P> => {
-  return function CustomLayoutRenderer(props) {
+  CustomLayoutRenderer.displayName = `CustomLayoutRenderer${Component.displayName ?? Component.name ?? 'UnknownComponent'}`;
+
+  return CustomLayoutRenderer;
+
+  function CustomLayoutRenderer(props: { id: string } & P) {
     const [{ renderer, options, nodes }] = useStore((store) => {
       const node = store.uiContext.getNode(props.id) as CustomNode;
       return node;
     });
 
-    const LayoutNode = useCustomLayoutNode(renderer);
+    const LayoutNode =
+      useCustomLayoutNode(renderer) ??
+      (renderer as string | ComponentType<PropsWithChildren>);
 
     const nodesArray = [nodes ?? []].flat();
     const children = !nodesArray.length ? null : (
@@ -34,11 +40,9 @@ export const createCustomLayoutRenderer = <P extends object>(
     );
 
     return (
-      <Component {...props}>
-        <LayoutNode id={props.id} {...options}>
-          {children}
-        </LayoutNode>
-      </Component>
+      <LayoutNode {...options} {...props}>
+        {children}
+      </LayoutNode>
     );
-  };
+  }
 };

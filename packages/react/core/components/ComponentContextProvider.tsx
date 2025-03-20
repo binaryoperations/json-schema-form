@@ -13,9 +13,11 @@ export type ComponentContextProviderProps =
 export type ComponentContextProvider =
   ComponentType<ComponentContextProviderProps>;
 
-const CustomLayoutRenderer = createCustomLayoutRenderer((props) => (
-  <>{props.children}</>
-));
+const CustomLayoutRenderer = createCustomLayoutRenderer(
+  function CustomLayoutRendererRoot(props: PropsWithChildren) {
+    return <>{props.children}</>;
+  }
+);
 
 export const ComponentContextProvider: ComponentContextProvider = memo(
   function ComponentContextProvider(props) {

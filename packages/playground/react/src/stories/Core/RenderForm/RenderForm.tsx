@@ -34,6 +34,7 @@ import { useFormDataContext } from '@binaryoperations/json-forms-react/core/cont
 import { createLayoutRenderer } from '@binaryoperations/json-forms-react/core/hoc/createRenderer';
 import {
   type ComponentProps,
+  type PropsWithChildren,
   useCallback,
   useEffect,
   useRef,
@@ -124,6 +125,15 @@ const types = {
   }) {
     return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
   }),
+
+  testCustomLayout: (props: PropsWithChildren) => {
+    return (
+      <>
+        <h4>I'm a special custom snowflake</h4>
+        {props.children}
+      </>
+    );
+  },
 };
 
 function datediff(first: number, second: number) {

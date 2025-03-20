@@ -1,3 +1,4 @@
+import { RowsNode } from '@binaryoperations/json-forms-core/models';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren } from 'react';
 
@@ -32,7 +33,7 @@ export const Customer: Story = {
 export const CustomerWizard: Story = {
   args: {
     schema: customer.schema,
-    uiSchema: customerWizard.uiSchema!,
+    uiSchema: customerWizard.uiSchema,
     data: customerWizard.data!,
   },
 };
@@ -45,15 +46,18 @@ export const CustomerWizardWithCustomUiSchema: Story = {
       nodes: [
         {
           type: 'custom',
-          renderer: (props: PropsWithChildren) => {
-            return (
-              <>
-                <div>I'm a special custom snowflake</div>
-                {props.children}
-              </>
-            );
-          },
-          nodes: customerWizard.uiSchema!,
+          renderer: 'testCustomLayout',
+          nodes: (customerWizard.uiSchema as RowsNode).nodes[0],
+        },
+        {
+          type: 'custom',
+          nodes: (customerWizard.uiSchema as RowsNode).nodes[0],
+          renderer: (props: PropsWithChildren) => (
+            <div>
+              <h4>I'm another special snowflake</h4>
+              {props.children}
+            </div>
+          ),
         },
       ],
     },
