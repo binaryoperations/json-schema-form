@@ -1,5 +1,4 @@
 import orderBy from 'lodash/orderBy';
-import { UiNodeType, } from '../../models/LayoutSchema';
 import { UiStore } from './UiStore';
 export class UiSchemaPreparer {
     counter = 0;
@@ -14,12 +13,13 @@ export class UiSchemaPreparer {
         const nextCount = ++this.counter;
         const id = idRoot + '/' + (uiSchema.id ?? nextCount);
         this.store.keyMap[id] = uiSchema;
-        if (uiSchema.type === UiNodeType.CUSTOM)
-            return id;
-        if (!('nodes' in uiSchema))
+        if (!('nodes' in uiSchema) || !uiSchema.nodes)
             return id;
         const treeNodes = [];
-        const nodes = uiSchema.nodes.filter(Boolean);
+        const nodes = [uiSchema.nodes].flat().filter(Boolean);
+        if (!Array.isArray(uiSchema.nodes)) {
+            this.store.keyMap[id] = { ...uiSchema, nodes };
+        }
         for (const nextUiSchema of nodes) {
             treeNodes.push(this.traverse(nextUiSchema, id));
         }

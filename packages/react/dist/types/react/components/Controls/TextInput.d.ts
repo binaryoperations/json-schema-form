@@ -59,7 +59,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
-    enterKeyHint?: "search" | "enter" | "done" | "go" | "next" | "previous" | "send" | undefined;
+    enterKeyHint?: "search" | "done" | "enter" | "go" | "next" | "previous" | "send" | undefined;
     hidden?: boolean | undefined;
     id?: string | undefined;
     lang?: string | undefined;
@@ -356,7 +356,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
-    enterKeyHint?: "search" | "enter" | "done" | "go" | "next" | "previous" | "send" | undefined;
+    enterKeyHint?: "search" | "done" | "enter" | "go" | "next" | "previous" | "send" | undefined;
     hidden?: boolean | undefined;
     id?: string | undefined;
     lang?: string | undefined;
@@ -670,7 +670,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
-    enterKeyHint?: "search" | "enter" | "done" | "go" | "next" | "previous" | "send" | undefined;
+    enterKeyHint?: "search" | "done" | "enter" | "go" | "next" | "previous" | "send" | undefined;
     hidden?: boolean | undefined;
     id?: string | undefined;
     lang?: string | undefined;
@@ -967,7 +967,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     contextMenu?: string | undefined;
     dir?: string | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
-    enterKeyHint?: "search" | "enter" | "done" | "go" | "next" | "previous" | "send" | undefined;
+    enterKeyHint?: "search" | "done" | "enter" | "go" | "next" | "previous" | "send" | undefined;
     hidden?: boolean | undefined;
     id?: string | undefined;
     lang?: string | undefined;
