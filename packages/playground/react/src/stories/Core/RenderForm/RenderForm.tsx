@@ -116,7 +116,7 @@ const types = {
   }),
   [UiNodeType.FIELD_SETS]: createLayoutRenderer(
     function LayoutFieldSets(props: { id: string }) {
-      return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
+      return <Row data-type="fieldSets" style={defaultStyles} {...props} />;
     }
   ),
   [UiNodeType.FIELD_SET]: createLayoutRenderer(function LayoutFieldSet(props: {

@@ -1,9 +1,9 @@
 import orderBy from 'lodash/orderBy';
 
 import {
+  CustomNode,
   type FieldsetNode,
   type LayoutSchema,
-  UiNodeType,
 } from '../../models/LayoutSchema';
 import { LogicalSchema } from '../logical.schema/Parser';
 import { UiStore } from './UiStore';
@@ -26,13 +26,16 @@ export class UiSchemaPreparer {
 
     this.store.keyMap[id] = uiSchema;
 
-    if (uiSchema.type === UiNodeType.CUSTOM) return id;
-
-    if (!('nodes' in uiSchema)) return id;
+    if (!('nodes' in uiSchema) || !uiSchema.nodes) return id;
 
     const treeNodes: string[] = [];
 
-    const nodes = (uiSchema as FieldsetNode).nodes.filter(Boolean);
+    const nodes = [uiSchema.nodes].flat().filter(Boolean) as LayoutSchema[];
+
+    if (!Array.isArray(uiSchema.nodes)) {
+      this.store.keyMap[id] = { ...(uiSchema as CustomNode), nodes };
+    }
+
     for (const nextUiSchema of nodes) {
       treeNodes.push(this.traverse(nextUiSchema, id));
     }

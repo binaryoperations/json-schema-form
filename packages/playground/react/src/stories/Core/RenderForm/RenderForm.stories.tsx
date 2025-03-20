@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react';
+import { PropsWithChildren } from 'react';
 
 import { customer, customerWizard } from './forms';
 import RenderFormApp from './RenderForm';
@@ -32,6 +33,30 @@ export const CustomerWizard: Story = {
   args: {
     schema: customer.schema,
     uiSchema: customerWizard.uiSchema!,
+    data: customerWizard.data!,
+  },
+};
+
+export const CustomerWizardWithCustomUiSchema: Story = {
+  args: {
+    schema: customer.schema,
+    uiSchema: {
+      type: 'columns',
+      nodes: [
+        {
+          type: 'custom',
+          renderer: (props: PropsWithChildren) => {
+            return (
+              <>
+                <div>I'm a special custom snowflake</div>
+                {props.children}
+              </>
+            );
+          },
+          nodes: customerWizard.uiSchema!,
+        },
+      ],
+    },
     data: customerWizard.data!,
   },
 };

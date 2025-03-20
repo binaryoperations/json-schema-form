@@ -21,16 +21,23 @@ export const createCustomLayoutRenderer = <P extends object>(
   Component: ComponentType<PropsWithChildren>
 ): ComponentType<{ id: string } & P> => {
   return function CustomLayoutRenderer(props) {
-    const [{ renderer, options }] = useStore((store) => {
+    const [{ renderer, options, nodes }] = useStore((store) => {
       const node = store.uiContext.getNode(props.id) as CustomNode;
       return node;
     });
 
     const LayoutNode = useCustomLayoutNode(renderer);
 
+    const nodesArray = [nodes ?? []].flat();
+    const children = !nodesArray.length ? null : (
+      <LayoutChildren id={props.id} />
+    );
+
     return (
       <Component {...props}>
-        <LayoutNode id={props.id} {...options} />
+        <LayoutNode id={props.id} {...options}>
+          {children}
+        </LayoutNode>
       </Component>
     );
   };

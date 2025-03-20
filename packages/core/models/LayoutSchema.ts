@@ -88,6 +88,7 @@ export interface CustomNode<T = any> extends UiNodeBase {
   type: `${UiNodeType.CUSTOM}`;
   renderer: T | string;
   options?: T;
+  nodes?: PossibleRootNodes | ChildNode<PossibleRootNodes>[];
 }
 
 type PossibleRootNodes =
