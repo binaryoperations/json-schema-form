@@ -103,23 +103,60 @@ export const optionStartsWith = (
  * @param schema {Schema}
  * @returns boolean
  */
-export const isStringSchema: Tester = (schema): schema is StringJsonSchema =>
-  schema.type === 'string';
 
-export const isNumberSchema: Tester = (schema): schema is NumberJsonSchema =>
-  schema.type === 'number';
+export const checkInferableOneOfNotNullSchema =
+  (tester: Tester): Tester =>
+  (schema: Schema, ...rest) => {
+    if (tester(schema, ...rest)) return true;
+    if (!Array.isArray(schema.oneOf)) return false;
+    const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
+    return filteredSchema.length === 1 && tester(filteredSchema[0], ...rest);
+  };
 
-export const isBooleanSchema: Tester = (schema): schema is BooleanJsonSchema =>
-  schema.type === 'boolean';
+export const checkInferableAnyOfNotNullSchema =
+  (tester: Tester): Tester =>
+  (schema: Schema, ...rest) => {
+    if (tester(schema, ...rest)) return true;
+    if (!Array.isArray(schema.anyOf)) return false;
+    const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
+    return filteredSchema.length === 1 && tester(filteredSchema[0], ...rest);
+  };
 
-export const isNullSchema: Tester = (schema): schema is NullJsonSchema =>
-  schema.type === 'null';
+export const isStringSchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is StringJsonSchema => schema.type === 'string'
+  )
+);
 
-export const isObjectSchema: Tester = (schema): schema is ObjectJsonSchema =>
-  schema.type === 'object';
+export const isNumberSchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is NumberJsonSchema => schema.type === 'number'
+  )
+);
 
-export const isArraySchema: Tester = (schema): schema is ArrayJsonSchema =>
-  schema.type === 'array';
+export const isBooleanSchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is BooleanJsonSchema => schema.type === 'boolean'
+  )
+);
+
+export const isNullSchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is NullJsonSchema => schema.type === 'null'
+  )
+);
+
+export const isObjectSchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is ObjectJsonSchema => schema.type === 'object'
+  )
+);
+
+export const isArraySchema = checkInferableOneOfNotNullSchema(
+  checkInferableAnyOfNotNullSchema(
+    (schema): schema is ArrayJsonSchema => schema.type === 'array'
+  )
+);
 
 /**
  *

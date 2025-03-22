@@ -178,6 +178,9 @@ export interface BooleanJsonSchema extends ControlSchemaBase<boolean> {
 export interface OneOfRootSchema extends ControlSchemaBase<boolean> {
   oneOf: Schema[];
 }
+export interface AnyOfRootSchema extends ControlSchemaBase<boolean> {
+  anyOf: Schema[];
+}
 
 export type ControlSchema =
   | StringJsonSchema
@@ -186,6 +189,7 @@ export type ControlSchema =
   | ObjectJsonSchema
   | NullJsonSchema
   | BooleanJsonSchema
-  | OneOfRootSchema;
+  | OneOfRootSchema
+  | AnyOfRootSchema;
 
 export type Schema = ControlSchema;

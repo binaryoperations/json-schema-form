@@ -49,9 +49,16 @@ const schema: Record<string, Schema> = {
     readOnly: true,
   },
   rating: {
-    type: 'number',
-    minimum: 0,
-    maximum: 7,
+    anyOf: [
+      {
+        type: 'null',
+      },
+      {
+        type: 'number',
+        minimum: 0,
+        maximum: 7,
+      },
+    ],
   },
   gender: {
     type: 'string',
