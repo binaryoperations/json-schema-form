@@ -140,7 +140,10 @@ export interface BooleanJsonSchema extends ControlSchemaBase<boolean> {
 export interface OneOfRootSchema extends ControlSchemaBase<boolean> {
     oneOf: Schema[];
 }
-export type ControlSchema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema | OneOfRootSchema;
+export interface AnyOfRootSchema extends ControlSchemaBase<boolean> {
+    anyOf: Schema[];
+}
+export type ControlSchema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema | OneOfRootSchema | AnyOfRootSchema;
 export type Schema = ControlSchema;
 export {};
 //# sourceMappingURL=ControlSchema.d.ts.map

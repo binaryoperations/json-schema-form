@@ -31,6 +31,8 @@ export declare const optionStartsWith: (property: string, expectedValue: string)
  * @param schema {Schema}
  * @returns boolean
  */
+export declare const checkInferableOneOfNotNullSchema: (tester: Tester) => Tester;
+export declare const checkInferableAnyOfNotNullSchema: (tester: Tester) => Tester;
 export declare const isStringSchema: Tester;
 export declare const isNumberSchema: Tester;
 export declare const isBooleanSchema: Tester;

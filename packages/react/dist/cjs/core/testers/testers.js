@@ -48,12 +48,28 @@ export const optionStartsWith = (property, expectedValue) => and(isControl, uiSc
  * @param schema {Schema}
  * @returns boolean
  */
-export const isStringSchema = (schema) => schema.type === 'string';
-export const isNumberSchema = (schema) => schema.type === 'number';
-export const isBooleanSchema = (schema) => schema.type === 'boolean';
-export const isNullSchema = (schema) => schema.type === 'null';
-export const isObjectSchema = (schema) => schema.type === 'object';
-export const isArraySchema = (schema) => schema.type === 'array';
+export const checkInferableOneOfNotNullSchema = (tester) => (schema, ...rest) => {
+    if (tester(schema, ...rest))
+        return true;
+    if (!Array.isArray(schema.oneOf))
+        return false;
+    const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
+    return filteredSchema.length === 1 && tester(filteredSchema[0], ...rest);
+};
+export const checkInferableAnyOfNotNullSchema = (tester) => (schema, ...rest) => {
+    if (tester(schema, ...rest))
+        return true;
+    if (!Array.isArray(schema.anyOf))
+        return false;
+    const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
+    return filteredSchema.length === 1 && tester(filteredSchema[0], ...rest);
+};
+export const isStringSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'string'));
+export const isNumberSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'number'));
+export const isBooleanSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'boolean'));
+export const isNullSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'null'));
+export const isObjectSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'object'));
+export const isArraySchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema((schema) => schema.type === 'array'));
 /**
  *
  * Option Testers
