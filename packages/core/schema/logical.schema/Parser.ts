@@ -5,6 +5,7 @@ import {
   isJsonError,
   type JsonError,
   type JsonSchema,
+  resolveOneOfFuzzy,
   type SchemaNode,
 } from 'json-schema-library';
 
@@ -27,7 +28,9 @@ export class LogicalSchema {
     DraftConstructor: DraftConstructor = Draft2019
   ) {
     this.draft =
-      schema instanceof Draft ? schema : new DraftConstructor(schema);
+      schema instanceof Draft
+        ? schema
+        : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
   }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues: T) {

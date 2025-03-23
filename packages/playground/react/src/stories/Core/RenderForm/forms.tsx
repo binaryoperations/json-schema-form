@@ -157,7 +157,7 @@ export const customer: FormConfig = {
         schema: schema.computedAge,
         options: { readOnly: true },
       },
-      { type: UiNodeType.CONTROL, path: 'rating', schema: schema.rating },
+      { type: UiNodeType.CONTROL, path: 'rating' },
       {
         type: UiNodeType.CONTROL,
         path: 'gender',
@@ -252,7 +252,6 @@ export const customerWizard: FormConfig = {
               {
                 type: UiNodeType.CONTROL,
                 path: 'rating',
-                schema: schema.rating,
               },
               {
                 type: UiNodeType.CONTROL,
