@@ -6,8 +6,8 @@ import { ControlContext } from '../context/ControlContext';
 import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';
 import { useUiStoreContext, useUiStoreRef, } from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
-import useLatest from './useLatest';
 import { useStore } from './useStore';
+import useValue from './useValue';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
 /**
  *
@@ -55,7 +55,7 @@ export function useControlProps(path, props) {
     const validate = useValidateData(path, 'onBlur');
     const setTouched = useUiStoreRef().current.setTouched;
     const [value, setValue] = useControlValue(path);
-    const latestValueRef = useLatest(value);
+    const proxyValue = useValue(value);
     const [meta] = useUiStoreContext((state) => {
         const schemaNodePointer = state.uiContext.deriveSchemaNodeAtPointer(path)?.pointer;
         return {
@@ -67,8 +67,8 @@ export function useControlProps(path, props) {
     return {
         onBlur: useCallback((e) => {
             onBlur?.(e);
-            validate(latestValueRef.current);
-        }, [onBlur, validate, latestValueRef]),
+            validate(proxyValue.value);
+        }, [onBlur, validate, proxyValue]),
         onFocus: useCallback((e) => {
             onFocus?.(e);
             setTouched(path);
