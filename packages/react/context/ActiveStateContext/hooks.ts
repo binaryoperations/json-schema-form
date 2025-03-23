@@ -1,6 +1,6 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import type { ReactNode } from 'react';
-import { useMemo } from 'react';
+import { createElement, useMemo } from 'react';
 
 import useRef from '../../core/hooks/useRef';
 import useSafeCallback from '../../core/hooks/useSafeCallback';
@@ -26,7 +26,7 @@ export const usePrepareContextValue = (props: ActiveStateProps) => {
   }, [value, props.multiple]);
 };
 
-export default function useActiveStateContext(props: ActiveStateProps) {
+export function useActiveStateContext(props: ActiveStateProps) {
   const activeState = usePrepareContextValue(props);
   const onChange = useSafeCallback((nextValue: ActiveStateType) => {
     if (props.multiple) {
@@ -43,13 +43,14 @@ export default function useActiveStateContext(props: ActiveStateProps) {
 
   return {
     onChange,
-    render: (children: ReactNode) => (
-      <ActiveStateProvider
-        value={activeState}
-        onChange={props.onChange && onChange}
-      >
-        {children}
-      </ActiveStateProvider>
-    ),
+    render: (children: ReactNode) =>
+      createElement(
+        ActiveStateProvider,
+        {
+          value: activeState,
+          onChange: props.onChange && onChange,
+        },
+        children
+      ),
   };
 }
