@@ -8,5 +8,5 @@ export type TabsPropsBase<T = unknown> = PropsWithChildren<{
     tabListProps?: Omit<ColumnProps, 'children'>;
 }>;
 export type TabsProps<T = unknown> = ActiveStateProps<T> & TabsPropsBase<T>;
-export declare const Tabs: (props: TabsProps) => import("react/jsx-runtime").JSX.Element;
+export declare const Tabs: (props: TabsProps) => import("react").FunctionComponentElement<import("../../../core/fast-context").ProviderProps<import("../../../context/ActiveStateContext/types").ActiveStateType>>;
 //# sourceMappingURL=TabParent.d.ts.map

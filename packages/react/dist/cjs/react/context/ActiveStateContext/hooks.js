@@ -1,6 +1,5 @@
-import { jsx as _jsx } from "react/jsx-runtime";
 import { cast } from '../../../core/internals/cast';
-import { useMemo } from 'react';
+import { createElement, useMemo } from 'react';
 import useRef from '../../core/hooks/useRef';
 import useSafeCallback from '../../core/hooks/useSafeCallback';
 import { ActiveStateProvider } from './ActiveStateContext';
@@ -16,7 +15,7 @@ export const usePrepareContextValue = (props) => {
         return { activeState, multiple: props.multiple };
     }, [value, props.multiple]);
 };
-export default function useActiveStateContext(props) {
+export function useActiveStateContext(props) {
     const activeState = usePrepareContextValue(props);
     const onChange = useSafeCallback((nextValue) => {
         if (props.multiple) {
@@ -27,7 +26,10 @@ export default function useActiveStateContext(props) {
     });
     return {
         onChange,
-        render: (children) => (_jsx(ActiveStateProvider, { value: activeState, onChange: props.onChange && onChange, children: children })),
+        render: (children) => createElement(ActiveStateProvider, {
+            value: activeState,
+            onChange: props.onChange && onChange,
+        }, children),
     };
 }
 //# sourceMappingURL=hooks.js.map

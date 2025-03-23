@@ -4,8 +4,8 @@ export declare const usePrepareContextValue: (props: ActiveStateProps) => {
     activeState: any[];
     multiple: boolean | undefined;
 };
-export default function useActiveStateContext(props: ActiveStateProps): {
+export declare function useActiveStateContext(props: ActiveStateProps): {
     onChange: (nextValue: ActiveStateType) => void;
-    render: (children: ReactNode) => import("react/jsx-runtime").JSX.Element;
+    render: (children: ReactNode) => import("react").FunctionComponentElement<import("../../core/fast-context").ProviderProps<ActiveStateType>>;
 };
 //# sourceMappingURL=hooks.d.ts.map

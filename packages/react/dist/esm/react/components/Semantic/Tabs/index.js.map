@@ -1,1 +1,1 @@
-{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../../../components/Semantic/Tabs/index.tsx"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAqB,MAAM,WAAW,CAAC;AACvD,OAAO,EAAE,IAAI,EAAsC,MAAM,aAAa,CAAC"}
+{"version":3,"file":"index.js","sourceRoot":"","sources":["../../../../../../components/Semantic/Tabs/index.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,OAAO,EAAqB,MAAM,WAAW,CAAC;AACvD,OAAO,EAAE,IAAI,EAAsC,MAAM,aAAa,CAAC"}
