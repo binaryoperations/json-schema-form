@@ -19,8 +19,8 @@ import {
   useUiStoreRef,
 } from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
-import useLatest from './useLatest';
 import { useStore } from './useStore';
+import useValue from './useValue';
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);
@@ -119,7 +119,7 @@ export function useControlProps<
 
   const [value, setValue] = useControlValue(path);
 
-  const latestValueRef = useLatest(value);
+  const proxyValue = useValue(value);
 
   const [meta] = useUiStoreContext((state) => {
     const schemaNodePointer =
@@ -136,9 +136,10 @@ export function useControlProps<
     onBlur: useCallback<Required<ControlProps>['onBlur']>(
       (e) => {
         onBlur?.(e);
-        validate(latestValueRef.current);
+
+        validate(proxyValue.value);
       },
-      [onBlur, validate, latestValueRef]
+      [onBlur, validate, proxyValue]
     ),
     onFocus: useCallback<Required<ControlProps>['onFocus']>(
       (e) => {

@@ -14,8 +14,8 @@ import {
 import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-selector';
 
 import { useInvariantContext } from '../hooks/useInvariantContext';
-import { useLatest } from '../hooks/useLatest';
-import { usePrevious } from '../hooks/usePrevious';
+import useSafeCallback from '../hooks/useSafeCallback';
+import useValue from '../hooks/useValue';
 
 type StoreDataType = NonNullable<object>;
 
@@ -37,7 +37,7 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   const store = useRef<IStore>(value as IStore);
   const watchRef = useRef(watch);
   const effectRef = useRef(false);
-  const onChangeRef = useLatest(onChange);
+  const onChangeRef = useSafeCallback(onChange ?? (() => {}));
 
   const get = useCallback(() => store.current, [store]);
 
@@ -46,8 +46,7 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   const set = useCallback(
     (callback: (prev: IStore) => Partial<IStore>) => {
       store.current = { ...store.current, ...callback(store.current) };
-      if (!effectRef.current && onChangeRef.current)
-        onChangeRef.current(store.current);
+      if (!effectRef.current && onChangeRef) onChangeRef(store.current);
       else subscribers.current.forEach((subscriber) => subscriber());
       effectRef.current = false;
     },
@@ -76,7 +75,7 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
    * 2. the data stored in store.current may not be current with regards to the parent and the parent must have dropped the references related to the data.
    * 3. because store.current is a ref, on watch and change, if we update store.current, no side-effect introduced.
    */
-  if (usePrevious(value).current !== value && watchRef.current) {
+  if (useValue(value).previousValue !== value && watchRef.current) {
     store.current = { ...store.current, ...value };
   }
 
