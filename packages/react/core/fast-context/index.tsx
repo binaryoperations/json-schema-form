@@ -29,6 +29,8 @@ type UseStoreDataReturnType<IStore extends StoreDataType = StoreDataType> = {
   subscribe: (callback: () => void) => () => void;
 };
 
+const noop = () => {};
+
 const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   value: IStore,
   onChange?: (nextValue: IStore) => void,
@@ -37,7 +39,8 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   const store = useRef<IStore>(value as IStore);
   const watchRef = useRef(watch);
   const effectRef = useRef(false);
-  const onChangeRef = useSafeCallback(onChange ?? (() => {}));
+  const hasOnChange = useRef(!!onChange).current;
+  const onChangeRef = useSafeCallback(onChange ?? noop);
 
   const get = useCallback(() => store.current, [store]);
 
@@ -46,11 +49,11 @@ const useStoreData = <IStore extends StoreDataType = StoreDataType>(
   const set = useCallback(
     (callback: (prev: IStore) => Partial<IStore>) => {
       store.current = { ...store.current, ...callback(store.current) };
-      if (!effectRef.current && onChangeRef) onChangeRef(store.current);
+      if (!effectRef.current && hasOnChange) onChangeRef(store.current);
       else subscribers.current.forEach((subscriber) => subscriber());
       effectRef.current = false;
     },
-    [store, onChangeRef]
+    [store, onChangeRef, hasOnChange]
   );
 
   const subscribe = useCallback((callback: () => void) => {
