@@ -1,4 +1,4 @@
-import { Draft, Draft2019, isJsonError, } from 'json-schema-library';
+import { Draft, Draft2019, isJsonError, resolveOneOfFuzzy, } from 'json-schema-library';
 export class LogicalSchema {
     draft;
     static prepare(schema, DraftConstructor) {
@@ -6,7 +6,10 @@ export class LogicalSchema {
         return new ClassConstructor(schema, DraftConstructor);
     }
     constructor(schema, DraftConstructor = Draft2019) {
-        this.draft = new DraftConstructor(schema);
+        this.draft =
+            schema instanceof Draft
+                ? schema
+                : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
     }
     prepareTemplate(defaultValues) {
         return this.draft.getTemplate(defaultValues);

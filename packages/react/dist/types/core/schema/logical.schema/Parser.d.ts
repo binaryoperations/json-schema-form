@@ -6,7 +6,7 @@ type DraftConstructor = {
 export declare class LogicalSchema {
     private draft;
     static prepare(schema: JsonSchema, DraftConstructor?: DraftConstructor): LogicalSchema;
-    constructor(schema: JsonSchema, DraftConstructor?: DraftConstructor);
+    constructor(schema: JsonSchema | Draft, DraftConstructor?: DraftConstructor);
     prepareTemplate<T extends Record<string, any>>(defaultValues: T): any;
     validate(value: any, schema?: JsonSchema | Draft): {
         isValid: boolean;
