@@ -23,10 +23,11 @@ export class LogicalSchema {
   }
 
   constructor(
-    schema: JsonSchema,
+    schema: JsonSchema | Draft,
     DraftConstructor: DraftConstructor = Draft2019
   ) {
-    this.draft = new DraftConstructor(schema);
+    this.draft =
+      schema instanceof Draft ? schema : new DraftConstructor(schema);
   }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues: T) {
