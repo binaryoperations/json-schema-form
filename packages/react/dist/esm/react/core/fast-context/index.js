@@ -5,21 +5,23 @@ import { useSyncExternalStoreWithSelector } from 'use-sync-external-store/with-s
 import { useInvariantContext } from '../hooks/useInvariantContext';
 import useSafeCallback from '../hooks/useSafeCallback';
 import useValue from '../hooks/useValue';
+const noop = () => { };
 const useStoreData = (value, onChange, watch = false) => {
     const store = useRef(value);
     const watchRef = useRef(watch);
     const effectRef = useRef(false);
-    const onChangeRef = useSafeCallback(onChange ?? (() => { }));
+    const hasOnChange = useRef(!!onChange).current;
+    const onChangeRef = useSafeCallback(onChange ?? noop);
     const get = useCallback(() => store.current, [store]);
     const subscribers = useRef(new Set());
     const set = useCallback((callback) => {
         store.current = { ...store.current, ...callback(store.current) };
-        if (!effectRef.current && onChangeRef)
+        if (!effectRef.current && hasOnChange)
             onChangeRef(store.current);
         else
             subscribers.current.forEach((subscriber) => subscriber());
         effectRef.current = false;
-    }, [store, onChangeRef]);
+    }, [store, onChangeRef, hasOnChange]);
     const subscribe = useCallback((callback) => {
         subscribers.current.add(callback);
         return () => subscribers.current.delete(callback);
