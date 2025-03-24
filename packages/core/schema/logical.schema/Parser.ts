@@ -33,8 +33,10 @@ export class LogicalSchema {
         : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
   }
 
-  prepareTemplate<T extends Record<string, any>>(defaultValues: T) {
-    return this.draft.getTemplate(defaultValues);
+  prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
+    return this.draft.getTemplate(defaultValues, undefined, {
+      addOptionalProps: true,
+    });
   }
 
   validate(value: any, schema: JsonSchema | Draft = this.draft) {
@@ -50,8 +52,10 @@ export class LogicalSchema {
 
   getSchemaOf(pointer: string, data: Record<string, any> = {}) {
     const schemaNode = this.draft.getSchema({ pointer, data });
+
     if (!schemaNode)
       throw new Error(`Schema not found for pointer: ${pointer}`);
+
     if (isJsonError(schemaNode))
       throw new Error(schemaNode.name, { cause: schemaNode });
 

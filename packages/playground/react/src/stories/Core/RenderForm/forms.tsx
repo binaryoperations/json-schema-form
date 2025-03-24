@@ -51,12 +51,12 @@ const schema: Record<string, Schema> = {
   rating: {
     anyOf: [
       {
-        type: 'null',
-      },
-      {
         type: 'number',
         minimum: 0,
         maximum: 7,
+      },
+      {
+        type: 'null',
       },
     ],
   },
@@ -110,7 +110,7 @@ const customerData: Omit<FormConfig, 'uiSchema'> = {
     phone: { number: '007' }, // custom?
     dateOfBirth: '', // date input/ date picker
     computedAge: '', // computed field? hide if date of birth is invalid
-    rating: '7', // would be a number // slider/number field + steps
+    // rating: '7', // would be a number // slider/number field + steps
     gender: '', // options // render select/radio-buttons
     website: '', // url field,
     interests: [], // options // render multiselect/combobox/checkbox,

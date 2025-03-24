@@ -3,6 +3,7 @@ import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
 import type { ComponentType } from 'react';
 
+import { useFormDataRef } from '../context/FormDataContext';
 import { useRendererContext } from '../context/RendererContext';
 import { useStore } from './useStore';
 
@@ -26,12 +27,13 @@ export const useCustomLayoutNode = (type: string | ComponentType<object>) => {
 
 export const useControlNode = (id: string) => {
   const [controls] = useRendererContext((store) => store.controls);
+  const formDataRef = useFormDataRef();
 
   return useStore((store) => {
     return findControl(
       controls,
       store.uiContext.getNode(id),
-      store.uiContext.deriveSchemaAtPointer(id)!
+      store.uiContext.deriveSchemaAtPointer(id, formDataRef.current)!
     );
   }, shallowCompare)[0];
 };
