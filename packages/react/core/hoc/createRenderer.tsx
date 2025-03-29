@@ -44,7 +44,7 @@ function createCustomLayoutRenderer<P extends PropsWithChildren>(
 
     const { value, props: restProps } = useBreakpoints(props);
 
-    const LayoutNode = useCustomLayoutNode(renderer);
+    const LayoutNode = useCustomLayoutNode(renderer as string | ComponentType);
 
     const nodesArray = [nodes ?? []].flat();
     const children = !nodesArray.length ? null : (
