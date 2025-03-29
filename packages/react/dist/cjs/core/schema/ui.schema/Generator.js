@@ -1,4 +1,4 @@
 export class UiSchemaGenerator {
     static generate() { }
 }
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiR2VuZXJhdG9yLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vY29yZS9zY2hlbWEvdWkuc2NoZW1hL0dlbmVyYXRvci50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLE9BQU8saUJBQWlCO0lBQzVCLE1BQU0sQ0FBQyxRQUFRLEtBQUksQ0FBQztDQUNyQiJ9
+//# sourceMappingURL=Generator.js.map

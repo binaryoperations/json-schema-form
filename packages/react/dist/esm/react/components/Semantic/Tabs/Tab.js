@@ -2,4 +2,4 @@ import { useIsActive } from '../../../context/ActiveStateContext';
 export const Tab = (props) => {
     return !useIsActive(props.id) ? null : (props.children ?? null);
 };
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiVGFiLmpzIiwic291cmNlUm9vdCI6IiIsInNvdXJjZXMiOlsiLi4vLi4vLi4vLi4vLi4vLi4vY29tcG9uZW50cy9TZW1hbnRpYy9UYWJzL1RhYi50c3giXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBR0EsT0FBTyxFQUFFLFdBQVcsRUFBRSxNQUFNLDhCQUE4QixDQUFDO0FBTTNELE1BQU0sQ0FBQyxNQUFNLEdBQUcsR0FBUSxDQUFDLEtBQUssRUFBRSxFQUFFO0lBQ2hDLE9BQU8sQ0FBQyxXQUFXLENBQUMsS0FBSyxDQUFDLEVBQUUsQ0FBQyxDQUFDLENBQUMsQ0FBQyxJQUFJLENBQUMsQ0FBQyxDQUFDLENBQUMsS0FBSyxDQUFDLFFBQVEsSUFBSSxJQUFJLENBQUMsQ0FBQztBQUNsRSxDQUFDLENBQUMifQ==
+//# sourceMappingURL=Tab.js.map

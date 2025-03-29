@@ -1,0 +1,1 @@
+{"version":3,"file":"useInvariantContext.js","sourceRoot":"","sources":["../../../../../core/hooks/useInvariantContext.ts"],"names":[],"mappings":"AAAA,OAAO,SAAS,MAAM,uDAAuD,CAAC;AAC9E,OAAO,EAAgB,UAAU,EAAE,MAAM,OAAO,CAAC;AAEjD,MAAM,UAAU,mBAAmB,CACjC,OAA0B,EAC1B,OAAe;IAEf,MAAM,KAAK,GAAG,UAAU,CAAC,OAAO,CAAC,CAAC;IAClC,OAAO,SAAS,CAAC,KAAK,EAAE,OAAO,CAAC,CAAC;AACnC,CAAC"}

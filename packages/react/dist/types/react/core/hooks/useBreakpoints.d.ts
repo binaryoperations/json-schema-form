@@ -12,6 +12,6 @@ export declare function useBreakpoints<T extends {}, V = any>(props: T & {
             xl: V;
         }> | undefined;
     }, "breakpoints">;
-    currentBreakpoint: "xs" | "sm" | "md" | "lg" | "xl";
+    currentBreakpoint: "xs" | "sm" | "md" | "lg" | "xl" | undefined;
 };
 //# sourceMappingURL=useBreakpoints.d.ts.map

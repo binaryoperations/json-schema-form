@@ -5,7 +5,7 @@
     "composite": false,
     "declaration": false,
     "declarationMap": false,
-    "inlineSourceMap": true,
+    "sourceMap": true,
     "paths": {
       "@binaryoperations/json-forms-core": [
         "../core"

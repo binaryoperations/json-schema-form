@@ -1,3 +1,3 @@
 import { useUiStoreContext } from '../context/StoreContext';
 export const useStore = useUiStoreContext;
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlU3RvcmUuanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi9jb3JlL2hvb2tzL3VzZVN0b3JlLnRzIl0sIm5hbWVzIjpbXSwibWFwcGluZ3MiOiJBQUFBLE9BQU8sRUFBRSxpQkFBaUIsRUFBRSxNQUFNLHlCQUF5QixDQUFDO0FBRTVELE1BQU0sQ0FBQyxNQUFNLFFBQVEsR0FBRyxpQkFBaUIsQ0FBQyJ9
+//# sourceMappingURL=useStore.js.map

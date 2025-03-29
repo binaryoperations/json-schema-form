@@ -1,3 +1,3 @@
 export { TabItem } from './TabItem';
 export { Tabs } from './TabParent';
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiaW5kZXguanMiLCJzb3VyY2VSb290IjoiIiwic291cmNlcyI6WyIuLi8uLi8uLi8uLi8uLi8uLi9jb21wb25lbnRzL1NlbWFudGljL1RhYnMvaW5kZXgudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUEsT0FBTyxFQUFFLE9BQU8sRUFBcUIsTUFBTSxXQUFXLENBQUM7QUFDdkQsT0FBTyxFQUFFLElBQUksRUFBc0MsTUFBTSxhQUFhLENBQUMifQ==
+//# sourceMappingURL=index.js.map
