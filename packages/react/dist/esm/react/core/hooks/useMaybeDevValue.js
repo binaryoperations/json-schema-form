@@ -2,4 +2,4 @@ const isDev = process.env.NODE_ENV === 'development';
 export const useMaybeDevValue = (devCallback, prodCallback) => {
     return isDev ? devCallback() : prodCallback();
 };
-//# sourceMappingURL=useMaybeDevValue.js.map
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoidXNlTWF5YmVEZXZWYWx1ZS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbIi4uLy4uLy4uLy4uLy4uL2NvcmUvaG9va3MvdXNlTWF5YmVEZXZWYWx1ZS50cyJdLCJuYW1lcyI6W10sIm1hcHBpbmdzIjoiQUFBQSxNQUFNLEtBQUssR0FBRyxPQUFPLENBQUMsR0FBRyxDQUFDLFFBQVEsS0FBSyxhQUFhLENBQUM7QUFFckQsTUFBTSxDQUFDLE1BQU0sZ0JBQWdCLEdBQUcsQ0FDOUIsV0FBb0IsRUFDcEIsWUFBcUIsRUFDckIsRUFBRTtJQUNGLE9BQU8sS0FBSyxDQUFDLENBQUMsQ0FBQyxXQUFXLEVBQUUsQ0FBQyxDQUFDLENBQUMsWUFBWSxFQUFFLENBQUM7QUFDaEQsQ0FBQyxDQUFDIn0=
