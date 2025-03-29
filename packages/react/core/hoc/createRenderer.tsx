@@ -1,36 +1,48 @@
-import type { CustomNode } from '@binaryoperations/json-forms-core/models';
+import type {
+  Breakpoints,
+  CustomNode,
+} from '@binaryoperations/json-forms-core/models';
 import type { ComponentType, PropsWithChildren } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
+import { ComponentRendererProps } from '../context/RendererContext';
 import { useStore } from '../hooks';
+import { useBreakpoints } from '../hooks/useBreakpoints';
 import { useCustomLayoutNode } from '../hooks/useRenderer';
 
-export const createLayoutRenderer = <P extends object>(
-  Component: ComponentType<P>
-): ComponentType<{ id: string } & P> => {
-  return function LayoutRenderer(props) {
+export { createCustomLayoutRenderer, createLayoutRenderer };
+
+function createLayoutRenderer<P extends object>(Component: ComponentType<P>) {
+  Renderer.displayName = createComponentName(Component, `LayoutRenderer`);
+
+  return Renderer;
+
+  function Renderer(
+    props: { id: string; breakPoints?: Breakpoints<Partial<P>> } & P
+  ) {
+    const { value, props: restProps } = useBreakpoints(props);
+
     return (
-      <Component {...props}>
+      <Component {...restProps} {...value}>
         <LayoutChildren id={props.id} />
       </Component>
     );
-  };
-};
+  }
+}
 
-export const createCustomLayoutRenderer = <P extends object>(
-  Component: ComponentType<PropsWithChildren>
-): ComponentType<
-  { id: string; children?: PropsWithChildren['children'] } & P
-> => {
-  CustomLayoutRenderer.displayName = `CustomLayoutRenderer${Component.displayName ?? Component.name ?? 'UnknownComponent'}`;
+function createCustomLayoutRenderer<P extends PropsWithChildren>(
+  Component: ComponentType<P>
+) {
+  Renderer.displayName = createComponentName(Component, 'CustomLayoutRenderer');
+  return Renderer;
 
-  return CustomLayoutRenderer;
-
-  function CustomLayoutRenderer(props: { id: string } & P) {
+  function Renderer(props: ComponentRendererProps<PropsWithChildren<P>>) {
     const [{ renderer, options, nodes }] = useStore((store) => {
       const node = store.uiContext.getNode(props.id) as CustomNode;
       return node;
     });
+
+    const { value, props: restProps } = useBreakpoints(props);
 
     const LayoutNode = useCustomLayoutNode(renderer);
 
@@ -40,9 +52,15 @@ export const createCustomLayoutRenderer = <P extends object>(
     );
 
     return (
-      <LayoutNode {...options} {...props}>
+      <LayoutNode {...options} {...restProps} {...value}>
         {children}
       </LayoutNode>
     );
   }
-};
+}
+
+let counter = 0;
+function createComponentName(C: { displayName?: string }, namePrefix: string) {
+  const displayName = C.displayName ?? (C as ComponentType).name;
+  return namePrefix + (displayName ?? `UnknownComponent_${++counter}`);
+}

@@ -6,10 +6,13 @@ import { useLayoutNode } from '../hooks/useRenderer';
 import { ControlNode } from './ControlNode';
 
 export const LayoutNode = function LayoutNode(props: { id: string }) {
-  const [nodeType] = useStore((store) => store.uiContext.getNodeType(props.id));
+  const [{ nodeType, breakpoints }] = useStore((store) => {
+    const node = store.uiContext.getNode(props.id);
+    return { nodeType: node.type, breakpoints: node.breakpoints };
+  }, shallowCompare);
   const LayoutNode = useLayoutNode(nodeType);
 
-  return <LayoutNode id={props.id} />;
+  return <LayoutNode id={props.id} breakpoints={breakpoints} />;
 };
 
 export const LayoutChildren = memo(function LayoutChildren(props: {

@@ -1,5 +1,13 @@
 import type { ControlSchema } from './ControlSchema';
 
+export type Breakpoints<T = any> = Partial<{
+  xs: T;
+  sm: T;
+  md: T;
+  lg: T;
+  xl: T;
+}>;
+
 export enum UiNodeType {
   FIELD_SETS = 'fieldsets',
   FIELD_SET = 'fieldset',
@@ -53,6 +61,7 @@ export interface UiNodeBase {
   type: `${UiNodeType}`;
   rules?: Rules;
   id?: string;
+  breakpoints?: Breakpoints;
 }
 
 export interface FieldsetsNode extends UiNodeBase {
@@ -98,4 +107,4 @@ type PossibleRootNodes =
   | ControlNode
   | CustomNode;
 
-export type LayoutSchema = PossibleRootNodes;
+export type LayoutSchema<T extends {} = {}> = PossibleRootNodes & T;

@@ -3,12 +3,14 @@ export const styles = {
     flexDirection: 'column',
     maxWidth: '100%',
     display: 'flex',
+    flexWrap: 'wrap',
   },
   rowReverse: {
     flexDirection: 'column-reverse',
   },
   column: {
     display: 'flex',
+    maxWidth: '100%',
     flexDirection: 'row',
   },
   columnReverse: {
