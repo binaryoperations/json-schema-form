@@ -4,6 +4,7 @@ import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
 import { useControl, useControlProps, useControlValue } from '../hooks';
+import { useBreakpoints } from '../hooks/useBreakpoints';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { withErrorBoundary } from './ErrorBoundary';
@@ -60,6 +61,7 @@ export const ControlNode = withControlContext(
     return (
       <Control
         {...control.options}
+        {...useBreakpoints(control)?.value}
         error={meta?.error}
         label={path}
         value={(value ?? '') as any}
