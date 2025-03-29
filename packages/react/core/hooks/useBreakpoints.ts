@@ -17,17 +17,29 @@ export function useBreakpoints<T extends {}, V = any>(
   };
 
   const currentBreakpoint = useMemo(() => {
+    if (!breakpoints) return;
     const breakpointsDefinitions = { xs, sm, md, lg, xl };
     const keys: (keyof Breakpoints)[] = ['xs', 'sm', 'md', 'lg', 'xl'];
 
-    return keys.reduce((previous, key) => {
+    let counter = 0;
+    let previous = 'xs' as keyof Breakpoints;
+
+    while (true) {
+      const key = keys[counter];
+      if (!key) break;
       if (breakpointsDefinitions[key])
         return breakpoints?.[key] ? key : previous;
-      return previous;
-    }, 'xs');
+
+      counter++;
+
+      previous = breakpoints?.[key] ? key : previous;
+    }
+
+    return previous;
+    // return breakpoints?.[key] && !breakpoints[previous] ? key : previous;
   }, [breakpoints, xs, sm, md, lg, xl]);
 
-  const value = breakpoints?.[currentBreakpoint];
+  const value = breakpoints?.[currentBreakpoint!];
 
   return {
     value,
