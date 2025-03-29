@@ -361,3 +361,440 @@ export const customerWizard: FormConfig = {
     ],
   },
 };
+
+export const responsive: FormConfig = {
+  schema: {
+    type: 'object',
+    properties: {
+      number: {
+        type: 'number',
+        minimum: 0,
+        maximum: 100,
+        description: '',
+        title: 'number',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      date: {
+        type: 'string',
+        format: 'date',
+        description: '',
+        title: 'date',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      datetime: {
+        type: 'string',
+        format: 'date',
+        minimum: 1742045565178,
+        description: '',
+        title: 'datetime',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      time: {
+        type: 'string',
+        format: 'time',
+        description: '',
+        title: 'time',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      money: {
+        type: 'number',
+        format: 'currency',
+        description: '',
+        title: 'money',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      first_name: {
+        type: 'string',
+        description: '',
+        title: 'First Name',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      last_name: {
+        type: 'string',
+        description: '',
+        title: 'Last Name',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      date_of_birth: {
+        type: 'string',
+        description: '',
+        title: 'Date of Birth',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      gender: {
+        type: 'string',
+        description: '',
+        title: 'Gender',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      phone: {
+        type: 'number',
+        minimum: 0,
+        maximum: 100,
+        description: '',
+        title: 'Phone',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      email: {
+        type: 'string',
+        format: 'email',
+        pattern: '[^\\s@]+@[^\\s@]+\\.[^\\s@]+',
+        description: '',
+        title: 'email',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      notes: {
+        type: 'string',
+        description: '',
+        title: 'Notes',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      line_one: {
+        type: 'string',
+        description: '',
+        title: 'Line One',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      line_two: {
+        type: 'string',
+        description: '',
+        title: 'Line Two',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      city: {
+        type: 'string',
+        description: '',
+        title: 'City',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      postal_code: {
+        type: 'string',
+        description: '',
+        title: 'Postal Code',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      country: {
+        type: 'string',
+        description: '',
+        title: 'Country',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+    },
+    required: [],
+  },
+  uiSchema: {
+    type: 'rows',
+    breakpoints: {
+      xs: {
+        style: {
+          flexBasis: '100%',
+          flexGrow: 1,
+        },
+      },
+    },
+    nodes: [
+      {
+        type: 'columns',
+        breakpoints: {
+          xs: {
+            style: {
+              flexWrap: 'wrap',
+            },
+          },
+        },
+        nodes: [
+          {
+            type: 'rows',
+            breakpoints: {
+              sm: {
+                style: {
+                  flexBasis: '50%',
+                  flexGrow: 1,
+                },
+              },
+              md: {
+                style: {
+                  flexBasis: '33.33333333333333%',
+                  flexGrow: 1,
+                },
+              },
+            },
+            nodes: [
+              {
+                type: 'columns',
+                breakpoints: {
+                  xs: {
+                    style: {
+                      flexWrap: 'wrap',
+                    },
+                  },
+                },
+                nodes: [
+                  {
+                    type: 'control',
+                    id: 'first_name',
+                    path: 'first_name',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'last_name',
+                    path: 'last_name',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'date_of_birth',
+                    path: 'date_of_birth',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'gender',
+                    path: 'gender',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'phone',
+                    path: 'phone',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'email',
+                    path: 'email',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                      md: {
+                        style: {
+                          flexBasis: '33.33333333333333%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+              {
+                type: 'columns',
+                breakpoints: {
+                  xs: {
+                    style: {
+                      flexWrap: 'wrap',
+                    },
+                  },
+                },
+                nodes: [
+                  {
+                    type: 'control',
+                    id: 'notes',
+                    path: 'notes',
+                    breakpoints: {
+                      xs: {
+                        style: {
+                          flexBasis: '100%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: 'rows',
+            breakpoints: {
+              sm: {
+                style: {
+                  flexBasis: '50%',
+                  flexGrow: 1,
+                },
+              },
+              md: {
+                style: {
+                  flexBasis: '33.33333333333333%',
+                  flexGrow: 1,
+                },
+              },
+            },
+            nodes: [
+              {
+                type: 'columns',
+                breakpoints: {
+                  xs: {
+                    style: {
+                      flexWrap: 'wrap',
+                    },
+                  },
+                },
+                nodes: [
+                  {
+                    type: 'control',
+                    id: 'line_one',
+                    path: 'line_one',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '100%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'line_two',
+                    path: 'line_two',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '100%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+              {
+                type: 'columns',
+                breakpoints: {
+                  xs: {
+                    style: {
+                      flexWrap: 'wrap',
+                    },
+                  },
+                },
+                nodes: [
+                  {
+                    type: 'control',
+                    id: 'city',
+                    path: 'city',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                  {
+                    type: 'control',
+                    id: 'postal_code',
+                    path: 'postal_code',
+                    breakpoints: {
+                      sm: {
+                        style: {
+                          flexBasis: '50%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+              {
+                type: 'columns',
+                breakpoints: {
+                  xs: {
+                    style: {
+                      flexWrap: 'wrap',
+                    },
+                  },
+                },
+                nodes: [
+                  {
+                    type: 'control',
+                    id: 'country',
+                    path: 'country',
+                    breakpoints: {
+                      xs: {
+                        style: {
+                          flexBasis: '100%',
+                          flexGrow: 1,
+                        },
+                      },
+                    },
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+};

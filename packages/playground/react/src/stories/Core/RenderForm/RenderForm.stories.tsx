@@ -2,7 +2,7 @@ import { RowsNode } from '@binaryoperations/json-forms-core/models';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren } from 'react';
 
-import { customer, customerWizard } from './forms';
+import { customer, customerWizard, responsive } from './forms';
 import RenderFormApp from './RenderForm';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -62,5 +62,32 @@ export const CustomerWizardWithCustomUiSchema: Story = {
       ],
     },
     data: customerWizard.data!,
+  },
+};
+
+export const Responsive: Story = {
+  args: {
+    schema: responsive.schema,
+    uiSchema: {
+      type: 'columns',
+      nodes: [
+        {
+          type: 'custom',
+          renderer: 'testCustomLayout',
+          nodes: (responsive.uiSchema as RowsNode).nodes[0],
+        },
+        {
+          type: 'custom',
+          nodes: (responsive.uiSchema as RowsNode).nodes[0],
+          renderer: (props: PropsWithChildren) => (
+            <div>
+              <h4>I'm another special snowflake</h4>
+              {props.children}
+            </div>
+          ),
+        },
+      ],
+    },
+    data: responsive.data!,
   },
 };
