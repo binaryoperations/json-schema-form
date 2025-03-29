@@ -1,12 +1,15 @@
 import type { RankedControl } from '../../../core/controls/createControl';
+import type { Breakpoints } from '../../../core/models';
 import type { BaseControlProps } from '../../../core/types/control';
 import type { ComponentType, SyntheticEvent } from 'react';
 import type { PropsWithChildren } from 'react';
+export type ComponentRendererProps<T extends {}> = {
+    id: string;
+    breakpoints?: Breakpoints<Partial<T>>;
+} & T;
 export type RendererContextType<Props extends BaseControlProps<any, unknown, SyntheticEvent> = BaseControlProps<any, unknown, SyntheticEvent>> = {
     controls: RankedControl<ComponentType<Props>, unknown>[];
-    layout: Record<string, ComponentType<PropsWithChildren<{
-        id: string;
-    }>>>;
+    layout: Record<string, ComponentType<ComponentRendererProps<PropsWithChildren>>>;
 };
 export declare const RendererContextProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<RendererContextType<BaseControlProps<any, unknown, SyntheticEvent<Element, Event>>>>> & {
     displayName: string | undefined;

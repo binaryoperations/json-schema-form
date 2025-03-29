@@ -1,6 +1,7 @@
 import { findControl } from '../../../core/controls/findControl';
 import invariant from '../../../core/internals/invariant';
 import { shallowCompare } from '../../../core/internals/object';
+import { useFormDataRef } from '../context/FormDataContext';
 import { useRendererContext } from '../context/RendererContext';
 import { useStore } from './useStore';
 export const useLayoutNode = (type) => {
@@ -15,8 +16,9 @@ export const useCustomLayoutNode = (type) => {
 };
 export const useControlNode = (id) => {
     const [controls] = useRendererContext((store) => store.controls);
+    const formDataRef = useFormDataRef();
     return useStore((store) => {
-        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveSchemaAtPointer(id));
+        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveSchemaAtPointer(id, formDataRef.current));
     }, shallowCompare)[0];
 };
 //# sourceMappingURL=useRenderer.js.map

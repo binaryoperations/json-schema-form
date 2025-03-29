@@ -7,7 +7,7 @@ export declare class LogicalSchema {
     private draft;
     static prepare(schema: JsonSchema, DraftConstructor?: DraftConstructor): LogicalSchema;
     constructor(schema: JsonSchema | Draft, DraftConstructor?: DraftConstructor);
-    prepareTemplate<T extends Record<string, any>>(defaultValues: T): any;
+    prepareTemplate<T extends Record<string, any>>(defaultValues?: T): any;
     validate(value: any, schema?: JsonSchema | Draft): {
         isValid: boolean;
         errors: JsonError[];

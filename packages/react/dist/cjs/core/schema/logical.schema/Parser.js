@@ -12,7 +12,9 @@ export class LogicalSchema {
                 : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
     }
     prepareTemplate(defaultValues) {
-        return this.draft.getTemplate(defaultValues);
+        return this.draft.getTemplate(defaultValues, undefined, {
+            addOptionalProps: true,
+        });
     }
     validate(value, schema = this.draft) {
         schema = schema instanceof Draft ? schema.getSchema() : schema;
