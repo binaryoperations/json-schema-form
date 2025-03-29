@@ -57,35 +57,45 @@ type ChildNode<T> = T & {
  * Available Ui Schemas
  *
  */
-export interface UiNodeBase {
+export interface UiNodeBase<T = object> {
   type: `${UiNodeType}`;
   rules?: Rules;
   id?: string;
-  breakpoints?: Breakpoints;
+  breakpoints?: Breakpoints<T>;
 }
 
-export interface FieldsetsNode extends UiNodeBase {
+export interface FieldsetsNode<
+  P extends object = object,
+  CP extends object = object,
+> extends UiNodeBase<P> {
   type: `${UiNodeType.FIELD_SETS}`;
-  nodes: ChildNode<FieldsetNode>[];
+  nodes: ChildNode<FieldsetNode<CP>>[];
 }
 
-export interface FieldsetNode extends UiNodeBase {
+export interface FieldsetNode<
+  P extends object = object,
+  CP extends object = object,
+> extends UiNodeBase<P> {
   type: `${UiNodeType.FIELD_SET}`;
   label?: string;
-  nodes: ChildNode<PossibleRootNodes>[];
+  nodes: ChildNode<PossibleRootNodes<CP>>[];
 }
 
-export interface RowsNode extends UiNodeBase {
+export interface RowsNode<P extends object = object, CP extends object = object>
+  extends UiNodeBase<P> {
   type: `${UiNodeType.ROWS}`;
-  nodes: ChildNode<PossibleRootNodes>[];
+  nodes: ChildNode<PossibleRootNodes<CP>>[];
 }
 
-export interface ColumnsNode extends UiNodeBase {
+export interface ColumnsNode<
+  P extends object = object,
+  CP extends object = object,
+> extends UiNodeBase<P> {
   type: `${UiNodeType.COLUMNS}`;
-  nodes: ChildNode<PossibleRootNodes>[];
+  nodes: ChildNode<PossibleRootNodes<CP>>[];
 }
 
-export interface ControlNode<T extends object = object> extends UiNodeBase {
+export interface ControlNode<T extends object = object> extends UiNodeBase<T> {
   type: `${UiNodeType.CONTROL}`;
   schema?: ControlSchema;
   label?: string;
@@ -93,18 +103,18 @@ export interface ControlNode<T extends object = object> extends UiNodeBase {
   options?: T;
 }
 
-export interface CustomNode<T = any> extends UiNodeBase {
+export interface CustomNode<T = object> extends UiNodeBase<T> {
   type: `${UiNodeType.CUSTOM}`;
   renderer: T | string;
   options?: T;
   nodes?: PossibleRootNodes | ChildNode<PossibleRootNodes>[];
 }
 
-type PossibleRootNodes =
-  | FieldsetsNode
-  | RowsNode
-  | ColumnsNode
-  | ControlNode
-  | CustomNode;
+type PossibleRootNodes<T extends object = object> =
+  | FieldsetsNode<T>
+  | RowsNode<T>
+  | ColumnsNode<T>
+  | ControlNode<T>
+  | CustomNode<T>;
 
-export type LayoutSchema<T extends {} = {}> = PossibleRootNodes & T;
+export type LayoutSchema<T extends {} = {}> = PossibleRootNodes<T>;
