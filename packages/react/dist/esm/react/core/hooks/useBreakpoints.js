@@ -5,8 +5,8 @@ export function useBreakpoints(props) {
     const { xs, sm, md, lg, xl } = {
         xs: useMediaQuery('(max-width: 460px)'),
         sm: useMediaQuery('(min-width: 460px) and (max-width: 787px)'),
-        md: useMediaQuery('(max-width: 787px) and (max-width: 992px)'),
-        lg: useMediaQuery('(max-width: 992px) and (max-width: 1280px)'),
+        md: useMediaQuery('(min-width: 787px) and (max-width: 992px)'),
+        lg: useMediaQuery('(min-width: 992px) and (max-width: 1280px)'),
         xl: useMediaQuery('(min-width: 1280px)'),
     };
     const currentBreakpoint = useMemo(() => {
