@@ -5,11 +5,19 @@
     "composite": false,
     "declaration": false,
     "declarationMap": false,
-    "sourceMap": true,
+    "inlineSourceMap": true,
     "paths": {
-      "@binaryoperations/json-forms-core": ["../core"],
-      "#/*": ["./*", "../core/*"]
+      "@binaryoperations/json-forms-core": [
+        "../core"
+      ],
+      "#/*": [
+        "./*",
+        "../core/*"
+      ]
     }
   },
-  "include": ["../core", "."]
+  "include": [
+    "../core",
+    "."
+  ]
 }

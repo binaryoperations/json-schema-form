@@ -7,11 +7,19 @@
     "emitDeclarationOnly": true,
     "declarationMap": true,
     "declaration": true,
-    "sourceMap": false,
+    "inlineSourceMap": false,
     "paths": {
-      "@binaryoperations/json-forms-core": ["../core"],
-      "#/*": ["./*", "../core/*"]
+      "@binaryoperations/json-forms-core": [
+        "../core"
+      ],
+      "#/*": [
+        "./*",
+        "../core/*"
+      ]
     }
   },
-  "include": ["../core", "."]
+  "include": [
+    "../core",
+    "."
+  ]
 }
