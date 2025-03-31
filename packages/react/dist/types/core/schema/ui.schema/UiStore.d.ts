@@ -12,7 +12,7 @@ export declare class UiStore {
     getNodeType(key: string): "fieldsets" | "fieldset" | "rows" | "columns" | "control" | "custom";
     isControl(key: string): boolean;
     setRoot(key: string): void;
-    deriveSchemaAtPointer(key: string, data?: object): import("../../models").ControlSchema | null;
+    deriveSchemaAtPointer(key: string, data?: object): (import("../../models").CompositeSchema | import("../../models").StringJsonSchema | import("../../models").NumberJsonSchema | import("../../models").ArrayJsonSchema | import("../../models").ObjectJsonSchema | import("../../models").NullJsonSchema | import("../../models").BooleanJsonSchema | import("../../models").OneOfRootSchema | import("../../models").AnyOfRootSchema) | null;
     deriveSchemaNodeAtPointer(key: string, data?: object): SchemaNode;
 }
 //# sourceMappingURL=UiStore.d.ts.map

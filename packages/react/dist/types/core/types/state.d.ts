@@ -1,7 +1,7 @@
 import { Ajv } from 'ajv';
-import type { Schema } from '../models';
+import type { ControlSchema } from '../models';
 type State = {
-    schema: Schema;
+    schema: ControlSchema;
     ajv: Ajv;
 };
 export default State;

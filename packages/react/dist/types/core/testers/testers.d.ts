@@ -1,10 +1,10 @@
-import type { Schema } from '../models/ControlSchema';
+import type { ControlSchema } from '../models/ControlSchema';
 import { FieldsetNode, type LayoutSchema } from '../models/LayoutSchema';
-export type Tester = (schema: Schema, uiSchema: LayoutSchema | FieldsetNode, context: {
-    rootSchema: Schema;
+export type Tester = (schema: ControlSchema, uiSchema: LayoutSchema | FieldsetNode, context: {
+    rootSchema: ControlSchema;
 }) => boolean;
-export type Ranker = (schema: Schema, uiSchema: LayoutSchema | FieldsetNode, context: {
-    rootSchema: Schema;
+export type Ranker = (schema: ControlSchema, uiSchema: LayoutSchema | FieldsetNode, context: {
+    rootSchema: ControlSchema;
 }) => number;
 export declare const and: (...functions: Tester[]) => Tester;
 export declare const or: (...functions: Tester[]) => Tester;
@@ -28,7 +28,7 @@ export declare const optionStartsWith: (property: string, expectedValue: string)
  */
 /**
  *
- * @param schema {Schema}
+ * @param schema {ControlSchema}
  * @returns boolean
  */
 export declare const checkInferableOneOfNotNullSchema: (tester: Tester) => Tester;
@@ -45,6 +45,7 @@ export declare const isArraySchema: Tester;
  *
  */
 export declare const formatIs: (expectedValue: unknown) => Tester;
+export declare const formatStartsWith: (expectedValue: unknown) => Tester;
 /**
  *
  * Rank Testers
@@ -56,5 +57,6 @@ export declare const isArrayRanked: Ranker;
 export declare const isBooleanRanked: Ranker;
 export declare const isNumberRanked: Ranker;
 export declare const isDateRanked: Ranker;
+export declare const isDateTimeRanked: Ranker;
 export declare const isTimeRanked: Ranker;
 //# sourceMappingURL=testers.d.ts.map

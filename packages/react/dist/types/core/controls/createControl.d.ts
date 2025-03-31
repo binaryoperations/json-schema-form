@@ -9,6 +9,7 @@ export declare class ControlCreator<T = unknown> {
     constructor();
     create<C extends T, Value, ValueGetter extends GetValueFromEvent<Value>>(Control: C, getValueFromEvent: ValueGetter, deriveRank: Ranker): RankedControl<C, Value>;
     DateControl<C extends T>(Control: C, getValueFromEvent: GetValueFromEvent<Date | number | string>): RankedControl<C, unknown, GetValueFromEvent<unknown>>;
+    DateTimeControl<C extends T>(Control: C, getValueFromEvent: GetValueFromEvent<Date | number | string>): RankedControl<C, unknown, GetValueFromEvent<unknown>>;
     TimeControl<C extends T>(Control: C, getValueFromEvent: GetValueFromEvent<string>): RankedControl<C, unknown, GetValueFromEvent<unknown>>;
     TextControl<C extends T>(Control: C, getValueFromEvent: GetValueFromEvent<string>): RankedControl<C, unknown, GetValueFromEvent<unknown>>;
     NumberControl<C extends T>(Control: C, getValueFromEvent: GetValueFromEvent<string | number>): RankedControl<C, unknown, GetValueFromEvent<unknown>>;

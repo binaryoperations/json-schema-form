@@ -8,11 +8,11 @@ export const or = (...functions) => {
 };
 export const ranked = (...functions) => {
     return (...arg) => {
-        let counter = 0;
+        let counter = -1;
         for (const nextFunc of functions) {
             const resolution = nextFunc(...arg);
             if (+resolution <= 0)
-                return -1;
+                return counter;
             counter += +resolution;
         }
         return counter;
@@ -45,7 +45,7 @@ export const optionStartsWith = (property, expectedValue) => and(isControl, uiSc
  */
 /**
  *
- * @param schema {Schema}
+ * @param schema {ControlSchema}
  * @returns boolean
  */
 export const checkInferableOneOfNotNullSchema = (tester) => (schema, ...rest) => {
@@ -80,6 +80,11 @@ export const formatIs = (expectedValue) => {
         return get(cast(schema), 'format') === expectedValue;
     };
 };
+export const formatStartsWith = (expectedValue) => {
+    return (schema) => {
+        return !!get(cast(schema), 'format')?.startsWith(expectedValue);
+    };
+};
 /**
  *
  * Rank Testers
@@ -90,6 +95,7 @@ export const isTextRanked = createRankedTester(isStringSchema);
 export const isArrayRanked = createRankedTester(isArraySchema);
 export const isBooleanRanked = createRankedTester(isBooleanSchema);
 export const isNumberRanked = createRankedTester(isNumberSchema);
-export const isDateRanked = ranked(isTextRanked, or(formatIs('date'), optionIs('format', 'date'), optionStartsWith('format', 'date')));
-export const isTimeRanked = ranked(isTextRanked, or(formatIs('time'), optionIs('format', 'time')));
+export const isDateRanked = createRankedTester(isTextRanked, formatIs('date'), formatStartsWith('date'), or(optionIs('format', 'date'), optionStartsWith('format', 'date')));
+export const isDateTimeRanked = createRankedTester(isDateRanked, or(formatIs('datetime'), optionIs('format', 'datetime')), or(formatStartsWith('datetime'), optionStartsWith('format', 'datetime')));
+export const isTimeRanked = createRankedTester(isTextRanked, or(formatIs('time'), optionIs('format', 'time')));
 //# sourceMappingURL=testers.js.map

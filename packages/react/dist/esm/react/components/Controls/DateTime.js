@@ -9,7 +9,7 @@ export const DateControl = createControl.DateControl(Date, (event) => event.nati
 export const DateTime = forwardRef(function DateTime(props, ref) {
     return _jsx(Input, { ...props, type: "datetime-local", ref: ref });
 });
-export const DateTimeControl = createControl.DateControl(DateTime, (event) => event.nativeEvent.target.value);
+export const DateTimeControl = createControl.DateTimeControl(DateTime, (event) => event.nativeEvent.target.value);
 export const Time = forwardRef(function Time(props, ref) {
     return _jsx(Input, { ...props, type: "time", ref: ref });
 });

@@ -1,5 +1,62 @@
 export type ControlSchemaTypes = 'string' | 'number' | 'array' | 'object' | 'boolean' | 'null';
-export type BaseKeys = keyof ControlSchemaBase;
+export interface CompositeSchema {
+    /**
+     * This interface represents the complete set of properties
+     * that can be expected in a JSON Schema as per the latest
+     * specification.
+     */
+    $schema?: string;
+    $id?: string;
+    title?: string;
+    description?: string;
+    default?: any;
+    examples?: any[];
+    type?: `${ControlSchemaTypes}` | `${ControlSchemaTypes}`[];
+    enum?: any[];
+    const?: any;
+    format?: string;
+    readOnly?: boolean;
+    writeOnly?: boolean;
+    allOf?: CompositeSchema[];
+    anyOf?: CompositeSchema[];
+    oneOf?: CompositeSchema[];
+    not?: CompositeSchema;
+    if?: CompositeSchema;
+    then?: CompositeSchema;
+    else?: CompositeSchema;
+    errorMessage?: any;
+    definitions?: {
+        [key: string]: CompositeSchema;
+    };
+    properties?: {
+        [property: string]: CompositeSchema;
+    };
+    patternProperties?: {
+        [pattern: string]: CompositeSchema;
+    };
+    additionalProperties?: boolean | CompositeSchema;
+    required?: string[];
+    dependencies?: {
+        [key: string]: CompositeSchema | string[];
+    };
+    minProperties?: number;
+    maxProperties?: number;
+    items?: CompositeSchema | CompositeSchema[];
+    additionalItems?: boolean | CompositeSchema;
+    minItems?: number;
+    maxItems?: number;
+    uniqueItems?: boolean;
+    contains?: CompositeSchema;
+    minLength?: number;
+    maxLength?: number;
+    pattern?: string;
+    minimum?: number;
+    maximum?: number;
+    exclusiveMinimum?: number;
+    exclusiveMaximum?: number;
+    multipleOf?: number;
+    propertyNames?: CompositeSchema;
+}
 interface ControlSchemaBase<Default = unknown> {
     $ref?: string;
     /**
@@ -143,7 +200,7 @@ export interface OneOfRootSchema extends ControlSchemaBase<boolean> {
 export interface AnyOfRootSchema extends ControlSchemaBase<boolean> {
     anyOf: Schema[];
 }
-export type ControlSchema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema | OneOfRootSchema | AnyOfRootSchema;
-export type Schema = ControlSchema;
+type Schema = StringJsonSchema | NumberJsonSchema | ArrayJsonSchema | ObjectJsonSchema | NullJsonSchema | BooleanJsonSchema | OneOfRootSchema | AnyOfRootSchema | CompositeSchema;
+export type ControlSchema = Schema;
 export {};
 //# sourceMappingURL=ControlSchema.d.ts.map

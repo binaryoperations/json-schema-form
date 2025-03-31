@@ -1,4 +1,5 @@
 import { cast } from '../../internals/cast';
+import resolvers from '../../internals/resolvers';
 import { UiNodeType, } from '../../models/LayoutSchema';
 export class UiStore {
     draftSchema;
@@ -41,10 +42,19 @@ export class UiStore {
         if (!this.isControl(key))
             return null;
         const node = cast(this.getNode(key));
-        if (!node.schema) {
-            return cast(this.draftSchema.getSchemaOf(node.path, data));
+        let schema = node.schema;
+        const template = this.draftSchema.prepareTemplate(data);
+        if (!schema) {
+            schema = this.draftSchema.getSchemaOf(node.path, template);
         }
-        return node.schema;
+        if (Array.isArray(schema.type)) {
+            const value = resolvers.resolvePath(template, node.path);
+            schema = {
+                ...schema,
+                type: schema.type.find((type) => type === typeof value) ?? 'null',
+            };
+        }
+        return schema;
     }
     deriveSchemaNodeAtPointer(key, data) {
         return this.draftSchema.getSchemaNodeOf(key, data);

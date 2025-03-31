@@ -1,4 +1,4 @@
-import { isArrayRanked, isBooleanRanked, isDateRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
+import { isArrayRanked, isBooleanRanked, isDateRanked, isDateTimeRanked, isNumberRanked, isTextRanked, isTimeRanked, } from '../testers/testers';
 export class ControlCreator {
     constructor() { }
     create(Control, getValueFromEvent, deriveRank) {
@@ -10,6 +10,9 @@ export class ControlCreator {
     }
     DateControl(Control, getValueFromEvent) {
         return this.create(Control, getValueFromEvent, isDateRanked);
+    }
+    DateTimeControl(Control, getValueFromEvent) {
+        return this.create(Control, getValueFromEvent, isDateTimeRanked);
     }
     TimeControl(Control, getValueFromEvent) {
         return this.create(Control, getValueFromEvent, isTimeRanked);
