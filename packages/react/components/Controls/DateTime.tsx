@@ -37,7 +37,7 @@ export const DateTime = forwardRef<HTMLInputElement, DateTimeProps>(
   }
 );
 
-export const DateTimeControl = createControl.DateControl(
+export const DateTimeControl = createControl.DateTimeControl(
   DateTime,
   (event: SyntheticEvent<HTMLInputElement, ChangeEvent<HTMLInputElement>>) =>
     event.nativeEvent.target.value

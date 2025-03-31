@@ -30,6 +30,7 @@
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
+    "type:check": "tsc --project tsconfig.build.esm.json --noEmit",
     "build:cjs": "tsc --project tsconfig.build.cjs.json && tsc-alias -p tsconfig.build.cjs.json",
     "build:esm": "tsc --project tsconfig.build.esm.json && tsc-alias -p tsconfig.build.esm.json",
     "build:types": "tsc --project tsconfig.build.types.json && tsc-alias -p tsconfig.build.types.json",

@@ -4,10 +4,10 @@ import { get } from '#/internals/object';
 import type {
   ArrayJsonSchema,
   BooleanJsonSchema,
+  ControlSchema,
   NullJsonSchema,
   NumberJsonSchema,
   ObjectJsonSchema,
-  Schema,
   StringJsonSchema,
 } from '../models/ControlSchema';
 import {
@@ -17,15 +17,15 @@ import {
 } from '../models/LayoutSchema';
 
 export type Tester = (
-  schema: Schema,
+  schema: ControlSchema,
   uiSchema: LayoutSchema | FieldsetNode,
-  context: { rootSchema: Schema }
+  context: { rootSchema: ControlSchema }
 ) => boolean;
 
 export type Ranker = (
-  schema: Schema,
+  schema: ControlSchema,
   uiSchema: LayoutSchema | FieldsetNode,
-  context: { rootSchema: Schema }
+  context: { rootSchema: ControlSchema }
 ) => number;
 
 export const and = (...functions: Tester[]): Tester => {
@@ -38,11 +38,11 @@ export const or = (...functions: Tester[]): Tester => {
 
 export const ranked = (...functions: (Tester | Ranker)[]): Ranker => {
   return (...arg) => {
-    let counter = 0;
+    let counter = -1;
 
     for (const nextFunc of functions) {
       const resolution = nextFunc(...arg);
-      if (+resolution <= 0) return -1;
+      if (+resolution <= 0) return counter;
       counter += +resolution;
     }
 
@@ -100,13 +100,13 @@ export const optionStartsWith = (
 
 /**
  *
- * @param schema {Schema}
+ * @param schema {ControlSchema}
  * @returns boolean
  */
 
 export const checkInferableOneOfNotNullSchema =
   (tester: Tester): Tester =>
-  (schema: Schema, ...rest) => {
+  (schema: ControlSchema, ...rest) => {
     if (tester(schema, ...rest)) return true;
     if (!Array.isArray(schema.oneOf)) return false;
     const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
@@ -115,7 +115,7 @@ export const checkInferableOneOfNotNullSchema =
 
 export const checkInferableAnyOfNotNullSchema =
   (tester: Tester): Tester =>
-  (schema: Schema, ...rest) => {
+  (schema: ControlSchema, ...rest) => {
     if (tester(schema, ...rest)) return true;
     if (!Array.isArray(schema.anyOf)) return false;
     const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
@@ -168,6 +168,11 @@ export const formatIs = (expectedValue: unknown): Tester => {
     return get(cast(schema), 'format') === expectedValue;
   };
 };
+export const formatStartsWith = (expectedValue: unknown): Tester => {
+  return (schema) => {
+    return !!get(cast(schema), 'format')?.startsWith(expectedValue);
+  };
+};
 
 /**
  *
@@ -186,16 +191,19 @@ export const isBooleanRanked = createRankedTester(isBooleanSchema);
 
 export const isNumberRanked = createRankedTester(isNumberSchema);
 
-export const isDateRanked = ranked(
+export const isDateRanked = createRankedTester(
   isTextRanked,
-  or(
-    formatIs('date'),
-    optionIs('format', 'date'),
-    optionStartsWith('format', 'date')
-  )
+  formatIs('date'),
+  formatStartsWith('date'),
+  or(optionIs('format', 'date'), optionStartsWith('format', 'date'))
+);
+export const isDateTimeRanked = createRankedTester(
+  isDateRanked,
+  or(formatIs('datetime'), optionIs('format', 'datetime')),
+  or(formatStartsWith('datetime'), optionStartsWith('format', 'datetime'))
 );
 
-export const isTimeRanked = ranked(
+export const isTimeRanked = createRankedTester(
   isTextRanked,
   or(formatIs('time'), optionIs('format', 'time'))
 );

@@ -1,7 +1,7 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
+  ControlSchema,
   ObjectJsonSchema,
-  Schema,
   StringJsonSchema,
 } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
@@ -15,7 +15,7 @@ export type FormConfig = {
   uiSchema: LayoutSchema;
 };
 
-const schema: Record<string, Schema> = {
+const schema: Record<string, ControlSchema> = {
   phone: {
     type: 'object',
     properties: {
@@ -363,46 +363,10 @@ export const customerWizard: FormConfig = {
 };
 
 export const responsive: FormConfig = {
+  data: {},
   schema: {
     type: 'object',
     properties: {
-      number: {
-        type: 'number',
-        minimum: 0,
-        maximum: 100,
-        description: '',
-        title: 'number',
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
-      },
-      date: {
-        type: 'string',
-        format: 'date',
-        description: '',
-        title: 'date',
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
-      },
-      datetime: {
-        type: 'string',
-        format: 'date',
-        minimum: 1742045565178,
-        description: '',
-        title: 'datetime',
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
-      },
-      time: {
-        type: 'string',
-        format: 'time',
-        description: '',
-        title: 'time',
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
-      },
-      money: {
-        type: 'number',
-        format: 'currency',
-        description: '',
-        title: 'money',
-        $schema: 'https://json-schema.org/draft/2020-12/schema',
-      },
       first_name: {
         type: 'string',
         description: '',
@@ -794,6 +758,58 @@ export const responsive: FormConfig = {
             ],
           },
         ],
+      },
+    ],
+  },
+};
+
+export const composite: FormConfig = {
+  data: {},
+  schema: {
+    type: 'object',
+    properties: {
+      number: {
+        type: ['number', 'string', 'null'],
+        minimum: 0,
+        maximum: 100,
+        description: '',
+        title: 'number',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      date: {
+        type: ['string', 'number', 'null'],
+        format: 'date',
+        description: '',
+        title: 'date',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+      datetime: {
+        type: ['string', 'number', 'null'],
+        format: 'datetime',
+        description: '',
+        title: 'datetime',
+        $schema: 'https://json-schema.org/draft/2020-12/schema',
+      },
+    },
+    required: [],
+  },
+  uiSchema: {
+    type: 'rows',
+    nodes: [
+      {
+        type: 'control',
+        id: 'number',
+        path: 'number',
+      },
+      {
+        type: 'control',
+        id: 'date',
+        path: 'date',
+      },
+      {
+        type: 'control',
+        id: 'datetime',
+        path: 'datetime',
       },
     ],
   },

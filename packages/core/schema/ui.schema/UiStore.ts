@@ -1,4 +1,6 @@
 import { cast } from '#/internals/cast';
+import resolvers from '#/internals/resolvers';
+import { ControlSchema } from '#/models';
 
 import {
   ControlNode,
@@ -60,13 +62,25 @@ export class UiStore {
 
     const node = cast<ControlNode>(this.getNode(key));
 
-    if (!node.schema) {
-      return cast<Required<ControlNode>['schema']>(
-        this.draftSchema.getSchemaOf(node.path, data)
-      );
+    let schema = node.schema;
+    const template = this.draftSchema.prepareTemplate(data);
+
+    if (!schema) {
+      schema = this.draftSchema.getSchemaOf(
+        node.path,
+        template
+      ) as ControlSchema;
     }
 
-    return node.schema;
+    if (Array.isArray(schema.type)) {
+      const value = resolvers.resolvePath(template, node.path);
+      schema = {
+        ...schema,
+        type: schema.type.find((type) => type === typeof value) ?? 'null',
+      };
+    }
+
+    return schema;
   }
 
   deriveSchemaNodeAtPointer(key: string, data?: object) {

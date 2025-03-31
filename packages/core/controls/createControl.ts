@@ -2,6 +2,7 @@ import {
   isArrayRanked,
   isBooleanRanked,
   isDateRanked,
+  isDateTimeRanked,
   isNumberRanked,
   isTextRanked,
   isTimeRanked,
@@ -36,6 +37,13 @@ export class ControlCreator<T = unknown> {
     getValueFromEvent: GetValueFromEvent<Date | number | string>
   ) {
     return this.create(Control, getValueFromEvent, isDateRanked);
+  }
+
+  DateTimeControl<C extends T>(
+    Control: C,
+    getValueFromEvent: GetValueFromEvent<Date | number | string>
+  ) {
+    return this.create(Control, getValueFromEvent, isDateTimeRanked);
   }
 
   TimeControl<C extends T>(

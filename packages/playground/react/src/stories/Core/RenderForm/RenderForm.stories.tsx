@@ -2,7 +2,7 @@ import { RowsNode } from '@binaryoperations/json-forms-core/models';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren } from 'react';
 
-import { customer, customerWizard, responsive } from './forms';
+import { composite, customer, customerWizard, responsive } from './forms';
 import RenderFormApp from './RenderForm';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -89,5 +89,13 @@ export const Responsive: Story = {
       ],
     },
     data: responsive.data!,
+  },
+};
+
+export const Composite: Story = {
+  args: {
+    schema: composite.schema,
+    uiSchema: composite.uiSchema,
+    data: composite.data!,
   },
 };
