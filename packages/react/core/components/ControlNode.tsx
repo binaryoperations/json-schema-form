@@ -45,10 +45,10 @@ export const ControlNode = withControlContext(
     );
 
     const path = control.path;
-    const { value, setValue, meta, onBlur, onFocus } = useControlProps(
-      path,
-      props
-    );
+    const { value, setValue, meta, onBlur, onFocus } = useControlProps(path, {
+      ...props,
+      ...control.options,
+    });
 
     const handleSetValue = useCallback(
       (e: SyntheticEvent) => {
