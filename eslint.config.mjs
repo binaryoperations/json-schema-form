@@ -42,6 +42,14 @@ export default tseslint.config(
         { allowConstantExport: true },
       ],
       "@typescript-eslint/no-empty-object-type": ["off"],
+      "@stylistic/js/max-len": ["warn", {
+        code: 120,
+        ignoreTrailingComments: true,
+        ignoreComments: true,
+        ignoreStrings: true,
+        ignoreTemplateLiterals: true,
+        ignoreRegExpLiterals: true,
+       }],
     },
   },
   _.merge({ files: ["**/*.{ts,tsx,json}"] }, eslintPluginPrettierRecommended, {
