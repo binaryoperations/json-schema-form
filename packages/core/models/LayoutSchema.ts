@@ -61,6 +61,7 @@ export interface UiNodeBase<T = object> {
   type: `${UiNodeType}`;
   rules?: Rules;
   id?: string;
+  order?: number;
   breakpoints?: Breakpoints<T>;
 }
 

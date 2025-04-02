@@ -42,7 +42,7 @@ export class UiSchemaPreparer {
 
     this.store.tree[id] = orderBy(
       treeNodes,
-      (nodeId) => this.store.keyMap[nodeId].id ?? 0,
+      (nodeId) => this.store.keyMap[nodeId].order ?? 0,
       'asc'
     );
 
