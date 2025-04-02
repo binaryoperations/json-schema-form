@@ -764,7 +764,11 @@ export const responsive: FormConfig = {
 };
 
 export const composite: FormConfig = {
-  data: {},
+  data: {
+    number: '1',
+    date: new Date().toISOString(),
+    datetime: new Date().toISOString(),
+  },
   schema: {
     type: 'object',
     properties: {
@@ -775,6 +779,7 @@ export const composite: FormConfig = {
         description: '',
         title: 'number',
         $schema: 'https://json-schema.org/draft/2020-12/schema',
+        maxLength: 0,
       },
       date: {
         type: ['string', 'number', 'null'],
