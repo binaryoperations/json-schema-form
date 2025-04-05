@@ -1,6 +1,6 @@
 import { type ChangeEvent, forwardRef, type SyntheticEvent } from 'react';
 
-import { createControl } from './createControl';
+import { createControl } from '../../core/hoc/createControl';
 import { Input, type InputProps } from './Input';
 
 export interface NumberProps extends InputProps {

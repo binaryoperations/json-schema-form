@@ -6,7 +6,7 @@ import {
 } from 'react';
 import type { Merge } from 'type-fest';
 
-import { createControl } from './createControl';
+import { createControl } from '../../core/hoc/createControl';
 import { Input, type InputProps } from './Input';
 
 type InputBaseProps = {

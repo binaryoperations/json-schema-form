@@ -1,4 +1,4 @@
-import type { Breakpoints } from '@binaryoperations/json-forms-core/models';
+import { type Breakpoints } from '@binaryoperations/json-forms-core/models';
 import type { FC } from 'react';
 
 import { styles } from './styles';
@@ -21,3 +21,4 @@ export const Row: Row = function Row(props) {
 
   return <div {...divProps} style={style}></div>;
 };
+

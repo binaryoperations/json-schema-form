@@ -1,7 +1,7 @@
 import { FC, memo, ReactNode } from 'react';
 
-import { Button, type ButtonProps } from '#/components/Button';
-import { useActiveState } from '#/context/ActiveStateContext';
+import { Button, type ButtonProps } from '../../../components/Button';
+import { useActiveState } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
 
 export interface TabItemProps<T = unknown>
   extends Omit<ButtonProps, 'onClick' | 'children' | 'id'> {

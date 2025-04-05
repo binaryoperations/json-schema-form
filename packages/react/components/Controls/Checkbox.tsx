@@ -1,6 +1,6 @@
 import type { ChangeEvent, SyntheticEvent } from 'react';
 
-import { createControl } from './createControl';
+import { createControl } from '../../core/hoc/createControl';
 import { withLabel } from './withLabel';
 
 type CheckboxAttributes = React.JSX.IntrinsicElements['input'];

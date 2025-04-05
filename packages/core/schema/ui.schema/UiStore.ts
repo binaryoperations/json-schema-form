@@ -1,6 +1,6 @@
-import { cast } from '#/internals/cast';
-import resolvers from '#/internals/resolvers';
-import { ControlSchema } from '#/models';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
+import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
+import { ControlSchema } from '@binaryoperations/json-forms-core/models';
 
 import {
   ControlNode,

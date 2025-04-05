@@ -3,7 +3,7 @@ import { type PropsWithChildren, useId } from 'react';
 import {
   type ActiveStateProps,
   useActiveStateContext,
-} from '#/context/ActiveStateContext';
+} from '@binaryoperations/json-forms-react/context/ActiveStateContext';
 
 import { Row } from '../Row';
 import { AccordionItem, AccordionItemProps } from './AccordionItem';

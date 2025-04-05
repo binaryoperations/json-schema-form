@@ -28,6 +28,7 @@ export default tseslint.config(
     },
     rules: {
       ...reactHooks.configs.recommended.rules,
+      "@stylistic/js/print-width": ["warn", 120],
       "@typescript-eslint/no-explicit-any": ["off"],
       "@typescript-eslint/no-unused-vars": [
         "error",

@@ -1,10 +1,7 @@
 import { ComponentType, memo, useState } from 'react';
 
 import { Row } from '../../components/Semantic';
-import {
-  ComponentContextProvider,
-  ComponentContextProviderProps,
-} from './ComponentContextProvider';
+
 import {
   FormDataProvider,
   type FormDataProviderProps,
@@ -15,7 +12,8 @@ import {
   type StoreContextProviderProps,
 } from './StoreContextProvider';
 
-export type FormProps = Omit<ComponentContextProviderProps, 'children'> &
+
+export type FormProps =
   Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & {
     data: object;
     style?: React.JSX.IntrinsicElements['form']['style'];
@@ -30,7 +28,6 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
   const [initialData] = useState(props.data);
 
   return (
-    <ComponentContextProvider layout={props.layout} controls={props.controls}>
       <StoreContextProvider
         uiSchema={props.uiSchema}
         schema={props.schema}
@@ -47,6 +44,5 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
           </Row>
         </FormDataProvider>
       </StoreContextProvider>
-    </ComponentContextProvider>
   );
 });

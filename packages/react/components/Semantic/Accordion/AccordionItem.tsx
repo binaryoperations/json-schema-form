@@ -1,6 +1,6 @@
 import { FC, memo, ReactNode } from 'react';
 
-import { useActiveState } from '#/context/ActiveStateContext';
+import { useActiveState } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
 
 export type DetailsProp = React.JSX.IntrinsicElements['details'];
 

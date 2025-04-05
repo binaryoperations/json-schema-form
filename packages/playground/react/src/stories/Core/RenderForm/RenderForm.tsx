@@ -10,7 +10,7 @@ import {
 } from '@binaryoperations/json-forms-core/models/LayoutSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
-import { createControl } from '@binaryoperations/json-forms-react/components/Controls/createControl';
+import { createControl } from '@binaryoperations/json-forms-react';
 import {
   DateControl,
   DateTimeControl,
@@ -31,7 +31,6 @@ import {
   type FormProps,
 } from '@binaryoperations/json-forms-react/core/components/Form';
 import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
-import { createLayoutRenderer } from '@binaryoperations/json-forms-react/core/hoc/createRenderer';
 import {
   type ComponentProps,
   type PropsWithChildren,
@@ -40,13 +39,54 @@ import {
   useRef,
   useState,
 } from 'react';
+import { regiserControlRenderers, registerLayoutsRenderers } from '@binaryoperations/json-forms-react';
 
 const defaultStyles = {
   gap: 8,
   flex: 1,
 };
 
-const controlTypes = {
+registerLayoutsRenderers({
+  [UiNodeType.COLUMNS]: function LayoutColumn(props: { id: string; }) {
+    return <Column data-type="column" style={defaultStyles} {...props} />;
+  },
+  [UiNodeType.ROWS]: function LayoutRow(props: { id: string; }) {
+    return <Row data-type="row" style={defaultStyles} {...props} />;
+  },
+  [UiNodeType.FIELD_SETS]: function LayoutFieldSets(props: { id: string; }) {
+    return <Row data-type="fieldSets" style={defaultStyles} {...props} />;
+  },
+  [UiNodeType.FIELD_SET]: function LayoutFieldSet(props: { id: string; }) {
+    return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
+  },
+  [UiNodeType.CONTROL]: function LayoutControl(props: { id: string; }) {
+    return (
+      <Row
+        data-type="control"
+        style={{
+          backgroundColor: '#e5e5e5',
+          wordBreak: 'break-all',
+          flexDirection: 'column',
+          display: 'flex',
+          alignItems: 'flex-start',
+          flex: 1,
+        }}
+        {...props}
+      />
+    );
+  },
+
+  testCustomLayout: (props: PropsWithChildren) => {
+    return (
+      <>
+        <h4>I'm a special custom snowflake</h4>
+        {props.children}
+      </>
+    );
+  },
+})
+
+regiserControlRenderers({
   date: DateControl,
   datetime: DateTimeControl,
   time: TimeControl,
@@ -82,59 +122,7 @@ const controlTypes = {
       'deriveFrom' in ((uischema as ControlNode).options ?? {}) ? 100 : -1
     )
   ),
-};
-
-const controls = Object.values(controlTypes);
-
-const types = {
-  [UiNodeType.COLUMNS]: createLayoutRenderer(function LayoutColumn(props: {
-    id: string;
-  }) {
-    return <Column data-type="column" style={defaultStyles} {...props} />;
-  }),
-  [UiNodeType.ROWS]: createLayoutRenderer(function LayoutRow(props: {
-    id: string;
-  }) {
-    return <Row data-type="row" style={defaultStyles} {...props} />;
-  }),
-  [UiNodeType.CONTROL]: createLayoutRenderer(function LayoutControl(props: {
-    id: string;
-  }) {
-    return (
-      <Row
-        data-type="control"
-        style={{
-          backgroundColor: '#e5e5e5',
-          wordBreak: 'break-all',
-          flexDirection: 'column',
-          display: 'flex',
-          alignItems: 'flex-start',
-          flex: 1,
-        }}
-        {...props}
-      />
-    );
-  }),
-  [UiNodeType.FIELD_SETS]: createLayoutRenderer(
-    function LayoutFieldSets(props: { id: string }) {
-      return <Row data-type="fieldSets" style={defaultStyles} {...props} />;
-    }
-  ),
-  [UiNodeType.FIELD_SET]: createLayoutRenderer(function LayoutFieldSet(props: {
-    id: string;
-  }) {
-    return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
-  }),
-
-  testCustomLayout: (props: PropsWithChildren) => {
-    return (
-      <>
-        <h4>I'm a special custom snowflake</h4>
-        {props.children}
-      </>
-    );
-  },
-};
+});
 
 function datediff(first: number, second: number) {
   return Math.round((second - first) / (1000 * 60 * 60 * 24));
@@ -166,8 +154,6 @@ function App(props: {
   return (
     <Bootstrap
       {...props}
-      layout={types}
-      controls={controls}
       style={defaultStyles}
       data={data}
       onDataChange={onChange}

@@ -3,29 +3,27 @@ import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
 import type { ComponentType } from 'react';
 
-import { useRendererContext } from '../context/RendererContext';
+import { ControlRepository, LayoutRepository } from '../context/RendererContext';
 import { useStore } from './useStore';
+
+
 
 export const useLayoutNode = (type: string) => {
   return invariant(
-    useRendererContext((store) => {
-      return store.layout[type];
-    })[0],
+    LayoutRepository.get(type),
     `Layout "${type}" has not been registered`
   );
 };
 
 export const useCustomLayoutNode = (type: string | ComponentType<object>) => {
   return invariant(
-    useRendererContext((store) => {
-      return typeof type === 'string' ? store.layout[type] : type;
-    })[0],
+    typeof type === 'string' ? LayoutRepository.get(type) : type,
     `Custom Layout "${type}" has not been registered`
   );
 };
 
 export const useControlNode = (id: string) => {
-  const [controls] = useRendererContext((store) => store.controls);
+  const controls = Object.values(ControlRepository.getAll());
 
   return useStore((store) => {
     return findControl(

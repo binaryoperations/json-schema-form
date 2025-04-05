@@ -24,9 +24,6 @@
   "module": "dist/esm/react/index.js",
   "types": "dist/types/react/index.d.ts",
   "typings": "dist/types/react/index.d.ts",
-  "imports": {
-    "#/*": "./*"
-  },
   "scripts": {
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",

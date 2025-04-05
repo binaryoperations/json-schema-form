@@ -1,8 +1,8 @@
 import { PropsWithChildren } from 'react';
 import { FC } from 'react';
 
-import { useIsActive } from '#/context/ActiveStateContext';
-import { ID } from '#/type';
+import { useIsActive } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { ID } from '@binaryoperations/json-forms-react/type';
 
 export type TabProps = PropsWithChildren<{ id: ID }>;
 export type Tab = FC<PropsWithChildren<{ id: ID }>>;

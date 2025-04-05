@@ -10,9 +10,8 @@
       "@binaryoperations/json-forms-core": [
         "../core"
       ],
-      "#/*": [
-        "./*",
-        "../core/*"
+      "@binaryoperations/json-forms-react/*": [
+        "./*"
       ]
     }
   },
