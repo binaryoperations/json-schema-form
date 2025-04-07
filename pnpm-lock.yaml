@@ -22,6 +22,12 @@ importers:
 
   .:
     dependencies:
+      '@binaryoperations/json-forms-core':
+        specifier: workspace:*
+        version: link:packages/core
+      '@binaryoperations/json-forms-react':
+        specifier: workspace:*
+        version: link:packages/react
       eslint-config-turbo:
         specifier: ^2.1.3
         version: 2.4.4(eslint@9.23.0)(turbo@2.4.4)

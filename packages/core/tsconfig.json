@@ -1,15 +1,6 @@
 {
   "extends": "../configs/tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "paths": {
-      "@binaryoperations/json-forms-core/*": [
-        "./*"
-      ]
-    }
-  },
-  "include": [
-    "./**/*.ts",
-    "./**/*.tsx"
-  ]
+    "composite": true
+  }
 }

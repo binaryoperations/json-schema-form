@@ -1,13 +1,14 @@
 {
   "extends": "../configs/tsconfig.react.json",
   "compilerOptions": {
+    "outDir": "../../dist/react",
     "composite": true,
     "paths": {
       "@binaryoperations/json-forms-react/*": [
         "./*"
       ],
       "@binaryoperations/json-forms-core/*": [
-        "../core/dist/*"
+        "../core/*"
       ]
     }
   },

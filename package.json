@@ -22,20 +22,25 @@
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "exports": {
-    "./react": {
-      "types": "./packages/react/dist/types/react/index.d.ts",
-      "require": "./packages/react/dist/cjs/react/index.js",
-      "import": "./packages/react/dist/esm/react/index.js"
-    },
-    "./react/*": {
-      "types": "./packages/react/dist/types/react/*",
-      "require": "./packages/react/dist/cjs/react/*",
-      "import": "./packages/react/dist/esm/react/*"
-    },
-    "./core/*": {
-      "types": "./packages/react/dist/types/core/*",
-      "require": "./packages/react/dist/cjs/core/*",
-      "import": "./packages/react/dist/esm/core/*"
+    "./core": "./packages/dist/core/index.js",
+    "./core/*": "./packages/dist/core/*.js",
+    "./react": "./packages/dist/react/index.js",
+    "./react/*": "./packages/dist/react/*.js"
+  },
+  "typesVersions": {
+    "*": {
+      "core": [
+        "packages/dist/core/index.d.ts"
+      ],
+      "core/*": [
+        "packages/dist/core/*/index.d.ts"
+      ],
+      "react": [
+        "packages/dist/react/index.d.ts"
+      ],
+      "react/*": [
+        "packages/dist/react/*/index.d.ts"
+      ]
     }
   },
   "scripts": {
@@ -45,7 +50,7 @@
     "lint": "turbo run lint",
     "lint:fix": "pnpm lint -- --fix",
     "turbo": "turbo run",
-    "react": "pnpm --filter @binaryoperations/json-forms-react run"
+    "prepublishOnly": "pnpm turbo build"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
@@ -69,7 +74,9 @@
   },
   "dependencies": {
     "eslint-config-turbo": "^2.1.3",
-    "lodash": "^4.17.21"
+    "lodash": "^4.17.21",
+    "@binaryoperations/json-forms-core": "workspace:*",
+    "@binaryoperations/json-forms-react": "workspace:*"
   },
   "peerDependencies": {
     "json-schema-library": "^10.0.0-rc8"
