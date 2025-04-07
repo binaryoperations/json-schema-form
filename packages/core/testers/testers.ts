@@ -1,5 +1,5 @@
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { get } from '@binaryoperations/json-forms-core/internals/object';
+import { cast } from '../internals/cast';
+import { get } from '../internals/object';
 
 import type { ControlSchema } from '../models/ControlSchema';
 import {

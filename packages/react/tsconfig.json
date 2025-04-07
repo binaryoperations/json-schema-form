@@ -5,6 +5,9 @@
     "paths": {
       "@binaryoperations/json-forms-react/*": [
         "./*"
+      ],
+      "@binaryoperations/json-forms-core/*": [
+        "../core/dist/*"
       ]
     }
   },

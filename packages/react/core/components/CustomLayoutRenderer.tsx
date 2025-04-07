@@ -1,7 +1,7 @@
-import { ComponentType, PropsWithChildren } from 'react';
-import { ComponentRendererProps } from '../context/RendererContext';
+import type { ComponentType, PropsWithChildren } from 'react';
+import type { ComponentRendererProps } from '../context/RendererContext';
 import { useStore } from '../hooks';
-import { CustomNode } from '@binaryoperations/json-forms-core/models';
+import type { CustomNode } from '@binaryoperations/json-forms-core/models';
 import { useBreakpoints } from '../hooks/useBreakpoints';
 import { useCustomLayoutNode } from '../hooks/useRenderer';
 import { LayoutChildren } from './LayoutNode';

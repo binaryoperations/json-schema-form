@@ -1,8 +1,6 @@
 import type { FC } from 'react';
 
 import { styles } from './styles';
-import { LayoutRepository } from '@binaryoperations/json-forms-react/core/context/RendererContext';
-import { UiNodeType } from '@binaryoperations/json-forms-core/models';
 
 type DivProps = React.JSX.IntrinsicElements['div'];
 export interface ColumnProps extends DivProps {
@@ -22,4 +20,3 @@ export const Column: Column = function Column(props) {
   return <div {...divProps} style={style}></div>;
 };
 
-LayoutRepository.register(UiNodeType.COLUMNS, Column)

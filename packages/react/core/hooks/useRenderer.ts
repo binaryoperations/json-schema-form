@@ -3,7 +3,7 @@ import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
 import type { ComponentType } from 'react';
 
-import { ControlRepository, LayoutRepository } from '../context/RendererContext';
+import { ControlRepository, LayoutRepository } from '@binaryoperations/json-forms-react/core/context/RendererContext';
 import { useStore } from './useStore';
 
 

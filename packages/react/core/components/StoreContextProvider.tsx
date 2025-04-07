@@ -4,7 +4,7 @@ import type {
 } from '@binaryoperations/json-forms-core/models';
 import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
 import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
-import { JsonSchema } from 'json-schema-library';
+import type { JsonSchema } from 'json-schema-library';
 import type { ComponentType, PropsWithChildren } from 'react';
 import { memo, useMemo } from 'react';
 import { useCallback } from 'react';
