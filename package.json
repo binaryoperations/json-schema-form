@@ -51,7 +51,7 @@
     "check-types": "tsc --noEmit",
     "lint": "turbo run lint",
     "lint:fix": "pnpm lint -- --fix",
-    "build": "turbo run build",
+    "build": "turbo run build && node ./scripts/generate-index-files.js",
     "turbo": "turbo run",
     "prepublishOnly": "pnpm build"
   },

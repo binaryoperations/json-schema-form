@@ -21,7 +21,6 @@
     "skipLibCheck": true,
     "strict": true,
     "target": "esnext",
-    "baseUrl": ".",
     "paths": {
       "@binaryoperations/json-forms-core": [
         "./packages/core/src"
@@ -36,5 +35,13 @@
         "./packages/react/src/*"
       ]
     }
-  }
+  },
+  "references": [
+    {
+      "path": "../core"
+    },
+    {
+      "path": "../react"
+    }
+  ]
 }

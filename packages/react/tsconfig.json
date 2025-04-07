@@ -2,18 +2,15 @@
   "extends": "../configs/tsconfig.react.json",
   "compilerOptions": {
     "outDir": "../../dist",
-    "composite": true,
-    "paths": {
-      "@binaryoperations/json-forms-react/*": [
-        "./*"
-      ],
-      "@binaryoperations/json-forms-core/*": [
-        "../core/*"
-      ]
-    }
+    "composite": true
   },
   "include": [
     "./**/*.ts",
     "./**/*.tsx"
+  ],
+  "references": [
+    {
+      "path": "../core"
+    }
   ]
 }

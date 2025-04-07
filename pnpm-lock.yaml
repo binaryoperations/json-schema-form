@@ -128,12 +128,9 @@ importers:
 
   packages/playground/react:
     dependencies:
-      '@binaryoperations/json-forms-core':
+      '@binaryoperations/json-forms':
         specifier: workspace:^
-        version: link:../../core
-      '@binaryoperations/json-forms-react':
-        specifier: workspace:^
-        version: link:../../react
+        version: link:../../..
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
