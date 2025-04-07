@@ -1,4 +1,4 @@
-import { Tab } from '@binaryoperations/json-forms-react/components/Semantic/Tabs/Tab';
+import { Tab } from '@binaryoperations/json-forms/react/components/Semantic/Tabs/Tab';
 
 export const tabs = [
   {

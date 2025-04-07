@@ -1,8 +1,8 @@
 import {
   Tabs,
   type TabsPropsBase,
-} from '@binaryoperations/json-forms-react/components/Semantic/Tabs';
-import { type ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+} from '@binaryoperations/json-forms/react/components/Semantic/Tabs';
+import { type ActiveStateProps } from '@binaryoperations/json-forms/react/context/ActiveStateContext';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FC } from 'react';
 

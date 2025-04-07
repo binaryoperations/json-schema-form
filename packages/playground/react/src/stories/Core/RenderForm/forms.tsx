@@ -1,13 +1,13 @@
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
+import { cast } from '@binaryoperations/json-forms/core/internals/cast';
 import {
   ControlSchema,
   ObjectJsonSchema,
   StringJsonSchema,
-} from '@binaryoperations/json-forms-core/models/ControlSchema';
+} from '@binaryoperations/json-forms/core/models/ControlSchema';
 import {
   type LayoutSchema,
   UiNodeType,
-} from '@binaryoperations/json-forms-core/models/LayoutSchema';
+} from '@binaryoperations/json-forms/core/models/LayoutSchema';
 
 export type FormConfig = {
   data: object;
