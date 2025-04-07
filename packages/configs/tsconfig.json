@@ -23,16 +23,16 @@
     "target": "esnext",
     "paths": {
       "@binaryoperations/json-forms-core": [
-        "./packages/core/src"
+        "../core/src"
       ],
       "@binaryoperations/json-forms-core/*": [
-        "./packages/core/src/*"
+        "../core/src/*"
       ],
       "@binaryoperations/json-forms-react": [
-        "./packages/react/src"
+        "../react/src"
       ],
       "@binaryoperations/json-forms-react/*": [
-        "./packages/react/src/*"
+        "../react/src/*"
       ]
     }
   },

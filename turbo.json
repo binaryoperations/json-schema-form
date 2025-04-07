@@ -7,8 +7,8 @@
         "^build"
       ],
       "outputs": [
-        "../../dist/core",
-        "../../dist/react"
+        "../release/dist/core",
+        "../release/dist/react"
       ]
     },
     "check-types": {

@@ -31,6 +31,4 @@ const createIndexFiles = (directory) => {
 };
 
 // Run for both core and react
-['core', 'react'].forEach(pkg => {
-  createIndexFiles(path.join(__dirname, '..', 'dist', pkg));
-});
+createIndexFiles(path.join(__dirname, '..', 'packages', 'release', 'dist'));

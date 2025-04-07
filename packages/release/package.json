@@ -1,0 +1,20 @@
+{
+  "name": "@binaryoperations/release",
+  "exports": {
+    "./core": "./dist/core/index.js",
+    "./core/*": "./dist/core/*.js",
+    "./react": "./dist/react/index.js",
+    "./react/*": "./dist/react/*.js"
+  },
+  "files": [
+    "dist"
+  ],
+  "dependencies": {
+    "@binaryoperations/json-forms-core": "workspace:*",
+    "@binaryoperations/json-forms-react": "workspace:*"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.2",
+    "typescript": "catalog:"
+  }
+}
