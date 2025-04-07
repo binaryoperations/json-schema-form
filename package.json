@@ -22,24 +22,26 @@
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "exports": {
-    "./core": "./packages/dist/core/index.js",
-    "./core/*": "./packages/dist/core/*.js",
-    "./react": "./packages/dist/react/index.js",
-    "./react/*": "./packages/dist/react/*.js"
+    "./core": "./dist/core/index.js",
+    "./core/*": "./dist/core/*.js",
+    "./core/*/": "./dist/core/*/index.js",
+    "./react": "./dist/react/index.js",
+    "./react/*": "./dist/react/*.js",
+    "./react/*/": "./dist/react/*.js"
   },
   "typesVersions": {
     "*": {
       "core": [
-        "packages/dist/core/index.d.ts"
+        "dist/core/index.d.ts"
       ],
       "core/*": [
-        "packages/dist/core/*/index.d.ts"
+        "dist/core/*/index.d.ts"
       ],
       "react": [
-        "packages/dist/react/index.d.ts"
+        "dist/react/index.d.ts"
       ],
       "react/*": [
-        "packages/dist/react/*/index.d.ts"
+        "dist/react/*/index.d.ts"
       ]
     }
   },
@@ -49,8 +51,9 @@
     "check-types": "tsc --noEmit",
     "lint": "turbo run lint",
     "lint:fix": "pnpm lint -- --fix",
+    "build": "turbo run build",
     "turbo": "turbo run",
-    "prepublishOnly": "pnpm turbo build"
+    "prepublishOnly": "pnpm build"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
