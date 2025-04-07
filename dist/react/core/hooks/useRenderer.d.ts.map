@@ -1,0 +1,1 @@
+{"version":3,"file":"useRenderer.d.ts","sourceRoot":"","sources":["../../../../packages/react/core/hooks/useRenderer.ts"],"names":[],"mappings":"AAGA,OAAO,KAAK,EAAE,aAAa,EAAE,MAAM,OAAO,CAAC;AAO3C,eAAO,MAAM,aAAa,GAAI,MAAM,MAAM;;;;GAKzC,CAAC;AAEF,eAAO,MAAM,mBAAmB,GAAI,MAAM,MAAM,GAAG,aAAa,CAAC,MAAM,CAAC;;;;iDAKvE,CAAC;AAEF,eAAO,MAAM,cAAc,GAAI,IAAI,MAAM,uRAUxC,CAAC"}
