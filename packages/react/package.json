@@ -24,8 +24,8 @@
     "lint": "eslint .",
     "lint:fix": "eslint --fix .",
     "type:check": "tsc --project tsconfig.build.json --noEmit",
-    "build:js": "tsc --project tsconfig.build.json",
-    "build:types": "tsc --project tsconfig.build.types.json",
+    "build:js": "tsc --project tsconfig.build.json && tsc-alias -p tsconfig.build.json",
+    "build:types": "tsc --project tsconfig.build.types.json && tsc-alias -p tsconfig.build.json",
     "build": "concurrently --names \"TYPES,ESM\" -c \"bgRed.bold,bgBlue.bold\" \"pnpm build:types\" \"pnpm build:js\""
   },
   "peerDependencies": {
@@ -46,6 +46,7 @@
     "eslint": "^9.21.0",
     "react": "^19.0.0",
     "ts-node": "^10.4.0",
+    "tsc-alias": "^1.8.14",
     "typescript": "catalog:",
     "typescript-eslint": "^8.26.0",
     "use-sync-external-store": "^1.4.0",
