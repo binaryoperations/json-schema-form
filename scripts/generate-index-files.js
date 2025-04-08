@@ -15,9 +15,19 @@ const createIndexFiles = (directory) => {
 
       // Create parent-level index file
       const parentDir = path.dirname(fullPath);
-      const indexContent = `export * from './${path.basename(fullPath)}/index';\n`;
+      const indexPath = path.join(parentDir, `${dirent.name}/index.js`);
 
-      if (!fs.existsSync(path.join(parentDir, `${dirent.name}/index.js`))) return;
+      if (!fs.existsSync(indexPath)) return;
+
+      let indexContent = `export * from './${path.basename(fullPath)}/index';\n`;
+
+      // Check if index file has default export
+      const fileContent = fs.readFileSync(indexPath, 'utf-8');
+      console.dir({indexPath, fileContent});
+      if (fileContent.includes('export default')) {
+        indexContent += `\nimport DefaultExport from './${path.basename(fullPath)}/index';\n`;
+        indexContent += `export default DefaultExport;\n`;
+      }
 
       fs.writeFileSync(
         path.join(parentDir, `${dirent.name}.js`),
