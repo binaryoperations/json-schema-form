@@ -46,3 +46,4 @@ node_modules/
 
 # Builds
 dist
+!packages/release/dist

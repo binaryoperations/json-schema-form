@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../release/dist/core",
     "composite": false,
     "declaration": false,
     "declarationMap": false

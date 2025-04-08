@@ -12,7 +12,7 @@
     "build-storybook": "storybook build"
   },
   "dependencies": {
-    "@binaryoperations/json-forms": "workspace:^",
+    "@binaryoperations/json-forms": "file:../../../",
     "ajv": "^8.17.1",
     "lodash": "^4.17.21",
     "react": "^19.0.0",

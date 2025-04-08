@@ -18,10 +18,7 @@
   "author": "Shashank Agarwal <shashank1010@gmail.com>",
   "license": "ISC",
   "scripts": {
-    "lint": "eslint .",
-    "build:js": "tsc --project tsconfig.build.json",
-    "build:types": "tsc --project tsconfig.build.types.json",
-    "build": "concurrently --names \"TYPES,JS\" -c \"bgRed.bold,bgBlue.bold\" \"pnpm build:types\" \"pnpm build:js\""
+    "lint": "eslint ."
   },
   "dependencies": {
     "fast-deep-equal": "3.1.3",
@@ -30,7 +27,6 @@
   "devDependencies": {
     "@types/lodash": "^4.17.7",
     "ajv": "^8.6.0",
-    "concurrently": "^9.1.2",
     "eslint": "^9.21.0",
     "lodash": "^4.17.21",
     "typescript": "catalog:",

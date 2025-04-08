@@ -1,6 +1,7 @@
 {
   "extends": "../configs/tsconfig.json",
   "compilerOptions": {
+    "outDir": "../release/dist/core",
     "composite": true,
     "paths": {
       "@binaryoperations/json-forms-core/*": [

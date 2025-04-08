@@ -3,7 +3,6 @@ packages:
   - "packages/*"
   - "packages/playground/*"
 
-
 # Define a catalog of version ranges.
 catalog:
   "json-schema-library": "^10.0.0-rc8"

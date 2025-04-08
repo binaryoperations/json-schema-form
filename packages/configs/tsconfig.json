@@ -20,28 +20,6 @@
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "esnext",
-    "paths": {
-      "@binaryoperations/json-forms-core": [
-        "../core/src"
-      ],
-      "@binaryoperations/json-forms-core/*": [
-        "../core/src/*"
-      ],
-      "@binaryoperations/json-forms-react": [
-        "../react/src"
-      ],
-      "@binaryoperations/json-forms-react/*": [
-        "../react/src/*"
-      ]
-    }
-  },
-  "references": [
-    {
-      "path": "../core"
-    },
-    {
-      "path": "../react"
-    }
-  ]
+    "target": "esnext"
+  }
 }

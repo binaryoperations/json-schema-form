@@ -1,4 +1,4 @@
-import "@binaryoperations/json-forms/react";
+
 
 import { cast } from '@binaryoperations/json-forms/core/internals/cast';
 import resolvers from '@binaryoperations/json-forms/core/internals/resolvers';

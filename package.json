@@ -24,10 +24,8 @@
   "exports": {
     "./core": "./packages/release/dist/core/index.js",
     "./core/*": "./packages/release/dist/core/*.js",
-    "./core/*/": "./packages/release/dist/core/*/index.js",
     "./react": "./packages/release/dist/react/index.js",
-    "./react/*": "./packages/release/dist/react/*.js",
-    "./react/*/": "./packages/release/dist/react/*.js"
+    "./react/*": "./packages/release/dist/react/*.js"
   },
   "typesVersions": {
     "*": {
@@ -51,7 +49,7 @@
     "check-types": "tsc --noEmit",
     "lint": "turbo run lint",
     "lint:fix": "pnpm lint -- --fix",
-    "build": "turbo run build && node ./scripts/generate-index-files.js",
+    "create:build": "rm -rf packages/release/dist && turbo run build && node ./scripts/generate-index-files.js",
     "turbo": "turbo run",
     "prepublishOnly": "pnpm build"
   },

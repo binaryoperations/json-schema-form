@@ -1,14 +1,11 @@
 {
   "name": "@binaryoperations/release",
   "exports": {
-    "./core": "./dist/core/index.js",
-    "./core/*": "./dist/core/*.js",
-    "./react": "./dist/react/index.js",
-    "./react/*": "./dist/react/*.js"
+    "./core": "./core/index.js",
+    "./core/*": "./core/*.js",
+    "./react": "./react/index.js",
+    "./react/*": "./react/*.js"
   },
-  "files": [
-    "dist"
-  ],
   "dependencies": {
     "@binaryoperations/json-forms-core": "workspace:*",
     "@binaryoperations/json-forms-react": "workspace:*"
