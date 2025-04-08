@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { createElement as _createElement } from "react";
 import { useId } from 'react';
-import { useActiveStateContext, } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { useActiveStateContext, } from '../../../context/ActiveStateContext';
 import { Row } from '../Row';
 import { AccordionItem } from './AccordionItem';
 const createUniqueName = (multiple, idBase, index) => {

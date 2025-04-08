@@ -1,5 +1,5 @@
-import type { ControlNode, ControlSchema } from '@binaryoperations/json-forms-core/models';
-import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
+import type { ControlNode, ControlSchema } from '../../../core/models';
+import type { Selector } from '../../../core/types/reducers';
 import { UiStoreContextType } from '../context/StoreContext';
 /**
  *

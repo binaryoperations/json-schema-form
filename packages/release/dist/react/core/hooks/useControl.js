@@ -1,6 +1,6 @@
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { set, shallowCompare, } from '@binaryoperations/json-forms-core/internals/object';
-import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
+import { cast } from '../../../core/internals/cast';
+import { set, shallowCompare, } from '../../../core/internals/object';
+import resolvers from '../../../core/internals/resolvers';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
 import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';

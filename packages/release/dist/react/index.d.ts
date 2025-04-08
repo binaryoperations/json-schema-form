@@ -1,4 +1,4 @@
-import { UiNodeType } from '@binaryoperations/json-forms-core/models';
+import { UiNodeType } from '../core/models';
 import './core/components/CustomLayoutRenderer';
 import { LayoutRepository } from './core/context/RendererContext';
 import { type RankedControl } from './core/hoc/createControl';

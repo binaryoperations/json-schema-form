@@ -1,2 +1,2 @@
-import { ControlCreator } from '@binaryoperations/json-forms-core/controls/createControl';
+import { ControlCreator } from '../../../core/controls/createControl';
 export const createControl = new ControlCreator();

@@ -1,6 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
-import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
-import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
+import LogicalSchema from '../../../core/schema/logical.schema';
+import UiSchema from '../../../core/schema/ui.schema';
 import { memo, useMemo } from 'react';
 import { useCallback } from 'react';
 import { UiStoreContextProvider } from '../context/StoreContext';

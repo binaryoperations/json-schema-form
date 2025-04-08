@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import invariant from '@binaryoperations/json-forms-core/internals/invariant';
+import invariant from '../../../core/internals/invariant';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
 import { useControl, useControlProps, useControlValue } from '../hooks';

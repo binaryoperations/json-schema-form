@@ -1,4 +1,4 @@
-import { UiNodeType } from '@binaryoperations/json-forms-core/models';
+import { UiNodeType } from '../core/models';
 import './core/components/CustomLayoutRenderer';
 import { ControlRepository, LayoutRepository } from './core/context/RendererContext';
 import { Form } from "./components/Semantic/Form";

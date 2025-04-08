@@ -1,7 +1,7 @@
-import { findControl } from '@binaryoperations/json-forms-core/controls/findControl';
-import invariant from '@binaryoperations/json-forms-core/internals/invariant';
-import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
-import { ControlRepository, LayoutRepository } from '@binaryoperations/json-forms-react/core/context/RendererContext';
+import { findControl } from '../../../core/controls/findControl';
+import invariant from '../../../core/internals/invariant';
+import { shallowCompare } from '../../../core/internals/object';
+import { ControlRepository, LayoutRepository } from '../../core/context/RendererContext';
 import { useStore } from './useStore';
 export const useLayoutNode = (type) => {
     return invariant(LayoutRepository.get(type), `Layout "${type}" has not been registered`);

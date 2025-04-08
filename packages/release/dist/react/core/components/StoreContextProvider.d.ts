@@ -1,4 +1,4 @@
-import type { LayoutSchema, ObjectJsonSchema } from '@binaryoperations/json-forms-core/models';
+import type { LayoutSchema, ObjectJsonSchema } from '../../../core/models';
 import type { ComponentType, PropsWithChildren } from 'react';
 export type StoreContextProviderProps = PropsWithChildren<{
     uiSchema: LayoutSchema;

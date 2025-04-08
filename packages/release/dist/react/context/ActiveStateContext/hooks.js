@@ -1,4 +1,4 @@
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
+import { cast } from '../../../core/internals/cast';
 import { createElement, useMemo } from 'react';
 import useRef from '../../core/hooks/useRef';
 import useSafeCallback from '../../core/hooks/useSafeCallback';

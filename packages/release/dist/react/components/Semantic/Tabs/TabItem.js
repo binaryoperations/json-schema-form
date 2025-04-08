@@ -1,7 +1,7 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { memo } from 'react';
 import { Button } from '../../../components/Button';
-import { useActiveState } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { useActiveState } from '../../../context/ActiveStateContext';
 export const TabItem = memo(function Tabs(props) {
     const { id, label, className = '', ...buttonProps } = props;
     const [isActive, onActivate] = useActiveState(id);

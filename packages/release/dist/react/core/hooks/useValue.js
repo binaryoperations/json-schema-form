@@ -1,4 +1,4 @@
-import { set } from '@binaryoperations/json-forms-core/internals/object';
+import { set } from '../../../core/internals/object';
 import { useState } from 'react';
 const useValue = (value) => {
     const [proxy] = useState(() => {

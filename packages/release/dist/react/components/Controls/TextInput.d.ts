@@ -630,7 +630,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     label?: string | undefined;
     multiline: true;
 }, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
-export declare const TextInputControl: import("@binaryoperations/json-forms-core/controls/createControl").RankedControl<import("react").ForwardRefExoticComponent<(Omit<InputBaseProps & {
+export declare const TextInputControl: import("../../../core/controls/createControl").RankedControl<import("react").ForwardRefExoticComponent<(Omit<InputBaseProps & {
     ref?: import("react").Ref<HTMLInputElement> | undefined;
     key?: import("react").Key | null | undefined;
     accept?: string | undefined | undefined;
@@ -1248,6 +1248,6 @@ export declare const TextInputControl: import("@binaryoperations/json-forms-core
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
-}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, unknown, import("@binaryoperations/json-forms-core/controls/createControl").GetValueFromEvent<unknown>>;
+}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, unknown, import("../../../core/controls/createControl").GetValueFromEvent<unknown>>;
 export {};
 //# sourceMappingURL=TextInput.d.ts.map

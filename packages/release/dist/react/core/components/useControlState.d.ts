@@ -1,4 +1,4 @@
-import type { LogicalSchema } from '@binaryoperations/json-forms-core/schema/logical.schema/Parser';
+import type { LogicalSchema } from '../../../core/schema/logical.schema/Parser';
 import type { JsonError } from 'json-schema-library';
 export declare function useControlState(initialData: object, draft: LogicalSchema): {
     setTouched: (path: string) => void;

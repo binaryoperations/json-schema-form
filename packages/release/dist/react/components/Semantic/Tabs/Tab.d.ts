@@ -1,6 +1,6 @@
 import { PropsWithChildren } from 'react';
 import { FC } from 'react';
-import { ID } from '@binaryoperations/json-forms-react/type';
+import { ID } from '../../../type';
 export type TabProps = PropsWithChildren<{
     id: ID;
 }>;

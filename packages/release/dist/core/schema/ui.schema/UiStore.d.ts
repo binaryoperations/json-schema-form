@@ -12,7 +12,7 @@ export declare class UiStore {
     getNodeType(key: string): "fieldsets" | "fieldset" | "rows" | "columns" | "control" | "custom";
     isControl(key: string): boolean;
     setRoot(key: string): void;
-    deriveSchemaAtPointer(key: string, data?: object): (import("@binaryoperations/json-forms-core/models/ControlSchema").CompositeSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").StringJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").NumberJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").ArrayJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").ObjectJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").NullJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").BooleanJsonSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").OneOfRootSchema | import("@binaryoperations/json-forms-core/models/ControlSchema").AnyOfRootSchema) | null;
+    deriveSchemaAtPointer(key: string, data?: object): (import("../../models/ControlSchema").CompositeSchema | import("../../models/ControlSchema").StringJsonSchema | import("../../models/ControlSchema").NumberJsonSchema | import("../../models/ControlSchema").ArrayJsonSchema | import("../../models/ControlSchema").ObjectJsonSchema | import("../../models/ControlSchema").NullJsonSchema | import("../../models/ControlSchema").BooleanJsonSchema | import("../../models/ControlSchema").OneOfRootSchema | import("../../models/ControlSchema").AnyOfRootSchema) | null;
     deriveSchemaNodeAtPointer(key: string, data?: object): SchemaNode;
 }
 //# sourceMappingURL=UiStore.d.ts.map

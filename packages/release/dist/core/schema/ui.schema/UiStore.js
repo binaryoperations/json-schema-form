@@ -1,5 +1,5 @@
-import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
+import { cast } from '../../internals/cast';
+import resolvers from '../../internals/resolvers';
 import { UiNodeType, } from '../../models/LayoutSchema';
 export class UiStore {
     draftSchema;

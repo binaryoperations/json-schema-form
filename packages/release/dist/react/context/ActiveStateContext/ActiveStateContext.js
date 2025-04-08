@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import useSafeCallback from '@binaryoperations/json-forms-react/core/hooks/useSafeCallback';
+import useSafeCallback from '../../core/hooks/useSafeCallback';
 import { createFastContext } from '../../core/fast-context';
 const ActiveStateContext = createFastContext('ActiveStateContext', true);
 export const ActiveStateProvider = ActiveStateContext.Provider;

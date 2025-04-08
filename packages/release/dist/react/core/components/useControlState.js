@@ -1,4 +1,4 @@
-import { fastDeepEqual, get, } from '@binaryoperations/json-forms-core/internals/object';
+import { fastDeepEqual, get, } from '../../../core/internals/object';
 import { groupBy } from 'lodash';
 import { useCallback, useMemo, useReducer } from 'react';
 export function useControlState(initialData, draft) {

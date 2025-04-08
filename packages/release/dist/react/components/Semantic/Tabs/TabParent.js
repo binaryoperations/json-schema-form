@@ -1,5 +1,5 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
-import { useActiveStateContext, } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { useActiveStateContext, } from '../../../context/ActiveStateContext';
 import { Column } from '../Column';
 import { Row } from '../Row';
 import { styles } from '../styles';

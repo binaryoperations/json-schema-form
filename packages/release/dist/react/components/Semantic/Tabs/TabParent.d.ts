@@ -1,5 +1,5 @@
 import { type PropsWithChildren } from 'react';
-import { type ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { type ActiveStateProps } from '../../../context/ActiveStateContext';
 import { ColumnProps } from '../Column';
 import { TabItemProps } from './TabItem';
 export type TabsPropsBase<T = unknown> = PropsWithChildren<{

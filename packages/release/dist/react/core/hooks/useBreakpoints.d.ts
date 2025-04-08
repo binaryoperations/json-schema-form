@@ -1,4 +1,4 @@
-import type { Breakpoints } from '@binaryoperations/json-forms-core/models';
+import type { Breakpoints } from '../../../core/models';
 export declare function useBreakpoints<T extends {}, V = any>(props: T & {
     breakpoints?: Breakpoints<V>;
 }): {

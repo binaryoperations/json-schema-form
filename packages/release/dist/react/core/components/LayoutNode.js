@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
+import { shallowCompare } from '../../../core/internals/object';
 import { memo } from 'react';
 import { useStore } from '../hooks';
 import { useLayoutNode } from '../hooks/useRenderer';

@@ -1,4 +1,4 @@
-import type { UiStore } from '@binaryoperations/json-forms-core/schema/ui.schema';
+import type { UiStore } from '../../../core/schema/ui.schema';
 import type { JsonError, JsonSchema } from 'json-schema-library';
 export type ValidateData = (value: any) => {
     isValid: boolean;

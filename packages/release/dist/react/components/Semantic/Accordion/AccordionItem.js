@@ -1,6 +1,6 @@
 import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
 import { memo } from 'react';
-import { useActiveState } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
+import { useActiveState } from '../../../context/ActiveStateContext';
 export const AccordionItem = memo(function Tabs(props) {
     const { id, label, className = '', description, ...detailsProps } = props;
     const [isActive, onActivate] = useActiveState(id);

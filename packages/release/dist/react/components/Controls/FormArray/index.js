@@ -1,5 +1,5 @@
 import { jsx as _jsx, Fragment as _Fragment } from "react/jsx-runtime";
-import { generateId } from '@binaryoperations/json-forms-core/internals/generateId';
+import { generateId } from '../../../../core/internals/generateId';
 import { Fragment } from 'react';
 const FormArray = ({ value, onChange, render }) => {
     const onAdd = () => {

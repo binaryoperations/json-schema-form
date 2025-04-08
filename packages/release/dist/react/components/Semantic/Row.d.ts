@@ -1,4 +1,4 @@
-import { type Breakpoints } from '@binaryoperations/json-forms-core/models';
+import { type Breakpoints } from '../../../core/models';
 import type { FC } from 'react';
 type DivProps = React.JSX.IntrinsicElements['div'];
 export interface RowProps extends DivProps {
