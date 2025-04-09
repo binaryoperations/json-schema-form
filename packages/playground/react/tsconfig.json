@@ -1,6 +1,20 @@
 {
+  "compilerOptions": {
+    "paths": {
+      "@binaryoperations/json-forms-react/*": [
+        "../../react/*"
+      ],
+      "@binaryoperations/json-forms-core/*": [
+        "../../core/*"
+      ]
+    }
+  },
   "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
+    {
+      "path": "./tsconfig.app.json"
+    },
+    {
+      "path": "./tsconfig.node.json"
+    }
   ]
 }

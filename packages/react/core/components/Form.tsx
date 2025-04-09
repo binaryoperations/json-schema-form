@@ -1,22 +1,20 @@
 import { ComponentType, memo, useState } from 'react';
 
-import { Row } from '../../components/Semantic';
-
 import {
   FormDataProvider,
   type FormDataProviderProps,
 } from './FormDataProvider';
-import { LayoutChildren } from './LayoutNode';
 import {
   StoreContextProvider,
   type StoreContextProviderProps,
 } from './StoreContextProvider';
+import { useCustomLayoutNode } from '../hooks/useRenderer';
+import { LayoutChildren } from './LayoutNode';
 
 
 export type FormProps =
-  Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & {
+  Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & React.JSX.IntrinsicElements['form'] & {
     data: object;
-    style?: React.JSX.IntrinsicElements['form']['style'];
     onDataChange?: FormDataProviderProps['onChange'];
     ref?: FormDataProviderProps['ref'];
     validationMode?: StoreContextProviderProps['validationMode'];
@@ -25,23 +23,26 @@ export type FormProps =
 export type Bootstrap = ComponentType<FormProps>;
 
 export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
+  const { data, onDataChange, ref, validationMode, uiSchema, schema, ...rest} = props;
   const [initialData] = useState(props.data);
+
+  const FormRenderer = useCustomLayoutNode('form');
 
   return (
       <StoreContextProvider
-        uiSchema={props.uiSchema}
-        schema={props.schema}
-        validationMode={props.validationMode ?? 'onBlur'}
+        uiSchema={uiSchema}
+        schema={schema}
+        validationMode={validationMode ?? 'onBlur'}
         initialData={initialData}
       >
         <FormDataProvider
-          value={props.data}
-          onChange={props.onDataChange}
-          ref={props.ref}
+          value={data}
+          onChange={onDataChange}
+          ref={ref}
         >
-          <Row style={props.style}>
-            <LayoutChildren id="root" />
-          </Row>
+          <FormRenderer {...rest} id="root">
+            <LayoutChildren id='root' />
+          </FormRenderer>
         </FormDataProvider>
       </StoreContextProvider>
   );

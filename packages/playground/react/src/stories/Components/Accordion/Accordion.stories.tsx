@@ -1,8 +1,8 @@
 import {
   Accordion,
   type AccordionPropsBase,
-} from '@binaryoperations/json-forms/react/components/Semantic/Accordion';
-import { ActiveStateProps } from '@binaryoperations/json-forms/react/context/ActiveStateContext';
+} from '@binaryoperations/json-forms-react/components/Semantic/Accordion';
+import { ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
 import type { Meta, StoryObj } from '@storybook/react';
 import { FC } from 'react';
 

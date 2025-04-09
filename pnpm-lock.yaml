@@ -119,9 +119,12 @@ importers:
 
   packages/playground/react:
     dependencies:
-      '@binaryoperations/json-forms':
-        specifier: file:../../../
-        version: file:(eslint@9.23.0)(json-schema-library@10.0.0-rc8)(turbo@2.4.4)
+      '@binaryoperations/json-forms-core':
+        specifier: workspace:*
+        version: link:../../core
+      '@binaryoperations/json-forms-react':
+        specifier: workspace:*
+        version: link:../../react
       ajv:
         specifier: ^8.17.1
         version: 8.17.1
@@ -364,11 +367,6 @@ packages:
   '@babel/types@7.27.0':
     resolution: {integrity: sha512-H45s8fVLYjbhFH62dIJ3WtmJ6RSPt/3DRO0ZcT2SUiYiQyz3BLVb9ADEnLl91m74aQPS3AzzeajZHYOalWe3bg==}
     engines: {node: '>=6.9.0'}
-
-  '@binaryoperations/json-forms@file:':
-    resolution: {directory: '', type: directory}
-    peerDependencies:
-      json-schema-library: ^10.0.0-rc8
 
   '@changesets/apply-release-plan@7.0.10':
     resolution: {integrity: sha512-wNyeIJ3yDsVspYvHnEz1xQDq18D9ifed3lI+wxRQRK4pArUcuHgCTrHv0QRnnwjhVCQACxZ+CBih3wgOct6UXw==}
@@ -3093,15 +3091,6 @@ snapshots:
     dependencies:
       '@babel/helper-string-parser': 7.25.9
       '@babel/helper-validator-identifier': 7.25.9
-
-  '@binaryoperations/json-forms@file:(eslint@9.23.0)(json-schema-library@10.0.0-rc8)(turbo@2.4.4)':
-    dependencies:
-      eslint-config-turbo: 2.4.4(eslint@9.23.0)(turbo@2.4.4)
-      json-schema-library: 10.0.0-rc8
-      lodash: 4.17.21
-    transitivePeerDependencies:
-      - eslint
-      - turbo
 
   '@changesets/apply-release-plan@7.0.10':
     dependencies:

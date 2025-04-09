@@ -1,4 +1,4 @@
-import { RowsNode } from '@binaryoperations/json-forms/core/models';
+import { RowsNode } from '@binaryoperations/json-forms-core/models';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren } from 'react';
 

@@ -15,7 +15,7 @@ export { Bootstrap } from './core/components/Form';
 
 
 /** This serves as the root of the component tree */
-LayoutRepository.register('form', createLayoutRenderer(Form));
+LayoutRepository.register('form', Form);
 LayoutRepository.register(UiNodeType.CUSTOM, CustomLayoutRenderer);
 
 
@@ -28,7 +28,6 @@ type Layouts = UiNodeLayouts | CustomLayouts;
 type PromiseKeys<T extends object> = {
   [K in keyof T]: () => Promise<T[K]>;
 };
-
 
 
 export const registerLayoutsRenderers = (arg: Partial<Layouts> = {}) => {

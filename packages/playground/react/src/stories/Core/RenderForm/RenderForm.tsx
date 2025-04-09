@@ -1,36 +1,36 @@
 
 
-import { cast } from '@binaryoperations/json-forms/core/internals/cast';
-import resolvers from '@binaryoperations/json-forms/core/internals/resolvers';
-import type { ObjectJsonSchema } from '@binaryoperations/json-forms/core/models/ControlSchema';
+import { cast } from '@binaryoperations/json-forms-core/internals/cast';
+import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
+import type { ObjectJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   type ControlNode,
   type LayoutSchema,
   UiNodeType,
-} from '@binaryoperations/json-forms/core/models/LayoutSchema';
-import { createRankedTester } from '@binaryoperations/json-forms/core/testers/testers';
-import { CheckboxControl } from '@binaryoperations/json-forms/react/components/Controls/Checkbox';
-import { createControl } from '@binaryoperations/json-forms/react';
+} from '@binaryoperations/json-forms-core/models/LayoutSchema';
+import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
+import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
+import { createControl } from '@binaryoperations/json-forms-react';
 import {
   DateControl,
   DateTimeControl,
   TimeControl,
-} from '@binaryoperations/json-forms/react/components/Controls/DateTime';
+} from '@binaryoperations/json-forms-react/components/Controls/DateTime';
 import {
   Number as NumberInput,
   NumberControl,
-} from '@binaryoperations/json-forms/react/components/Controls/Number';
-import { RadioControl } from '@binaryoperations/json-forms/react/components/Controls/Radio';
-import { TextInputControl } from '@binaryoperations/json-forms/react/components/Controls/TextInput';
+} from '@binaryoperations/json-forms-react/components/Controls/Number';
+import { RadioControl } from '@binaryoperations/json-forms-react/components/Controls/Radio';
+import { TextInputControl } from '@binaryoperations/json-forms-react/components/Controls/TextInput';
 import {
   Column,
   Row,
-} from '@binaryoperations/json-forms/react/components/Semantic';
+} from '@binaryoperations/json-forms-react/components/Semantic';
 import {
   Bootstrap,
   type FormProps,
-} from '@binaryoperations/json-forms/react/core/components/Form';
-import { useFormDataContext } from '@binaryoperations/json-forms/react/core/context/FormDataContext';
+} from '@binaryoperations/json-forms-react/core/components/Form';
+import { useFormDataContext } from '@binaryoperations/json-forms-react/core/context/FormDataContext';
 import {
   type ComponentProps,
   type PropsWithChildren,
@@ -39,7 +39,7 @@ import {
   useRef,
   useState,
 } from 'react';
-import { regiserControlRenderers, registerLayoutsRenderers } from '@binaryoperations/json-forms/react';
+import { regiserControlRenderers, registerLayoutsRenderers } from '@binaryoperations/json-forms-react';
 
 const defaultStyles = {
   gap: 8,
