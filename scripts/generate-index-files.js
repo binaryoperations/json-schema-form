@@ -23,7 +23,6 @@ const createIndexFiles = (directory) => {
 
       // Check if index file has default export
       const fileContent = fs.readFileSync(indexPath, 'utf-8');
-      console.dir({indexPath, fileContent});
       if (fileContent.includes('export default')) {
         indexContent += `\nimport DefaultExport from './${path.basename(fullPath)}/index';\n`;
         indexContent += `export default DefaultExport;\n`;
