@@ -15,7 +15,7 @@ export { Bootstrap } from './core/components/Form';
 
 
 /** This serves as the root of the component tree */
-LayoutRepository.register('form', Form);
+LayoutRepository.register('form', createLayoutRenderer(Form));
 LayoutRepository.register(UiNodeType.CUSTOM, CustomLayoutRenderer);
 
 
@@ -43,7 +43,7 @@ export const registerLayoutsRenderers = (arg: Partial<Layouts> = {}) => {
     layout = layout ?? LayoutRepository.get(name) ?? await loadRenderer?.();
     if (!layout) return;
 
-    const renderer = Object.values(UiNodeType).includes(name as UiNodeType) ? createLayoutRenderer(layout as Layouts[UiNodeType.COLUMNS]) : layout;
+    const renderer = createLayoutRenderer(layout as Layouts[UiNodeType.COLUMNS]);
     LayoutRepository.register(name, renderer)
   }
 

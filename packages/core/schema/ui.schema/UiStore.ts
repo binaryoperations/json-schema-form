@@ -38,23 +38,11 @@ export class UiStore {
     return this.getNodeType(key) === UiNodeType.CONTROL;
   }
 
-  setRoot(key: string) {
-    if (this.isControl(key)) {
-      this.keyMap.root = {
-        id: 'root',
-        type: UiNodeType.ROWS,
-        nodes: [cast<ControlNode>(this.getNode(key))],
-      };
-
-      this.tree.root = [key];
-      return;
-    }
-
-    this.keyMap.root = this.getNode(key);
-    this.tree.root = this.getChildren(key);
-
+  freeze() {
     this.keyMap = Object.freeze(this.keyMap);
     this.tree = Object.freeze(this.tree);
+
+    return this;
   }
 
   deriveSchemaAtPointer(key: string, data?: object) {

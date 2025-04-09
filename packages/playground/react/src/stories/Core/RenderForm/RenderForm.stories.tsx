@@ -42,7 +42,7 @@ export const CustomerWizardWithCustomUiSchema: Story = {
   args: {
     schema: customer.schema,
     uiSchema: {
-      type: 'columns',
+      type: 'rows',
       nodes: [
         {
           type: 'custom',
@@ -69,7 +69,7 @@ export const Responsive: Story = {
   args: {
     schema: responsive.schema,
     uiSchema: {
-      type: 'columns',
+      type: 'rows',
       nodes: [
         {
           type: 'custom',

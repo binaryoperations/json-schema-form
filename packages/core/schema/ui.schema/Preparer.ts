@@ -20,9 +20,9 @@ export class UiSchemaPreparer {
   // reconsider:
   // Do I need to prepare the tree in ahead-of-time?
   // can the child nodes be derived just-in-time?
-  private traverse(uiSchema: LayoutSchema | FieldsetNode, idRoot: string) {
+  private traverse(uiSchema: LayoutSchema | FieldsetNode, idRoot?: string) {
     const nextCount = ++this.counter;
-    const id = idRoot + '/' + (uiSchema.id ?? nextCount);
+    const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
 
     this.store.keyMap[id] = uiSchema;
 
@@ -53,12 +53,14 @@ export class UiSchemaPreparer {
     const ClassConstructor: typeof UiSchemaPreparer = Object.assign(this);
     const parser = new ClassConstructor(draftSchema);
 
-    const id = parser.traverse(uiSchema, 'root');
+    parser.traverse({
+      id: "root",
+      nodes: uiSchema,
+      type: "custom",
+      renderer: "form",
+    });
 
-    parser.store.setRoot(id);
-    const store = parser.store;
-
-    return new Proxy(store, {
+    return new Proxy(parser.store.freeze(), {
       get(target, key, receiver) {
         return Reflect.get(target, key, receiver);
       },

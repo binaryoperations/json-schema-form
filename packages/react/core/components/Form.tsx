@@ -8,8 +8,7 @@ import {
   StoreContextProvider,
   type StoreContextProviderProps,
 } from './StoreContextProvider';
-import { useCustomLayoutNode } from '../hooks/useRenderer';
-import { LayoutChildren } from './LayoutNode';
+import { useLayoutNode } from '../hooks/useRenderer';
 
 
 export type FormProps =
@@ -26,7 +25,7 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
   const { data, onDataChange, ref, validationMode, uiSchema, schema, ...rest} = props;
   const [initialData] = useState(props.data);
 
-  const FormRenderer = useCustomLayoutNode('form');
+  const FormRenderer = useLayoutNode('form');
 
   return (
       <StoreContextProvider
@@ -40,9 +39,7 @@ export const Bootstrap: Bootstrap = memo(function Bootsrap(props) {
           onChange={onDataChange}
           ref={ref}
         >
-          <FormRenderer {...rest} id="root">
-            <LayoutChildren id='root' />
-          </FormRenderer>
+          <FormRenderer {...rest} id="root" />
         </FormDataProvider>
       </StoreContextProvider>
   );
