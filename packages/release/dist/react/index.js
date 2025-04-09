@@ -21,7 +21,7 @@ export const registerLayoutsRenderers = (arg = {}) => {
         layout = layout ?? LayoutRepository.get(name) ?? await loadRenderer?.();
         if (!layout)
             return;
-        const renderer = Object.values(UiNodeType).includes(name) ? createLayoutRenderer(layout) : layout;
+        const renderer = createLayoutRenderer(layout);
         LayoutRepository.register(name, renderer);
     }
     Object.entries({ ...defaultLayouts, ...arg }).forEach(([name, layout]) => {

@@ -1,9 +1,8 @@
 import { ComponentType } from 'react';
 import { type FormDataProviderProps } from './FormDataProvider';
 import { type StoreContextProviderProps } from './StoreContextProvider';
-export type FormProps = Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & {
+export type FormProps = Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & React.JSX.IntrinsicElements['form'] & {
     data: object;
-    style?: React.JSX.IntrinsicElements['form']['style'];
     onDataChange?: FormDataProviderProps['onChange'];
     ref?: FormDataProviderProps['ref'];
     validationMode?: StoreContextProviderProps['validationMode'];

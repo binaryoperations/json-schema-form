@@ -11,7 +11,7 @@ export class UiSchemaPreparer {
     // can the child nodes be derived just-in-time?
     traverse(uiSchema, idRoot) {
         const nextCount = ++this.counter;
-        const id = idRoot + '/' + (uiSchema.id ?? nextCount);
+        const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
         this.store.keyMap[id] = uiSchema;
         if (!('nodes' in uiSchema) || !uiSchema.nodes)
             return id;
@@ -29,10 +29,13 @@ export class UiSchemaPreparer {
     static prepare(uiSchema, draftSchema) {
         const ClassConstructor = Object.assign(this);
         const parser = new ClassConstructor(draftSchema);
-        const id = parser.traverse(uiSchema, 'root');
-        parser.store.setRoot(id);
-        const store = parser.store;
-        return new Proxy(store, {
+        parser.traverse({
+            id: "root",
+            nodes: uiSchema,
+            type: "custom",
+            renderer: "form",
+        });
+        return new Proxy(parser.store.freeze(), {
             get(target, key, receiver) {
                 return Reflect.get(target, key, receiver);
             },

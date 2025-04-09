@@ -1,10 +1,11 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { memo, useState } from 'react';
-import { Row } from '../../components/Semantic';
 import { FormDataProvider, } from './FormDataProvider';
-import { LayoutChildren } from './LayoutNode';
 import { StoreContextProvider, } from './StoreContextProvider';
+import { useLayoutNode } from '../hooks/useRenderer';
 export const Bootstrap = memo(function Bootsrap(props) {
+    const { data, onDataChange, ref, validationMode, uiSchema, schema, ...rest } = props;
     const [initialData] = useState(props.data);
-    return (_jsx(StoreContextProvider, { uiSchema: props.uiSchema, schema: props.schema, validationMode: props.validationMode ?? 'onBlur', initialData: initialData, children: _jsx(FormDataProvider, { value: props.data, onChange: props.onDataChange, ref: props.ref, children: _jsx(Row, { style: props.style, children: _jsx(LayoutChildren, { id: "root" }) }) }) }));
+    const FormRenderer = useLayoutNode('form');
+    return (_jsx(StoreContextProvider, { uiSchema: uiSchema, schema: schema, validationMode: validationMode ?? 'onBlur', initialData: initialData, children: _jsx(FormDataProvider, { value: data, onChange: onDataChange, ref: ref, children: _jsx(FormRenderer, { ...rest, id: "root" }) }) }));
 });
