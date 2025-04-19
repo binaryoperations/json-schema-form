@@ -125,15 +125,16 @@ export function useControlProps<P extends Record<string, any> = {}>(
 
   const proxyValue = useValue(value);
 
-  const [meta] = useUiStoreContext((state) => {
-    const schemaNodePointer =
-      state.uiContext.deriveSchemaNodeAtPointer(path)?.pointer;
+  const [schemaNode] = useUiStoreContext((state) => {
+    return state.uiContext.deriveSchemaNodeAtPointer(path);
+  });
 
+  const [meta] = useUiStoreContext((state) => {
     return {
-      touched: state.touchedControlPaths.has(schemaNodePointer),
-      dirty: state.dirtyControlPaths.has(schemaNodePointer),
-      error: state.errors.get(schemaNodePointer)?.at(0)?.message,
-    };
+      touched: state.touchedControlPaths.has(schemaNode?.pointer),
+      dirty: state.dirtyControlPaths.has(schemaNode?.pointer),
+      error: state.errors.get(schemaNode?.pointer)?.at(0)?.message,
+    }
   }, shallowCompare);
 
   const handleOnBlur = useCallback<Required<ControlProps>['onBlur']>(
@@ -157,6 +158,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
 
   return {
     ...rest as P,
+    ...schemaNode?.schema?.options,
     onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
     onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
     value,
