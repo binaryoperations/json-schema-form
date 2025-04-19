@@ -20,12 +20,12 @@ export const ControlNode = withControlContext(withErrorBoundary(function Control
     const [control] = useControl((control) => control);
     const { Control, getValueFromEvent } = invariant(useControlNode(props.id), `Cannot find a relevant control for id: ${props.id}`);
     const path = control.path;
-    const { value, setValue, meta, onBlur, onFocus } = useControlProps(path, {
+    const { value, setValue, meta, onBlur, onFocus, id: _id, ...rest } = useControlProps(path, {
         ...props,
         ...control.options,
     });
     const handleSetValue = useCallback((e) => {
         setValue(getValueFromEvent(e));
     }, [getValueFromEvent, setValue]);
-    return (_jsx(Control, { ...control.options, error: meta?.error, label: path, value: (value ?? ''), onChange: handleSetValue, onBlur: onBlur, onFocus: onFocus }));
+    return (_jsx(Control, { ...rest, error: meta?.error, label: path, value: (value ?? ''), onChange: handleSetValue, onBlur: onBlur, onFocus: onFocus }));
 }, Unhandled));

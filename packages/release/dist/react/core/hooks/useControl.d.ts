@@ -32,6 +32,6 @@ type ControlProps = {
         error?: string;
     };
 };
-export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus' | 'readOnly'>): Omit<ControlProps, 'readOnly'>;
+export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus' | 'readOnly'>): Omit<ControlProps, 'readOnly'> & P;
 export {};
 //# sourceMappingURL=useControl.d.ts.map

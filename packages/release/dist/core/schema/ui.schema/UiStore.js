@@ -33,12 +33,12 @@ export class UiStore {
             return null;
         const node = cast(this.getNode(key));
         let schema = node.schema;
-        const template = this.draftSchema.prepareTemplate(data);
+        const value = resolvers.resolvePath(data, node.path);
+        const template = value ?? this.draftSchema.prepareTemplate(data);
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
         if (Array.isArray(schema.type)) {
-            const value = resolvers.resolvePath(template, node.path);
             schema = {
                 ...schema,
                 type: schema.type.find((type) => type === typeof value) ?? 'null',

@@ -51,7 +51,7 @@ export function useControlValue(path) {
     ];
 }
 export function useControlProps(path, props) {
-    const { onBlur, onFocus } = props;
+    const { onBlur, onFocus, ...rest } = props;
     const validate = useValidateData(path, 'onBlur');
     const setTouched = useUiStoreRef().current.setTouched;
     const [value, setValue] = useControlValue(path);
@@ -74,6 +74,7 @@ export function useControlProps(path, props) {
     }, [onFocus, setTouched, path]);
     const { readOnly, disabled } = props;
     return {
+        ...rest,
         onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
         onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
         value,
