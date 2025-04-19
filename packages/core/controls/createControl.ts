@@ -1,4 +1,5 @@
 import {
+  and,
   isArrayRanked,
   isBooleanRanked,
   isDateRanked,
@@ -34,50 +35,57 @@ export class ControlCreator<T = unknown> {
 
   DateControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<Date | number | string>
+    getValueFromEvent: GetValueFromEvent<Date | number | string>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isDateRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isDateRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   DateTimeControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<Date | number | string>
+    getValueFromEvent: GetValueFromEvent<Date | number | string>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isDateTimeRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isDateTimeRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   TimeControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<string>
+    getValueFromEvent: GetValueFromEvent<string>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isTimeRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isTimeRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   TextControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<string>
+    getValueFromEvent: GetValueFromEvent<string>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isTextRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isTextRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   NumberControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<string | number>
+    getValueFromEvent: GetValueFromEvent<string | number>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isNumberRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isNumberRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   ArrayControl<C extends T, ValueType = unknown>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<ValueType>
+    getValueFromEvent: GetValueFromEvent<ValueType>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isArrayRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isArrayRanked, customRanker].filter((x) => x !== undefined)));
   }
 
   BooleanControl<C extends T>(
     Control: C,
-    getValueFromEvent: GetValueFromEvent<boolean>
+    getValueFromEvent: GetValueFromEvent<boolean>,
+    customRanker?: Ranker
   ) {
-    return this.create(Control, getValueFromEvent, isBooleanRanked);
+    return this.create(Control, getValueFromEvent, and.apply(null, [isBooleanRanked, customRanker].filter((x) => x !== undefined)));
   }
 }
