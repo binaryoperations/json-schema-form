@@ -56,12 +56,14 @@ export function useControlProps(path, props) {
     const setTouched = useUiStoreRef().current.setTouched;
     const [value, setValue] = useControlValue(path);
     const proxyValue = useValue(value);
+    const [schemaNode] = useUiStoreContext((state) => {
+        return state.uiContext.deriveSchemaNodeAtPointer(path);
+    });
     const [meta] = useUiStoreContext((state) => {
-        const schemaNodePointer = state.uiContext.deriveSchemaNodeAtPointer(path)?.pointer;
         return {
-            touched: state.touchedControlPaths.has(schemaNodePointer),
-            dirty: state.dirtyControlPaths.has(schemaNodePointer),
-            error: state.errors.get(schemaNodePointer)?.at(0)?.message,
+            touched: state.touchedControlPaths.has(schemaNode?.pointer),
+            dirty: state.dirtyControlPaths.has(schemaNode?.pointer),
+            error: state.errors.get(schemaNode?.pointer)?.at(0)?.message,
         };
     }, shallowCompare);
     const handleOnBlur = useCallback((e) => {
@@ -75,6 +77,7 @@ export function useControlProps(path, props) {
     const { readOnly, disabled } = props;
     return {
         ...rest,
+        ...schemaNode?.schema?.options,
         onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
         onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
         value,

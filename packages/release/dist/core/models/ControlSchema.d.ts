@@ -56,6 +56,7 @@ export interface CompositeSchema {
     exclusiveMaximum?: number;
     multipleOf?: number;
     propertyNames?: CompositeSchema;
+    options?: object;
 }
 interface ControlSchemaBase<Default = unknown> {
     $ref?: string;
@@ -113,6 +114,7 @@ interface ControlSchemaBase<Default = unknown> {
     then?: Schema;
     else?: Schema;
     errorMessage?: any;
+    options?: object;
 }
 export interface StringJsonSchema extends ControlSchemaBase<string> {
     type: 'string';
