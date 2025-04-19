@@ -1,4 +1,5 @@
 import { cast } from '../../internals/cast';
+import { fpPick, cloneDeep } from '../../internals/object';
 import resolvers from '../../internals/resolvers';
 import { UiNodeType, } from '../../models/LayoutSchema';
 export class UiStore {
@@ -33,12 +34,13 @@ export class UiStore {
             return null;
         const node = cast(this.getNode(key));
         let schema = node.schema;
-        const value = resolvers.resolvePath(data, node.path);
-        const template = value ?? this.draftSchema.prepareTemplate(data);
+        // this might break references/computed values
+        const template = this.draftSchema.prepareTemplate(cloneDeep(fpPick(node.path.split("/"), data)));
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
         if (Array.isArray(schema.type)) {
+            const value = resolvers.resolvePath(template, node.path);
             schema = {
                 ...schema,
                 type: schema.type.find((type) => type === typeof value) ?? 'null',
