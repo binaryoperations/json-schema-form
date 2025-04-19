@@ -40,6 +40,7 @@ import {
   useState,
 } from 'react';
 import { regiserControlRenderers, registerLayoutsRenderers } from '@binaryoperations/json-forms-react';
+import { useControlSchema } from '@binaryoperations/json-forms-react/core/hooks';
 
 const defaultStyles = {
   gap: 8,
@@ -95,14 +96,15 @@ regiserControlRenderers({
   checkbox: CheckboxControl,
   radio: RadioControl,
   array: createControl.ArrayControl(
-    (props) => (
-      <div>
+    (props) => {
+      return(
+      <div className='array-control'>
         {props.label}:
-        {props.value.map((v: any, i: number) => {
+        {props.value?.map((v: any, i: number) => {
           return <div key={i}>{v}</div>;
         })}
       </div>
-    ),
+    )},
     () => []
   ),
   computedDate: createControl.create(
@@ -139,7 +141,7 @@ function App(props: {
   schema: ObjectJsonSchema;
   data: object;
 }) {
-  const [data, setData] = useState(props.data);
+  const [data, setData] = useState(() => Object.fromEntries(Object.entries(props.data).map(([key, value]) => [key, typeof value === 'object' ? Object.freeze(value) : value])));
 
   const onChange = useCallback((next: object) => {
     setData(next);

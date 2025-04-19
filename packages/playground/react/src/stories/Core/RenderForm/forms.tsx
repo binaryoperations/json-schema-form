@@ -819,3 +819,28 @@ export const composite: FormConfig = {
     ],
   },
 };
+
+export const frozenArray: FormConfig = {
+  data: {
+    array: Object.freeze(['football'])
+  },
+  schema: {
+    type: 'object',
+    properties: {
+      array: {
+        type: 'array',
+        items: {
+          type: 'string',
+          enum: ['football', 'basketball', 'volleyball'],
+        },
+      },
+    },
+  },
+  uiSchema:  {
+    type: "rows",
+    nodes: [{
+      type: "control",
+      path: "array"
+    }]
+  }
+}

@@ -116,8 +116,8 @@ type ControlProps = {
 export function useControlProps<P extends Record<string, any> = {}>(
   path: string,
   props: P & Pick<ControlProps, 'onBlur' | 'onFocus' | 'readOnly'>
-): Omit<ControlProps, 'readOnly'> {
-  const { onBlur, onFocus } = props;
+): Omit<ControlProps, 'readOnly'> & P {
+  const { onBlur, onFocus, ...rest } = props;
   const validate = useValidateData(path, 'onBlur');
   const setTouched = useUiStoreRef().current.setTouched;
 
@@ -156,6 +156,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const { readOnly, disabled } = props;
 
   return {
+    ...rest as P,
     onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
     onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
     value,

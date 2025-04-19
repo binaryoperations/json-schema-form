@@ -51,7 +51,9 @@ export class UiStore {
     const node = cast<ControlNode>(this.getNode(key));
 
     let schema = node.schema;
-    const template = this.draftSchema.prepareTemplate(data);
+
+    const value = resolvers.resolvePath(data, node.path);
+    const template = value ?? this.draftSchema.prepareTemplate(data);
 
     if (!schema) {
       schema = this.draftSchema.getSchemaOf(
@@ -61,7 +63,6 @@ export class UiStore {
     }
 
     if (Array.isArray(schema.type)) {
-      const value = resolvers.resolvePath(template, node.path);
       schema = {
         ...schema,
         type: schema.type.find((type) => type === typeof value) ?? 'null',

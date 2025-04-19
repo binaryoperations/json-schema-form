@@ -2,7 +2,7 @@ import { RowsNode } from '@binaryoperations/json-forms-core/models';
 import type { Meta, StoryObj } from '@storybook/react';
 import { PropsWithChildren } from 'react';
 
-import { composite, customer, customerWizard, responsive } from './forms';
+import { composite, customer, customerWizard, frozenArray, responsive } from './forms';
 import RenderFormApp from './RenderForm';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -99,3 +99,11 @@ export const Composite: Story = {
     data: composite.data!,
   },
 };
+
+export const FrozenArray: Story = {
+  args: {
+    schema: frozenArray.schema,
+    uiSchema: frozenArray.uiSchema,
+    data: frozenArray.data,
+  },
+}

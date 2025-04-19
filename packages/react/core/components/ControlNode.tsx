@@ -46,7 +46,7 @@ export const ControlNode = withControlContext(
     );
 
     const path = control.path;
-    const { value, setValue, meta, onBlur, onFocus } = useControlProps(path, {
+    const { value, setValue, meta, onBlur, onFocus, id: _id, ...rest } = useControlProps(path, {
       ...props,
       ...control.options,
     });
@@ -60,7 +60,7 @@ export const ControlNode = withControlContext(
 
     return (
       <Control
-        {...control.options}
+        {...rest}
         error={meta?.error}
         label={path}
         value={(value ?? '') as any}
