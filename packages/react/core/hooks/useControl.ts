@@ -2,6 +2,7 @@ import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import {
   set,
   shallowCompare,
+  noop,
 } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import type {
@@ -103,7 +104,6 @@ type ControlProps = {
   onFocus?: (e: any) => void;
   value: any;
   setValue: (value: any) => void;
-  readOnly?: boolean;
   disabled?: boolean;
 
   meta?: {
@@ -115,8 +115,8 @@ type ControlProps = {
 
 export function useControlProps<P extends Record<string, any> = {}>(
   path: string,
-  props: P & Pick<ControlProps, 'onBlur' | 'onFocus' | 'readOnly'>
-): Omit<ControlProps, 'readOnly'> & P {
+  props: P & Pick<ControlProps, 'onBlur' | 'onFocus'>
+): ControlProps & P {
   const { onBlur, onFocus, ...rest } = props;
   const validate = useValidateData(path, 'onBlur');
   const setTouched = useUiStoreRef().current.setTouched;
@@ -125,11 +125,11 @@ export function useControlProps<P extends Record<string, any> = {}>(
 
   const proxyValue = useValue(value);
 
-  const [{ pointer, schemaOptions }] = useUiStoreContext((state) => {
+  const [{ pointer, schema, }] = useUiStoreContext((state) => {
     const node = state.uiContext.deriveSchemaNodeAtPointer(path);
     return {
       pointer: node?.pointer,
-      schemaOptions: node?.schema?.options,
+      schema: node?.schema,
     };
   }, shallowCompare);
 
@@ -158,15 +158,16 @@ export function useControlProps<P extends Record<string, any> = {}>(
     [onFocus, setTouched, path]
   );
 
-  const { readOnly, disabled } = props;
-
+  const disabled = props.disabled || schema.readOnly;
+  schema
   return {
     ...rest as P,
-    ...schemaOptions,
-    onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
-    onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
+    ...schema.options,
+    disabled,
+    onBlur: deriveValue(handleOnBlur, onBlur, disabled),
+    onFocus: deriveValue(handleOnFocus, onFocus, disabled),
+    setValue: deriveValue(setValue, noop, disabled),
     value,
-    setValue,
 
     meta,
   };
@@ -210,10 +211,7 @@ function deriveValue<T>(
   value: T,
   readOnlyValue?: T,
   readOnly?: boolean,
-  disabled?: boolean
 ) {
-  if (disabled) return undefined;
-
   if (readOnly) {
     return readOnlyValue;
   }
