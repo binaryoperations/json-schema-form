@@ -24,7 +24,6 @@ type ControlProps = {
     onFocus?: (e: any) => void;
     value: any;
     setValue: (value: any) => void;
-    readOnly?: boolean;
     disabled?: boolean;
     meta?: {
         touched: boolean;
@@ -32,6 +31,6 @@ type ControlProps = {
         error?: string;
     };
 };
-export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus' | 'readOnly'>): Omit<ControlProps, 'readOnly'> & P;
+export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus'>): ControlProps & P;
 export {};
 //# sourceMappingURL=useControl.d.ts.map

@@ -5,9 +5,10 @@ import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import maxBy from 'lodash/maxBy';
 import cloneDeep from 'lodash/cloneDeep';
+import noop from 'lodash/noop';
 export { default as fastDeepEqual } from 'fast-deep-equal';
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
-export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep };
+export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop };
 export const set = (data, path, value) => {
     if (Object.is(get(data, path), value))
         return data;

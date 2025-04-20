@@ -1,5 +1,5 @@
 import { cast } from '../../../core/internals/cast';
-import { set, shallowCompare, } from '../../../core/internals/object';
+import { set, shallowCompare, noop, } from '../../../core/internals/object';
 import resolvers from '../../../core/internals/resolvers';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
@@ -56,11 +56,11 @@ export function useControlProps(path, props) {
     const setTouched = useUiStoreRef().current.setTouched;
     const [value, setValue] = useControlValue(path);
     const proxyValue = useValue(value);
-    const [{ pointer, schemaOptions }] = useUiStoreContext((state) => {
+    const [{ pointer, schema, }] = useUiStoreContext((state) => {
         const node = state.uiContext.deriveSchemaNodeAtPointer(path);
         return {
             pointer: node?.pointer,
-            schemaOptions: node?.schema?.options,
+            schema: node?.schema,
         };
     }, shallowCompare);
     const [meta] = useUiStoreContext((state) => {
@@ -78,14 +78,16 @@ export function useControlProps(path, props) {
         onFocus?.(e);
         setTouched(path);
     }, [onFocus, setTouched, path]);
-    const { readOnly, disabled } = props;
+    const disabled = props.disabled || schema.readOnly;
+    schema;
     return {
         ...rest,
-        ...schemaOptions,
-        onBlur: deriveValue(handleOnBlur, onBlur, readOnly, disabled),
-        onFocus: deriveValue(handleOnFocus, onFocus, readOnly, disabled),
+        ...schema.options,
+        disabled,
+        onBlur: deriveValue(handleOnBlur, onBlur, disabled),
+        onFocus: deriveValue(handleOnFocus, onFocus, disabled),
+        setValue: deriveValue(setValue, noop, disabled),
         value,
-        setValue,
         meta,
     };
 }
@@ -104,9 +106,7 @@ function useValidateData(path, validateOn) {
         uiStoreRef.current.setErrors(path, validateResult.isValid ? [] : validateResult.errors, shouldReset);
     }, [path, validate, uiStoreRef, validateOn, formDataRef]);
 }
-function deriveValue(value, readOnlyValue, readOnly, disabled) {
-    if (disabled)
-        return undefined;
+function deriveValue(value, readOnlyValue, readOnly) {
     if (readOnly) {
         return readOnlyValue;
     }
