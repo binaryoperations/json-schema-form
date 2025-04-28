@@ -5,5 +5,5 @@ packages:
 
 # Define a catalog of version ranges.
 catalog:
-  "json-schema-library": "^10.0.0-rc8"
+  "json-schema-library": "10.0.0-rc13"
   "typescript": "~5.8.0"

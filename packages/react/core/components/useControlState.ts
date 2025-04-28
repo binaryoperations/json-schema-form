@@ -31,7 +31,7 @@ export function useControlState(initialData: object, draft: LogicalSchema) {
   });
 
   const derivePath = useCallback(
-    (path: string) => draft.getSchemaNodeOf(path).pointer,
+    (path: string) => draft.getSchemaNodeOf(path).evaluationPath,
     [draft]
   );
 

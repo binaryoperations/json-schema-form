@@ -127,8 +127,9 @@ export function useControlProps<P extends Record<string, any> = {}>(
 
   const [{ pointer, schema, }] = useUiStoreContext((state) => {
     const node = state.uiContext.deriveSchemaNodeAtPointer(path);
+    node.evaluationPath
     return {
-      pointer: node?.pointer,
+      pointer: node.evaluationPath,
       schema: node?.schema,
     };
   }, shallowCompare);

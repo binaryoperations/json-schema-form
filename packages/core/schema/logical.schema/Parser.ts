@@ -1,74 +1,64 @@
 import {
-  Draft,
-  Draft2019,
-  type DraftConfig,
-  isJsonError,
+  compileSchema,
+  type Draft,
+  draft2020,
   type JsonError,
   type JsonSchema,
-  resolveOneOfFuzzy,
   type SchemaNode,
 } from 'json-schema-library';
 
 export { JsonError, SchemaNode };
 
-type DraftConstructor = {
-  new (schema?: JsonSchema, config?: Partial<DraftConfig>): Draft;
-};
-
 export class LogicalSchema {
-  private draft: Draft;
+  private draft: SchemaNode;
 
-  static prepare(schema: JsonSchema, DraftConstructor?: DraftConstructor) {
+  static prepare(schema: JsonSchema, draft?: Draft) {
     const ClassConstructor: typeof LogicalSchema = Object.assign(this);
-    return new ClassConstructor(schema, DraftConstructor);
+    return new ClassConstructor(schema, draft);
   }
 
   constructor(
-    schema: JsonSchema | Draft,
-    DraftConstructor: DraftConstructor = Draft2019
+    schema: JsonSchema | SchemaNode,
+    draft: Draft = draft2020
   ) {
-    this.draft =
-      schema instanceof Draft
-        ? schema
-        : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
+    this.draft = this.deriveSchemaNode(schema, draft);
   }
+
+  private deriveSchemaNode(
+    node: SchemaNode | JsonSchema,
+    draft: Draft = draft2020) {
+
+    if (!("validate" in (node as SchemaNode))) {
+      return compileSchema(node, {drafts: [draft]});
+    }
+
+      return node as SchemaNode;
+    }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
-    return this.draft.getTemplate(defaultValues, undefined, {
-      addOptionalProps: true,
-    });
+    return this.draft.getData(defaultValues);
   }
 
-  validate(value: any, schema: JsonSchema | Draft = this.draft) {
-    schema = schema instanceof Draft ? schema.getSchema()! : schema;
-
-    const errors = this.draft.validate(value, schema);
+  validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {
+    const schemaNode = this.deriveSchemaNode(schema);
+    const {valid, errors} = schemaNode.validate(value);
 
     return {
-      isValid: !errors.length,
+      isValid: !valid,
       errors,
     };
   }
 
   getSchemaOf(pointer: string, data: Record<string, any> = {}) {
-    const schemaNode = this.draft.getSchema({ pointer, data });
-
-    if (!schemaNode)
-      throw new Error(`Schema not found for pointer: ${pointer}`);
-
-    if (isJsonError(schemaNode))
-      throw new Error(schemaNode.name, { cause: schemaNode });
-
-    return schemaNode;
+    return this.getSchemaNodeOf(pointer, data).schema
   }
 
   getSchemaNodeOf(pointer: string, data: Record<string, any> = {}) {
-    const schemaNode = this.draft.getSchemaNode({ pointer, data });
-    if (!schemaNode)
-      throw new Error(`Schema not found for pointer: ${pointer}`);
-    if (isJsonError(schemaNode))
-      throw new Error(schemaNode.name, { cause: schemaNode });
+    const schemaNode = this.draft.getNode(pointer, data);
 
-    return schemaNode;
+    if (schemaNode.error)
+      throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+
+    return schemaNode.node!;
   }
 }
