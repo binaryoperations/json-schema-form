@@ -43,7 +43,7 @@ export class UiStore {
             const value = resolvers.resolvePath(template, node.path);
             schema = {
                 ...schema,
-                type: schema.type.find((type) => type === typeof value) ?? 'null',
+                type: schema.type.find((type) => type === typeof value) ?? schema.type.at(0),
             };
         }
         return schema;

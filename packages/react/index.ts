@@ -62,8 +62,8 @@ export const regiserControlRenderers = (arg: Partial<Record<string, RankedContro
       return import('./components/Controls/Number').then((module) => module.NumberControl as RankedControl);
     },
    'string': () => {
-    return import('./components/Controls/TextInput').then((module) => module.TextInputControl as RankedControl);
-   },
+      return import('./components/Controls/TextInput').then((module) => module.TextInputControl as RankedControl);
+    },
   };
 
   const defaultControls = Object.fromEntries(Object.entries(defaultControlGetters).map(([key]) => [key, undefined]))
