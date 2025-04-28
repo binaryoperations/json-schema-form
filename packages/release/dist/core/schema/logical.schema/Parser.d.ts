@@ -1,14 +1,12 @@
-import { Draft, type DraftConfig, type JsonError, type JsonSchema, type SchemaNode } from 'json-schema-library';
+import { type Draft, type JsonError, type JsonSchema, type SchemaNode } from 'json-schema-library';
 export { JsonError, SchemaNode };
-type DraftConstructor = {
-    new (schema?: JsonSchema, config?: Partial<DraftConfig>): Draft;
-};
 export declare class LogicalSchema {
     private draft;
-    static prepare(schema: JsonSchema, DraftConstructor?: DraftConstructor): LogicalSchema;
-    constructor(schema: JsonSchema | Draft, DraftConstructor?: DraftConstructor);
+    static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
+    constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
+    private deriveSchemaNode;
     prepareTemplate<T extends Record<string, any>>(defaultValues?: T): any;
-    validate(value: any, schema?: JsonSchema | Draft): {
+    validate(value: any, schema?: JsonSchema | SchemaNode): {
         isValid: boolean;
         errors: JsonError[];
     };

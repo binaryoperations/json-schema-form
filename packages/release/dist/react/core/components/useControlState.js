@@ -7,7 +7,7 @@ export function useControlState(initialData, draft) {
         dirtyControlPaths: new Map(),
         errors: new Map(),
     });
-    const derivePath = useCallback((path) => draft.getSchemaNodeOf(path).pointer, [draft]);
+    const derivePath = useCallback((path) => draft.getSchemaNodeOf(path).evaluationPath, [draft]);
     const setTouched = useCallback((path) => {
         setControlState({
             type: 'SET_TOUCHED',

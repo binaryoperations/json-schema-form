@@ -58,8 +58,9 @@ export function useControlProps(path, props) {
     const proxyValue = useValue(value);
     const [{ pointer, schema, }] = useUiStoreContext((state) => {
         const node = state.uiContext.deriveSchemaNodeAtPointer(path);
+        node.evaluationPath;
         return {
-            pointer: node?.pointer,
+            pointer: node.evaluationPath,
             schema: node?.schema,
         };
     }, shallowCompare);

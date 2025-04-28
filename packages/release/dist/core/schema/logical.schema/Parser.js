@@ -1,43 +1,37 @@
-import { Draft, Draft2019, isJsonError, resolveOneOfFuzzy, } from 'json-schema-library';
+import { compileSchema, draft2020, } from 'json-schema-library';
 export class LogicalSchema {
     draft;
-    static prepare(schema, DraftConstructor) {
+    static prepare(schema, draft) {
         const ClassConstructor = Object.assign(this);
-        return new ClassConstructor(schema, DraftConstructor);
+        return new ClassConstructor(schema, draft);
     }
-    constructor(schema, DraftConstructor = Draft2019) {
-        this.draft =
-            schema instanceof Draft
-                ? schema
-                : new DraftConstructor(schema, { resolveOneOf: resolveOneOfFuzzy });
+    constructor(schema, draft = draft2020) {
+        this.draft = this.deriveSchemaNode(schema, draft);
+    }
+    deriveSchemaNode(node, draft = draft2020) {
+        if (!("validate" in node)) {
+            return compileSchema(node, { drafts: [draft] });
+        }
+        return node;
     }
     prepareTemplate(defaultValues) {
-        return this.draft.getTemplate(defaultValues, undefined, {
-            addOptionalProps: true,
-        });
+        return this.draft.getData(defaultValues);
     }
     validate(value, schema = this.draft) {
-        schema = schema instanceof Draft ? schema.getSchema() : schema;
-        const errors = this.draft.validate(value, schema);
+        const schemaNode = this.deriveSchemaNode(schema);
+        const { valid, errors } = schemaNode.validate(value);
         return {
-            isValid: !errors.length,
+            isValid: !valid,
             errors,
         };
     }
     getSchemaOf(pointer, data = {}) {
-        const schemaNode = this.draft.getSchema({ pointer, data });
-        if (!schemaNode)
-            throw new Error(`Schema not found for pointer: ${pointer}`);
-        if (isJsonError(schemaNode))
-            throw new Error(schemaNode.name, { cause: schemaNode });
-        return schemaNode;
+        return this.getSchemaNodeOf(pointer, data).schema;
     }
     getSchemaNodeOf(pointer, data = {}) {
-        const schemaNode = this.draft.getSchemaNode({ pointer, data });
-        if (!schemaNode)
-            throw new Error(`Schema not found for pointer: ${pointer}`);
-        if (isJsonError(schemaNode))
-            throw new Error(schemaNode.name, { cause: schemaNode });
-        return schemaNode;
+        const schemaNode = this.draft.getNode(pointer, data);
+        if (schemaNode.error)
+            throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+        return schemaNode.node;
     }
 }
