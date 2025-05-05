@@ -30,25 +30,25 @@ type PromiseKeys<T extends object> = {
 };
 
 
-export const registerLayoutsRenderers = (arg: Partial<Layouts> = {}) => {
-  const defaultLayoutGetters: Partial<PromiseKeys<UiNodeLayouts>> = {
-    [UiNodeType.ROWS]: () => import('./components/Semantic/Row').then((module) => module.Row),
-    [UiNodeType.COLUMNS]: () => import('./components/Semantic/Column').then((module) => module.Column),
-  };
+const defaultLayoutGetters: Partial<PromiseKeys<UiNodeLayouts>> = {
+  [UiNodeType.ROWS]: () => import('./components/Semantic/Row').then((module) => module.Row),
+  [UiNodeType.COLUMNS]: () => import('./components/Semantic/Column').then((module) => module.Column),
+};
 
+export const registerLayoutsRenderers = (arg: Partial<Layouts> = {}) => {
   const defaultLayouts = Object.fromEntries(Object.entries(defaultLayoutGetters).map(([key]) => [key, undefined]))
 
-
   async function registerLayout(name: string, layout: Layout |  undefined, loadRenderer?: () => Promise<Layout> ) {
-    layout = layout ?? LayoutRepository.get(name) ?? await loadRenderer?.();
+    layout = layout ??  await loadRenderer?.();
     if (!layout) return;
+    if (LayoutRepository.get(name) === layout) return;
 
     const renderer = createLayoutRenderer(layout as Layouts[UiNodeType.COLUMNS]);
     LayoutRepository.register(name, renderer)
   }
 
 
-  Object.entries({ ...defaultLayouts, ...arg }).forEach(([name, layout]) => {
+  Object.entries({ ...defaultLayouts, ...LayoutRepository.getAll(), ...arg }).forEach(([name, layout]) => {
     registerLayout(name, layout, defaultLayoutGetters[name as UiNodeType]);
   });
 }
@@ -68,16 +68,16 @@ export const regiserControlRenderers = (arg: Partial<Record<string, RankedContro
 
   const defaultControls = Object.fromEntries(Object.entries(defaultControlGetters).map(([key]) => [key, undefined]))
 
-
   async function registerControl(name: string, renderer: RankedControl |  undefined, loadRenderer?: () => Promise<RankedControl> ) {
-    renderer = renderer ?? ControlRepository.get(name) ?? await loadRenderer?.();
+    renderer = renderer ?? await loadRenderer?.();
     if (!renderer) return;
+    if (ControlRepository.get(name) === renderer) return;
 
     ControlRepository.register(name, renderer)
   }
 
 
-  Object.entries({ ...defaultControls, ...arg }).forEach(([name, control]) => {
+  Object.entries({ ...defaultControls, ...ControlRepository.getAll(), ...arg }).forEach(([name, control]) => {
     registerControl(name, control, defaultControlGetters[name]);
   });
 }
