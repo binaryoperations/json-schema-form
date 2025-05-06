@@ -20,7 +20,7 @@ export const CustomLayoutRenderer = function CustomLayoutRendererRoot(props: Com
   const LayoutNode = useCustomLayoutNode(renderer as string | ComponentType);
 
   const nodesArray = [nodes ?? []].flat();
-  const children = !nodesArray.length ? null : (
+  const children = !nodesArray.length ? true : (
     <LayoutChildren id={props.id} />
   );
 

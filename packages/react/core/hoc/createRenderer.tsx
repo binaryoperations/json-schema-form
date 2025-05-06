@@ -1,7 +1,7 @@
 import type {
   Breakpoints,
 } from '@binaryoperations/json-forms-core/models';
-import type { ComponentType } from 'react';
+import type { ComponentType, ReactNode } from 'react';
 
 import { LayoutChildren } from '../components/LayoutNode';
 import { useBreakpoints } from '../hooks/useBreakpoints';
@@ -14,13 +14,13 @@ function createLayoutRenderer<P extends object>(Component: ComponentType<P>) {
   return Renderer;
 
   function Renderer(
-    props: { id: string; breakPoints?: Breakpoints<Partial<P>> } & P
+    props: { id: string; breakPoints?: Breakpoints<Partial<P>>, children?: ReactNode } & P
   ) {
     const { value, props: restProps } = useBreakpoints(props);
 
     return (
       <Component {...restProps} {...value}>
-        <LayoutChildren id={props.id} />
+        {props.children ?? <LayoutChildren id={props.id} />}
       </Component>
     );
   }
