@@ -62,7 +62,7 @@ export interface UiNodeBase<T = object> {
   rules?: Rules;
   id?: string;
   order?: number;
-  breakpoints?: Breakpoints<T>;
+  breakpoints?: Breakpoints<Partial<T>>;
 }
 
 export interface FieldsetsNode<
