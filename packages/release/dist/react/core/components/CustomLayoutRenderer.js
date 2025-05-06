@@ -11,6 +11,6 @@ export const CustomLayoutRenderer = function CustomLayoutRendererRoot(props) {
     const { value, props: restProps } = useBreakpoints(props);
     const LayoutNode = useCustomLayoutNode(renderer);
     const nodesArray = [nodes ?? []].flat();
-    const children = !nodesArray.length ? null : (_jsx(LayoutChildren, { id: props.id }));
+    const children = !nodesArray.length ? true : (_jsx(LayoutChildren, { id: props.id }));
     return (_jsx(LayoutNode, { ...options, ...restProps, ...value, children: children }));
 };

@@ -7,7 +7,7 @@ function createLayoutRenderer(Component) {
     return Renderer;
     function Renderer(props) {
         const { value, props: restProps } = useBreakpoints(props);
-        return (_jsx(Component, { ...restProps, ...value, children: _jsx(LayoutChildren, { id: props.id }) }));
+        return (_jsx(Component, { ...restProps, ...value, children: props.children ?? _jsx(LayoutChildren, { id: props.id }) }));
     }
 }
 let counter = 0;
