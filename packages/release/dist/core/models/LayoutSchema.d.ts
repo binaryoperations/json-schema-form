@@ -53,7 +53,7 @@ export interface UiNodeBase<T = object> {
     rules?: Rules;
     id?: string;
     order?: number;
-    breakpoints?: Breakpoints<T>;
+    breakpoints?: Breakpoints<Partial<T>>;
 }
 export interface FieldsetsNode<P extends object = object, CP extends object = object> extends UiNodeBase<P> {
     type: `${UiNodeType.FIELD_SETS}`;
