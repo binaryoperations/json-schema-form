@@ -1,8 +1,7 @@
 import orderBy from 'lodash/orderBy';
 
 import {
-  CustomNode,
-  type FieldsetNode,
+  type LayoutNodeType,
   type LayoutSchema,
 } from '../../models/LayoutSchema';
 import { LogicalSchema } from '../logical.schema/Parser';
@@ -20,20 +19,27 @@ export class UiSchemaPreparer {
   // reconsider:
   // Do I need to prepare the tree in ahead-of-time?
   // can the child nodes be derived just-in-time?
-  private traverse(uiSchema: LayoutSchema | FieldsetNode, idRoot?: string) {
-    const nextCount = ++this.counter;
+  private traverse(uiSchema: LayoutSchema, idRoot?: string) {
+    const nextCount = this.counter++;
     const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
+
+    if (uiSchema.type === "control" && !uiSchema.renderer) {
+      uiSchema = {...uiSchema, renderer: "control"}
+    }
+
 
     this.store.keyMap[id] = uiSchema;
 
-    if (!('nodes' in uiSchema) || !uiSchema.nodes) return id;
+
+    if (!uiSchema.nodes) return id;
+
 
     const treeNodes: string[] = [];
 
     const nodes = [uiSchema.nodes].flat().filter(Boolean) as LayoutSchema[];
 
     if (!Array.isArray(uiSchema.nodes)) {
-      this.store.keyMap[id] = { ...(uiSchema as CustomNode), nodes };
+      this.store.keyMap[id] = { ...(uiSchema as LayoutNodeType), nodes };
     }
 
     for (const nextUiSchema of nodes) {
@@ -55,8 +61,8 @@ export class UiSchemaPreparer {
 
     parser.traverse({
       id: "root",
-      nodes: uiSchema,
-      type: "custom",
+      nodes: [uiSchema],
+      type: "layout",
       renderer: "form",
     });
 

@@ -4,9 +4,8 @@ import { cast } from '@binaryoperations/json-forms-core/internals/cast';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import type { ObjectJsonSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
-  type ControlNode,
+  type ControlNodeType,
   type LayoutSchema,
-  UiNodeType,
 } from '@binaryoperations/json-forms-core/models/LayoutSchema';
 import { createRankedTester } from '@binaryoperations/json-forms-core/testers/testers';
 import { CheckboxControl } from '@binaryoperations/json-forms-react/components/Controls/Checkbox';
@@ -39,28 +38,28 @@ import {
   useRef,
   useState,
 } from 'react';
-import { regiserControlRenderers, registerLayoutsRenderers } from '@binaryoperations/json-forms-react';
-import { useControlSchema } from '@binaryoperations/json-forms-react/core/hooks';
+import { registerRenderers } from '@binaryoperations/json-forms-react';
+
 
 const defaultStyles = {
   gap: 8,
   flex: 1,
 };
 
-registerLayoutsRenderers({
-  [UiNodeType.COLUMNS]: function LayoutColumn(props: { id: string; }) {
+registerRenderers({
+  "columns": function LayoutColumn(props: { id: string; }) {
     return <Column data-type="column" style={defaultStyles} {...props} />;
   },
-  [UiNodeType.ROWS]: function LayoutRow(props: { id: string; }) {
+  "rows": function LayoutRow(props: { id: string; }) {
     return <Row data-type="row" style={defaultStyles} {...props} />;
   },
-  [UiNodeType.FIELD_SETS]: function LayoutFieldSets(props: { id: string; }) {
+  "fieldsets": function LayoutFieldSets(props: { id: string; }) {
     return <Row data-type="fieldSets" style={defaultStyles} {...props} />;
   },
-  [UiNodeType.FIELD_SET]: function LayoutFieldSet(props: { id: string; }) {
+  "fieldset": function LayoutFieldSet(props: { id: string; }) {
     return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
   },
-  [UiNodeType.CONTROL]: function LayoutControl(props: { id: string; }) {
+  "control": function LayoutControl(props: { id: string; }) {
     return (
       <Row
         data-type="control"
@@ -85,9 +84,8 @@ registerLayoutsRenderers({
       </>
     );
   },
-})
 
-regiserControlRenderers({
+
   date: DateControl,
   datetime: DateTimeControl,
   time: TimeControl,
@@ -121,10 +119,11 @@ regiserControlRenderers({
     },
     (e) => cast<{ value: string }>(e.target).value,
     createRankedTester((_, uischema) =>
-      'deriveFrom' in ((uischema as ControlNode).options ?? {}) ? 100 : -1
+      'deriveFrom' in ((uischema as ControlNodeType).options ?? {}) ? 100 : -1
     )
   ),
-});
+})
+
 
 function datediff(first: number, second: number) {
   return Math.round((second - first) / (1000 * 60 * 60 * 24));

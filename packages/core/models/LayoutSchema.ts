@@ -1,5 +1,7 @@
 import type { ControlSchema } from './ControlSchema';
 
+import type { SetOptional } from "type-fest";
+
 export type Breakpoints<T = any> = Partial<{
   xs: T;
   sm: T;
@@ -8,13 +10,9 @@ export type Breakpoints<T = any> = Partial<{
   xl: T;
 }>;
 
-export enum UiNodeType {
-  FIELD_SETS = 'fieldsets',
-  FIELD_SET = 'fieldset',
-  ROWS = 'rows',
-  COLUMNS = 'columns',
+export enum EnumUiNode {
   CONTROL = 'control',
-  CUSTOM = 'custom',
+  LAYOUT = 'layout',
 }
 
 /**
@@ -57,65 +55,38 @@ type ChildNode<T> = T & {
  * Available Ui Schemas
  *
  */
-export interface UiNodeBase<T = object> {
-  type: `${UiNodeType}`;
+export interface UiNodeBase<
+  P extends object = object,
+  CP = object,
+> {
+  type: string;
   rules?: Rules;
   id?: string;
   order?: number;
-  breakpoints?: Breakpoints<Partial<T>>;
+  breakpoints?: Breakpoints<Partial<P>>;
+  nodes?: ChildNode<PossibleRootNodes<CP, P>>[];
+  renderer: CP | string;
 }
 
-export interface FieldsetsNode<
+export interface LayoutNodeType<
+  CP = object,
   P extends object = object,
-  CP extends object = object,
-> extends UiNodeBase<P> {
-  type: `${UiNodeType.FIELD_SETS}`;
-  nodes: ChildNode<FieldsetNode<CP>>[];
+> extends UiNodeBase<P, CP> {
+  type: `${EnumUiNode.LAYOUT}`;
+  options?: P;
 }
 
-export interface FieldsetNode<
-  P extends object = object,
-  CP extends object = object,
-> extends UiNodeBase<P> {
-  type: `${UiNodeType.FIELD_SET}`;
-  label?: string;
-  nodes: ChildNode<PossibleRootNodes<CP>>[];
-}
-
-export interface RowsNode<P extends object = object, CP extends object = object>
-  extends UiNodeBase<P> {
-  type: `${UiNodeType.ROWS}`;
-  nodes: ChildNode<PossibleRootNodes<CP>>[];
-}
-
-export interface ColumnsNode<
-  P extends object = object,
-  CP extends object = object,
-> extends UiNodeBase<P> {
-  type: `${UiNodeType.COLUMNS}`;
-  nodes: ChildNode<PossibleRootNodes<CP>>[];
-}
-
-export interface ControlNode<T extends object = object> extends UiNodeBase<T> {
-  type: `${UiNodeType.CONTROL}`;
+export interface ControlNodeType<T extends object = object> extends SetOptional<UiNodeBase<T>, 'renderer'> {
+  type: `${EnumUiNode.CONTROL}`;
   schema?: ControlSchema;
   label?: string;
   path: string;
   options?: T;
 }
 
-export interface CustomNode<T = object> extends UiNodeBase<T> {
-  type: `${UiNodeType.CUSTOM}`;
-  renderer: T | string;
-  options?: T;
-  nodes?: PossibleRootNodes | ChildNode<PossibleRootNodes>[];
-}
 
-type PossibleRootNodes<T extends object = object> =
-  | FieldsetsNode<T>
-  | RowsNode<T>
-  | ColumnsNode<T>
-  | ControlNode<T>
-  | CustomNode<T>;
+type PossibleRootNodes<CP = object,T extends object = object>=
+  | LayoutNodeType<CP, T>
+  | ControlNodeType<T>;
 
 export type LayoutSchema<T extends {} = {}> = PossibleRootNodes<T>;

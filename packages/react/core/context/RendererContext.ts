@@ -20,4 +20,4 @@ type ControlProps = BaseControlProps<
 >
 
 export const ControlRepository = getControlRepository<RankedControl<ComponentType<ControlProps>, unknown>>();
-export const LayoutRepository = getLayoutRepository<ComponentType<ComponentRendererProps<PropsWithChildren>>>();
+export const RendererRepository = getLayoutRepository<ComponentType<ComponentRendererProps<PropsWithChildren>> | RankedControl<ComponentType<ControlProps>, unknown>>();

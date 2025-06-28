@@ -4,17 +4,16 @@ import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { ControlSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 
 import {
-  ControlNode,
-  FieldsetNode,
+  ControlNodeType,
   LayoutSchema,
-  UiNodeType,
+  EnumUiNode,
 } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
 
 export type { SchemaNode };
 
 export class UiStore {
-  keyMap: Record<string, LayoutSchema | FieldsetNode> = {};
+  keyMap: Record<string, LayoutSchema> = {};
   tree: Record<string, string[]> = {};
 
   constructor(private draftSchema: LogicalSchema) {}
@@ -36,7 +35,7 @@ export class UiStore {
   }
 
   isControl(key: string) {
-    return this.getNodeType(key) === UiNodeType.CONTROL;
+    return this.getNodeType(key) === EnumUiNode.CONTROL;
   }
 
   freeze() {
@@ -49,7 +48,7 @@ export class UiStore {
   deriveSchemaAtPointer(key: string, data?: object) {
     if (!this.isControl(key)) return null;
 
-    const node = cast<ControlNode>(this.getNode(key));
+    const node = cast<ControlNodeType>(this.getNode(key));
 
     let schema = node.schema;
     // this might break references/computed values

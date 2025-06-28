@@ -3,7 +3,7 @@ import { get } from '../internals/object';
 
 import type { ControlSchema } from '../models/ControlSchema';
 import {
-  ControlNode,
+  ControlNodeType,
   FieldsetNode,
   type LayoutSchema,
 } from '../models/LayoutSchema';
@@ -76,7 +76,7 @@ export const optionIs = (property: string, expectedValue: unknown): Ranker =>
     uiSchemaMatches(
       (uiSchema) =>
         +(
-          get(cast<ControlNode>(uiSchema).options, property) === expectedValue
+          get(cast<ControlNodeType>(uiSchema).options, property) === expectedValue
         ) * 2
     )
   );
@@ -88,7 +88,7 @@ export const optionStartsWith = (
   and(
     isControl,
     uiSchemaMatches((uiSchema) => {
-      const value = get(cast<ControlNode>(uiSchema).options, property);
+      const value = get(cast<ControlNodeType>(uiSchema).options, property);
       return +(typeof value === 'string' && value.startsWith(expectedValue));
     })
   );

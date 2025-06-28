@@ -6,7 +6,7 @@ import {
 } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import type {
-  ControlNode,
+  ControlNodeType,
   ControlSchema,
 } from '@binaryoperations/json-forms-core/models';
 import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
@@ -32,7 +32,7 @@ const useInvariantControl = (message: string) =>
  *
  */
 export function useControl<SelectorOutput>(
-  selector: Selector<ControlNode, SelectorOutput>,
+  selector: Selector<ControlNodeType, SelectorOutput>,
   equalityCheck = Object.is
 ) {
   const currentControlId = useInvariantControl(
@@ -41,7 +41,7 @@ export function useControl<SelectorOutput>(
 
   return useStore((store) => {
     return selector(
-      cast<ControlNode>(store.uiContext.getNode(currentControlId))
+      cast<ControlNodeType>(store.uiContext.getNode(currentControlId))
     );
   }, equalityCheck);
 }

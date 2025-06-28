@@ -6,7 +6,7 @@ import {
 } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   type LayoutSchema,
-  UiNodeType,
+  EnumUiNode,
 } from '@binaryoperations/json-forms-core/models/LayoutSchema';
 
 export type FormConfig = {
@@ -127,69 +127,72 @@ const customerData: Omit<FormConfig, 'uiSchema'> = {
 export const customer: FormConfig = {
   ...customerData,
   uiSchema: {
-    type: UiNodeType.ROWS, // fieldsets | fieldset | columns | rows | control
+    renderer: "rows",
+    type: EnumUiNode.LAYOUT, // fieldsets | fieldset | columns | rows | control
     // order: 0,
     nodes: [
-      { type: UiNodeType.CONTROL, path: 'email', schema: schema.email },
-      { type: UiNodeType.CONTROL, path: 'firstName', schema: schema.firstName },
-      { type: UiNodeType.CONTROL, path: 'lastName', schema: schema.lastName },
+      { type: EnumUiNode.CONTROL, path: 'email', schema: schema.email },
+      { type: EnumUiNode.CONTROL, path: 'firstName', schema: schema.firstName },
+      { type: EnumUiNode.CONTROL, path: 'lastName', schema: schema.lastName },
       {
-        type: UiNodeType.COLUMNS,
+        type: "layout",
+        renderer: "columns",
         nodes: [
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'phone/countryCode',
           },
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'phone/number',
           },
         ],
       },
       {
-        type: UiNodeType.CONTROL,
+        type: EnumUiNode.CONTROL,
         path: 'dateOfBirth',
         schema: schema.dateOfBirth,
       },
       {
-        type: UiNodeType.CONTROL,
+        type: EnumUiNode.CONTROL,
         path: 'computedAge',
         schema: schema.computedAge,
         options: { readOnly: true },
       },
-      { type: UiNodeType.CONTROL, path: 'rating' },
+      { type: EnumUiNode.CONTROL, path: 'rating' },
       {
-        type: UiNodeType.CONTROL,
+        type: EnumUiNode.CONTROL,
         path: 'gender',
         schema: cast<StringJsonSchema>(schema.gender),
       },
-      { type: UiNodeType.CONTROL, path: 'website', schema: schema.website },
+      { type: EnumUiNode.CONTROL, path: 'website', schema: schema.website },
       {
-        type: UiNodeType.CONTROL,
+        type: EnumUiNode.CONTROL,
         path: 'interests',
         schema: cast<StringJsonSchema>(schema.interests),
       },
       {
-        type: UiNodeType.ROWS,
+        renderer: "rows",
+        type: EnumUiNode.LAYOUT,
         nodes: [
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'address/lineOne',
           },
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'address/lineTwo',
           },
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'address/postalCode',
           },
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'address/city',
           },
           {
-            type: UiNodeType.CONTROL,
+            type: EnumUiNode.CONTROL,
             path: 'address/country',
           },
         ],
@@ -201,47 +204,51 @@ export const customer: FormConfig = {
 export const customerWizard: FormConfig = {
   ...customerData,
   uiSchema: {
-    type: UiNodeType.FIELD_SETS, // fieldsets | fieldset | columns | rows | control
+    type: "layout",
+    renderer: "fieldsets", // fieldsets | fieldset | columns | rows | control
     // order: 0,
     nodes: [
       {
-        label: '',
-        type: UiNodeType.FIELD_SET,
+        options: {label: '',},
+        renderer:"fieldset",
+        type: EnumUiNode.LAYOUT,
         nodes: [
           {
-            type: UiNodeType.ROWS,
+            renderer: "rows",
+            type: EnumUiNode.LAYOUT,
             nodes: [
-              { type: UiNodeType.CONTROL, path: 'email', schema: schema.email },
+              { type: EnumUiNode.CONTROL, path: 'email', schema: schema.email },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'firstName',
                 schema: schema.firstName,
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'lastName',
                 schema: schema.lastName,
               },
               {
-                type: UiNodeType.COLUMNS,
+                type: "layout",
+                renderer: "columns",
                 nodes: [
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'phone/countryCode',
                   },
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'phone/number',
                   },
                 ],
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'dateOfBirth',
                 schema: schema.dateOfBirth,
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'computedAge',
                 schema: schema.computedAge,
                 options: {
@@ -250,21 +257,21 @@ export const customerWizard: FormConfig = {
                 },
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'rating',
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'gender',
                 schema: cast<StringJsonSchema>(schema.gender),
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'website',
                 schema: schema.website,
               },
               {
-                type: UiNodeType.CONTROL,
+                type: EnumUiNode.CONTROL,
                 path: 'interests',
                 schema: cast<StringJsonSchema>(schema.interests),
               },
@@ -273,36 +280,40 @@ export const customerWizard: FormConfig = {
         ],
       },
       {
-        label: '',
-        type: UiNodeType.FIELD_SET,
+        options: {label: '',},
+        renderer:"fieldset",
+        type: EnumUiNode.LAYOUT,
         nodes: [
           {
-            type: UiNodeType.COLUMNS,
+            type: "layout",
+            renderer: "columns",
             nodes: [
               {
-                type: UiNodeType.ROWS,
+                renderer: "rows",
+                type: EnumUiNode.LAYOUT,
                 nodes: [
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'address/lineOne',
                   },
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'address/lineTwo',
                   },
                   {
-                    type: UiNodeType.COLUMNS,
+                    type: "layout",
+                    renderer: "columns",
                     nodes: [
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/postalCode',
                       },
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/city',
                       },
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/country',
                       },
                     ],
@@ -312,40 +323,43 @@ export const customerWizard: FormConfig = {
             ],
           },
           {
-            type: UiNodeType.COLUMNS,
+            type: "layout",
+            renderer: "columns",
             nodes: [
               {
-                type: UiNodeType.ROWS,
+                renderer: "rows",
+                type: EnumUiNode.LAYOUT,
                 nodes: [
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'address/lineOne',
 
                     options: { readOnly: true },
                   },
                   {
-                    type: UiNodeType.CONTROL,
+                    type: EnumUiNode.CONTROL,
                     path: 'address/lineTwo',
 
                     options: { readOnly: true },
                   },
                   {
-                    type: UiNodeType.COLUMNS,
+                    type: "layout",
+                    renderer: "columns",
                     nodes: [
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/postalCode',
 
                         options: { readOnly: true },
                       },
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/city',
 
                         options: { readOnly: true },
                       },
                       {
-                        type: UiNodeType.CONTROL,
+                        type: EnumUiNode.CONTROL,
                         path: 'address/country',
 
                         options: { readOnly: true },
@@ -447,7 +461,8 @@ export const responsive: FormConfig = {
     required: [],
   },
   uiSchema: {
-    type: 'rows',
+    type: "layout",
+    renderer: 'rows',
     breakpoints: {
       xs: {
         style: {
@@ -458,7 +473,8 @@ export const responsive: FormConfig = {
     },
     nodes: [
       {
-        type: 'columns',
+        type: "layout",
+        renderer: 'columns',
         breakpoints: {
           xs: {
             style: {
@@ -468,7 +484,8 @@ export const responsive: FormConfig = {
         },
         nodes: [
           {
-            type: 'rows',
+            type: "layout",
+            renderer: 'rows',
             breakpoints: {
               sm: {
                 style: {
@@ -485,7 +502,8 @@ export const responsive: FormConfig = {
             },
             nodes: [
               {
-                type: 'columns',
+                type: "layout",
+                renderer: 'columns',
                 breakpoints: {
                   xs: {
                     style: {
@@ -611,7 +629,8 @@ export const responsive: FormConfig = {
                 ],
               },
               {
-                type: 'columns',
+                type: "layout",
+                renderer: 'columns',
                 breakpoints: {
                   xs: {
                     style: {
@@ -638,7 +657,8 @@ export const responsive: FormConfig = {
             ],
           },
           {
-            type: 'rows',
+            type: "layout",
+            renderer: 'rows',
             breakpoints: {
               sm: {
                 style: {
@@ -655,7 +675,8 @@ export const responsive: FormConfig = {
             },
             nodes: [
               {
-                type: 'columns',
+                type: "layout",
+                renderer: 'columns',
                 breakpoints: {
                   xs: {
                     style: {
@@ -693,7 +714,8 @@ export const responsive: FormConfig = {
                 ],
               },
               {
-                type: 'columns',
+                type: "layout",
+                renderer: 'columns',
                 breakpoints: {
                   xs: {
                     style: {
@@ -731,7 +753,8 @@ export const responsive: FormConfig = {
                 ],
               },
               {
-                type: 'columns',
+                type: "layout",
+                renderer: 'columns',
                 breakpoints: {
                   xs: {
                     style: {
@@ -799,7 +822,8 @@ export const composite: FormConfig = {
     required: [],
   },
   uiSchema: {
-    type: 'rows',
+    type: 'layout',
+    renderer: "rows",
     nodes: [
       {
         type: 'control',
@@ -837,7 +861,8 @@ export const frozenArray: FormConfig = {
     },
   },
   uiSchema:  {
-    type: "rows",
+    type: "layout",
+    renderer: "rows",
     nodes: [{
       type: "control",
       path: "array"
