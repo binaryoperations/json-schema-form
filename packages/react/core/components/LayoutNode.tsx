@@ -12,7 +12,6 @@ import { LayoutNodeType } from '@binaryoperations/json-forms-core/models';
 
 import { useBreakpoints } from '../hooks/useBreakpoints';
 
-
 export const LayoutNode = function CustomLayoutRendererRoot(props: ComponentRendererProps<PropsWithChildren<any>>) {
   const [{ type, options, nodes, breakpoints }] = useStore((store) => {
     const node = store.uiContext.getNode(props.id) as LayoutNodeType<ComponentType>;

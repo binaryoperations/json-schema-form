@@ -43,11 +43,11 @@ export class ErrorBoundary extends PureComponent<
   }
 }
 
-export const withErrorBoundary = <Props extends object>(
+export const WithErrorBoundary = <Props extends object>(
   Component: ComponentType<Props>,
   Fallback?: ErrorBoundaryProps['Fallback']
 ) => {
-  return function withErrorBoundary(props: Props) {
+  return function WithErrorBoundary(props: Props) {
     const { ...componentProps } = props;
     return (
       <ErrorBoundary Fallback={Fallback}>

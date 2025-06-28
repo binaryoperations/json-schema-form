@@ -6,7 +6,7 @@ import { ControlContext } from '../context/ControlContext';
 import { useControl, useControlProps, useControlValue } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
-import { withErrorBoundary } from './ErrorBoundary';
+import { WithErrorBoundary } from './ErrorBoundary';
 
 
 const Unhandled = () => {
@@ -24,10 +24,10 @@ const Unhandled = () => {
   );
 };
 
-const withControlContext = <Props extends { id: string }>(
+const WithControlContext = <Props extends { id: string }>(
   Component: ComponentType<Props>
 ) => {
-  return function withControlContext(props: Props) {
+  return function WithControlContext(props: Props) {
     return (
       <ControlContext.Provider value={props.id}>
         <Component {...props} />
@@ -36,8 +36,8 @@ const withControlContext = <Props extends { id: string }>(
   };
 };
 
-export const ControlNode = withControlContext(
-  withErrorBoundary(function ControlNode(props: { id: string }) {
+export const ControlNode = WithControlContext(
+  WithErrorBoundary(function ControlNode(props: { id: string }) {
     const [control] = useControl((control) => control);
 
     const { Control, getValueFromEvent } = invariant(
