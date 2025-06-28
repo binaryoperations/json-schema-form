@@ -1,4 +1,4 @@
-import { ComponentType, memo, useState } from 'react';
+import { ComponentProps, ComponentType, memo, useState } from 'react';
 
 import {
   FormDataProvider,
@@ -12,7 +12,7 @@ import { LayoutNode } from './LayoutNode';
 
 
 export type FormProps =
-  Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & React.JSX.IntrinsicElements['form'] & {
+  Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & Omit<ComponentProps<'form'>, 'ref'> & {
     data: object;
     onDataChange?: FormDataProviderProps['onChange'];
     ref?: FormDataProviderProps['ref'];

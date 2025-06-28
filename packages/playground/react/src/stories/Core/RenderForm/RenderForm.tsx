@@ -146,7 +146,7 @@ function App(props: {
     setData(next);
   }, []);
 
-  const validatorRef = useRef<Required<FormProps>['ref']['current']>(null);
+  const validatorRef: Required<FormProps>['ref'] = useRef(null);
 
   useEffect(() => {
     console.log({ validatorRef: validatorRef.current });
@@ -159,17 +159,7 @@ function App(props: {
       data={data}
       onDataChange={onChange}
       ref={validatorRef}
-    >
-      {/* <FormDataProvider value={data} onChange={onChange}>
-        <UiStoreContextProvider value={context}>
-          <Form>
-            <Row style={defaultStyles}>
-              <RenderChildren id='root' />
-            </Row>
-          </Form>
-        </UiStoreContextProvider>
-      </FormDataProvider> */}
-    </Bootstrap>
+    />
   );
 }
 

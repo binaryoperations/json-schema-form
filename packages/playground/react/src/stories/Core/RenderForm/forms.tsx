@@ -6,7 +6,6 @@ import {
 } from '@binaryoperations/json-forms-core/models/ControlSchema';
 import {
   type LayoutSchema,
-  EnumUiNode,
 } from '@binaryoperations/json-forms-core/models/LayoutSchema';
 
 export type FormConfig = {
@@ -130,42 +129,42 @@ export const customer: FormConfig = {
     type: "rows",
     // order: 0,
     nodes: [
-      { type: EnumUiNode.CONTROL, path: 'email', schema: schema.email },
-      { type: EnumUiNode.CONTROL, path: 'firstName', schema: schema.firstName },
-      { type: EnumUiNode.CONTROL, path: 'lastName', schema: schema.lastName },
+      { type: "control", path: 'email', schema: schema.email },
+      { type: "control", path: 'firstName', schema: schema.firstName },
+      { type: "control", path: 'lastName', schema: schema.lastName },
       {
         type: "columns",
         nodes: [
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'phone/countryCode',
           },
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'phone/number',
           },
         ],
       },
       {
-        type: EnumUiNode.CONTROL,
+        type: "control",
         path: 'dateOfBirth',
         schema: schema.dateOfBirth,
       },
       {
-        type: EnumUiNode.CONTROL,
+        type: "control",
         path: 'computedAge',
         schema: schema.computedAge,
         options: { readOnly: true },
       },
-      { type: EnumUiNode.CONTROL, path: 'rating' },
+      { type: "control", path: 'rating' },
       {
-        type: EnumUiNode.CONTROL,
+        type: "control",
         path: 'gender',
         schema: cast<StringJsonSchema>(schema.gender),
       },
-      { type: EnumUiNode.CONTROL, path: 'website', schema: schema.website },
+      { type: "control", path: 'website', schema: schema.website },
       {
-        type: EnumUiNode.CONTROL,
+        type: "control",
         path: 'interests',
         schema: cast<StringJsonSchema>(schema.interests),
       },
@@ -173,23 +172,23 @@ export const customer: FormConfig = {
         type: "rows",
         nodes: [
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'address/lineOne',
           },
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'address/lineTwo',
           },
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'address/postalCode',
           },
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'address/city',
           },
           {
-            type: EnumUiNode.CONTROL,
+            type: "control",
             path: 'address/country',
           },
         ],
@@ -211,14 +210,14 @@ export const customerWizard: FormConfig = {
           {
             type: "rows",
             nodes: [
-              { type: EnumUiNode.CONTROL, path: 'email', schema: schema.email },
+              { type: "control", path: 'email', schema: schema.email },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'firstName',
                 schema: schema.firstName,
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'lastName',
                 schema: schema.lastName,
               },
@@ -226,22 +225,22 @@ export const customerWizard: FormConfig = {
                 type: "columns",
                 nodes: [
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'phone/countryCode',
                   },
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'phone/number',
                   },
                 ],
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'dateOfBirth',
                 schema: schema.dateOfBirth,
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'computedAge',
                 schema: schema.computedAge,
                 options: {
@@ -250,21 +249,21 @@ export const customerWizard: FormConfig = {
                 },
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'rating',
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'gender',
                 schema: cast<StringJsonSchema>(schema.gender),
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'website',
                 schema: schema.website,
               },
               {
-                type: EnumUiNode.CONTROL,
+                type: "control",
                 path: 'interests',
                 schema: cast<StringJsonSchema>(schema.interests),
               },
@@ -283,26 +282,26 @@ export const customerWizard: FormConfig = {
                 type: "rows",
                 nodes: [
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'address/lineOne',
                   },
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'address/lineTwo',
                   },
                   {
                     type: "columns",
                     nodes: [
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/postalCode',
                       },
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/city',
                       },
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/country',
                       },
                     ],
@@ -318,13 +317,13 @@ export const customerWizard: FormConfig = {
                 type: "rows",
                 nodes: [
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'address/lineOne',
 
                     options: { readOnly: true },
                   },
                   {
-                    type: EnumUiNode.CONTROL,
+                    type: "control",
                     path: 'address/lineTwo',
 
                     options: { readOnly: true },
@@ -333,19 +332,19 @@ export const customerWizard: FormConfig = {
                     type: "columns",
                     nodes: [
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/postalCode',
 
                         options: { readOnly: true },
                       },
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/city',
 
                         options: { readOnly: true },
                       },
                       {
-                        type: EnumUiNode.CONTROL,
+                        type: "control",
                         path: 'address/country',
 
                         options: { readOnly: true },
