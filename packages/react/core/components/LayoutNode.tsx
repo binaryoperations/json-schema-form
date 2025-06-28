@@ -14,14 +14,14 @@ import { useBreakpoints } from '../hooks/useBreakpoints';
 
 
 export const LayoutNode = function CustomLayoutRendererRoot(props: ComponentRendererProps<PropsWithChildren<any>>) {
-  const [{ renderer, options, nodes, breakpoints }] = useStore((store) => {
+  const [{ type, options, nodes, breakpoints }] = useStore((store) => {
     const node = store.uiContext.getNode(props.id) as LayoutNodeType<ComponentType>;
     return node;
   });
 
   const { value, props: restProps } = useBreakpoints({...props, breakpoints });
 
-  const Actor = useLayoutNode(renderer);
+  const Actor = useLayoutNode(type);
 
   if ("Control" in Actor) {
     throw new Error("Unexpected Control rendererd");

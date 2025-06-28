@@ -23,10 +23,6 @@ export class UiSchemaPreparer {
     const nextCount = this.counter++;
     const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
 
-    if (uiSchema.type === "control" && !uiSchema.renderer) {
-      uiSchema = {...uiSchema, renderer: "control"}
-    }
-
 
     this.store.keyMap[id] = uiSchema;
 
@@ -62,8 +58,7 @@ export class UiSchemaPreparer {
     parser.traverse({
       id: "root",
       nodes: [uiSchema],
-      type: "layout",
-      renderer: "form",
+      type: "form",
     });
 
     return new Proxy(parser.store.freeze(), {

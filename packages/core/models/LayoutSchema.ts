@@ -1,7 +1,5 @@
 import type { ControlSchema } from './ControlSchema';
 
-import type { SetOptional } from "type-fest";
-
 export type Breakpoints<T = any> = Partial<{
   xs: T;
   sm: T;
@@ -59,25 +57,23 @@ export interface UiNodeBase<
   P extends object = object,
   CP = object,
 > {
-  type: string;
   rules?: Rules;
   id?: string;
   order?: number;
   breakpoints?: Breakpoints<Partial<P>>;
   nodes?: ChildNode<PossibleRootNodes<CP, P>>[];
-  renderer: CP | string;
 }
 
 export interface LayoutNodeType<
   CP = object,
   P extends object = object,
 > extends UiNodeBase<P, CP> {
-  type: `${EnumUiNode.LAYOUT}`;
+  type: CP | string;
   options?: P;
 }
 
-export interface ControlNodeType<T extends object = object> extends SetOptional<UiNodeBase<T>, 'renderer'> {
-  type: `${EnumUiNode.CONTROL}`;
+export interface ControlNodeType<CP = object, T extends object = object> extends UiNodeBase<T> {
+  type: CP | `${EnumUiNode.CONTROL}`;
   schema?: ControlSchema;
   label?: string;
   path: string;
@@ -87,6 +83,6 @@ export interface ControlNodeType<T extends object = object> extends SetOptional<
 
 type PossibleRootNodes<CP = object,T extends object = object>=
   | LayoutNodeType<CP, T>
-  | ControlNodeType<T>;
+  | ControlNodeType<CP, T>;
 
 export type LayoutSchema<T extends {} = {}> = PossibleRootNodes<T>;
