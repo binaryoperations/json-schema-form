@@ -1,4 +1,3 @@
-import {  EnumUiNode } from '@binaryoperations/json-forms-core/models';
 import { RendererRepository, ControlRepository } from './core/context/RendererContext';
 import {Form} from "./components/Semantic/Form";
 

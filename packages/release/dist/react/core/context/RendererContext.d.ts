@@ -8,7 +8,7 @@ export type ComponentRendererProps<T extends {}> = {
 } & T;
 type ControlProps = BaseControlProps<any, unknown, SyntheticEvent>;
 export declare const ControlRepository: import("../../../core/internals/repository").Repository<Record<string, RankedControl<ComponentType<ControlProps>, unknown>>, string>;
-export declare const LayoutRepository: import("../../../core/internals/repository").Repository<Record<string, ComponentType<ComponentRendererProps<{
+export declare const RendererRepository: import("../../../core/internals/repository").Repository<Record<string, RankedControl<ComponentType<ControlProps>, unknown> | ComponentType<ComponentRendererProps<{
     children?: import("react").ReactNode | undefined;
 }>>>, string>;
 export {};

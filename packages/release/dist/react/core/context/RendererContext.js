@@ -1,3 +1,3 @@
 import { getControlRepository, getLayoutRepository } from '../../../core/renderers';
 export const ControlRepository = getControlRepository();
-export const LayoutRepository = getLayoutRepository();
+export const RendererRepository = getLayoutRepository();

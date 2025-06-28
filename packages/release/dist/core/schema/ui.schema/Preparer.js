@@ -10,10 +10,10 @@ export class UiSchemaPreparer {
     // Do I need to prepare the tree in ahead-of-time?
     // can the child nodes be derived just-in-time?
     traverse(uiSchema, idRoot) {
-        const nextCount = ++this.counter;
+        const nextCount = this.counter++;
         const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
         this.store.keyMap[id] = uiSchema;
-        if (!('nodes' in uiSchema) || !uiSchema.nodes)
+        if (!uiSchema.nodes)
             return id;
         const treeNodes = [];
         const nodes = [uiSchema.nodes].flat().filter(Boolean);
@@ -31,9 +31,8 @@ export class UiSchemaPreparer {
         const parser = new ClassConstructor(draftSchema);
         parser.traverse({
             id: "root",
-            nodes: uiSchema,
-            type: "custom",
-            renderer: "form",
+            nodes: [uiSchema],
+            type: "form",
         });
         return new Proxy(parser.store.freeze(), {
             get(target, key, receiver) {

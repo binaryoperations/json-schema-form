@@ -1,12 +1,8 @@
-export var UiNodeType;
-(function (UiNodeType) {
-    UiNodeType["FIELD_SETS"] = "fieldsets";
-    UiNodeType["FIELD_SET"] = "fieldset";
-    UiNodeType["ROWS"] = "rows";
-    UiNodeType["COLUMNS"] = "columns";
-    UiNodeType["CONTROL"] = "control";
-    UiNodeType["CUSTOM"] = "custom";
-})(UiNodeType || (UiNodeType = {}));
+export var EnumUiNode;
+(function (EnumUiNode) {
+    EnumUiNode["CONTROL"] = "control";
+    EnumUiNode["LAYOUT"] = "layout";
+})(EnumUiNode || (EnumUiNode = {}));
 /**
  *
  * Rules

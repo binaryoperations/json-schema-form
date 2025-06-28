@@ -4,21 +4,26 @@ import { memo } from 'react';
 import { useStore } from '../hooks';
 import { useLayoutNode } from '../hooks/useRenderer';
 import { ControlNode } from './ControlNode';
-export const LayoutNode = function LayoutNode(props) {
-    const [{ nodeType, breakpoints }] = useStore((store) => {
+import { useBreakpoints } from '../hooks/useBreakpoints';
+export const LayoutNode = function CustomLayoutRendererRoot(props) {
+    const [{ type, options, nodes, breakpoints }] = useStore((store) => {
         const node = store.uiContext.getNode(props.id);
-        return { nodeType: node.type, breakpoints: node.breakpoints };
-    }, shallowCompare);
-    const LayoutNode = useLayoutNode(nodeType);
-    return _jsx(LayoutNode, { id: props.id, breakpoints: breakpoints });
+        return node;
+    });
+    const { value, props: restProps } = useBreakpoints({ ...props, breakpoints });
+    const Actor = useLayoutNode(type);
+    if ("Control" in Actor) {
+        throw new Error("Unexpected Control rendererd");
+    }
+    const nodesArray = [nodes ?? []].flat();
+    const children = !nodesArray.length
+        ? null
+        : _jsx(LayoutChildren, { id: props.id });
+    return (_jsx(Actor, { ...options, ...restProps, ...value, breakpoints: breakpoints, children: children }));
 };
 export const LayoutChildren = memo(function LayoutChildren(props) {
     const [isControl] = useStore((store) => store.uiContext.isControl(props.id));
-    const [nodes] = useStore((store) => {
-        if (isControl)
-            return [];
-        return store.uiContext.getChildren(props.id);
-    }, shallowCompare);
+    const [nodes] = useStore((store) => store.uiContext.getChildren(props.id), shallowCompare);
     if (isControl) {
         return _jsx(ControlNode, { id: props.id });
     }

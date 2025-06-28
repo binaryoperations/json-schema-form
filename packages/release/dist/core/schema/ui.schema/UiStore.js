@@ -1,7 +1,7 @@
 import { cast } from '../../internals/cast';
 import { fpPick, cloneDeep } from '../../internals/object';
 import resolvers from '../../internals/resolvers';
-import { UiNodeType, } from '../../models/LayoutSchema';
+import { EnumUiNode, } from '../../models/LayoutSchema';
 export class UiStore {
     draftSchema;
     keyMap = {};
@@ -22,7 +22,7 @@ export class UiStore {
         return this.getNode(key).type;
     }
     isControl(key) {
-        return this.getNodeType(key) === UiNodeType.CONTROL;
+        return this.getNodeType(key) === EnumUiNode.CONTROL;
     }
     freeze() {
         this.keyMap = Object.freeze(this.keyMap);

@@ -53,7 +53,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters" | undefined | (string & {}) | undefined;
     autoFocus?: boolean | undefined | undefined;
     className?: string | undefined | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined | undefined;
     dir?: string | undefined | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -354,7 +354,7 @@ export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<
     autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters" | undefined | (string & {}) | undefined;
     autoFocus?: boolean | undefined | undefined;
     className?: string | undefined | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined | undefined;
     dir?: string | undefined | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -672,7 +672,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters" | undefined | (string & {}) | undefined;
     autoFocus?: boolean | undefined | undefined;
     className?: string | undefined | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined | undefined;
     dir?: string | undefined | undefined;
     draggable?: (boolean | "true" | "false") | undefined;
@@ -973,7 +973,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     autoCapitalize?: "off" | "none" | "on" | "sentences" | "words" | "characters" | undefined | (string & {}) | undefined;
     autoFocus?: boolean | undefined | undefined;
     className?: string | undefined | undefined;
-    contentEditable?: "inherit" | (boolean | "true" | "false") | "plaintext-only" | undefined;
+    contentEditable?: (boolean | "true" | "false") | "inherit" | "plaintext-only" | undefined;
     contextMenu?: string | undefined | undefined;
     dir?: string | undefined | undefined;
     draggable?: (boolean | "true" | "false") | undefined;

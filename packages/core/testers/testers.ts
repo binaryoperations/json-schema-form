@@ -4,13 +4,12 @@ import { get } from '../internals/object';
 import type { ControlSchema } from '../models/ControlSchema';
 import {
   ControlNodeType,
-  FieldsetNode,
   type LayoutSchema,
 } from '../models/LayoutSchema';
 
 export type Ranker = (
   schema: ControlSchema,
-  uiSchema: LayoutSchema | FieldsetNode,
+  uiSchema: LayoutSchema,
   context: { rootSchema: ControlSchema }
 ) => number;
 
@@ -55,7 +54,7 @@ const exactEqualsType =
     Number(type === object.type) * multiplier;
 
 export const uiSchemaMatches = (
-  predicate: (uiSchema: LayoutSchema | FieldsetNode) => number
+  predicate: (uiSchema: LayoutSchema) => number
 ): Ranker => {
   return (_, uiSchema) => predicate(uiSchema);
 };

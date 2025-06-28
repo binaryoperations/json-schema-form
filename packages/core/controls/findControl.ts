@@ -1,11 +1,11 @@
 import { maxBy } from 'lodash';
 
-import type { ControlSchema, FieldsetNode, LayoutSchema } from '../models';
+import type { ControlSchema, LayoutSchema } from '../models';
 import type { RankedControl } from './createControl';
 
 export const findControl = <C, EventType, Value>(
   controls: RankedControl<C, Value>[],
-  node: LayoutSchema | FieldsetNode,
+  node: LayoutSchema,
   schema: ControlSchema
 ) => {
   const ranked = controls.map((control) => ({

@@ -1,12 +1,12 @@
 import type { ControlSchema } from '../models/ControlSchema';
-import { FieldsetNode, type LayoutSchema } from '../models/LayoutSchema';
-export type Ranker = (schema: ControlSchema, uiSchema: LayoutSchema | FieldsetNode, context: {
+import { type LayoutSchema } from '../models/LayoutSchema';
+export type Ranker = (schema: ControlSchema, uiSchema: LayoutSchema, context: {
     rootSchema: ControlSchema;
 }) => number;
 export declare const and: (...functions: Ranker[]) => Ranker;
 export declare const or: (...functions: Ranker[]) => Ranker;
 export declare const ranked: (...functions: Ranker[]) => Ranker;
-export declare const uiSchemaMatches: (predicate: (uiSchema: LayoutSchema | FieldsetNode) => number) => Ranker;
+export declare const uiSchemaMatches: (predicate: (uiSchema: LayoutSchema) => number) => Ranker;
 export declare const hasFieldSets: Ranker;
 export declare const isFieldSet: Ranker;
 export declare const hasRows: Ranker;
