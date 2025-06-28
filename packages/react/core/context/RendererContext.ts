@@ -1,9 +1,8 @@
 import { getControlRepository, getLayoutRepository } from '@binaryoperations/json-forms-core/renderers';
-import type { RankedControl } from '@binaryoperations/json-forms-core/controls/createControl';
 import type { Breakpoints } from '@binaryoperations/json-forms-core/models';
-import type { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
-import type { ComponentType, SyntheticEvent } from 'react';
+import type { ComponentType } from 'react';
 import type { PropsWithChildren } from 'react';
+import { RankedControl } from '../hoc/createControl';
 
 
 
@@ -13,11 +12,6 @@ export type ComponentRendererProps<T extends {}> = {
 } & T;
 
 
-type ControlProps = BaseControlProps<
-  any,
-  unknown,
-  SyntheticEvent
->
 
-export const ControlRepository = getControlRepository<RankedControl<ComponentType<ControlProps>, unknown>>();
-export const RendererRepository = getLayoutRepository<ComponentType<ComponentRendererProps<PropsWithChildren>> | RankedControl<ComponentType<ControlProps>, unknown>>();
+export const ControlRepository = getControlRepository<RankedControl>();
+export const RendererRepository = getLayoutRepository<ComponentType<ComponentRendererProps<PropsWithChildren>> | RankedControl>();

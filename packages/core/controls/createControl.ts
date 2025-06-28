@@ -18,22 +18,27 @@ export type RankedControl<C, Value, ValueGetType = GetValueFromEvent<Value>> = {
   deriveRank: Ranker;
 };
 
-export class ControlCreator<T = unknown> {
-  constructor() {}
 
-  create<C extends T, Value, ValueGetter extends GetValueFromEvent<Value>>(
+export class ControlCreator<T = unknown, V = any> implements RankedControl<T, V>{
+  constructor(
+    public Control: T,
+    public getValueFromEvent: GetValueFromEvent<V>,
+    public deriveRank: Ranker,
+  ) {}
+
+  static withType<T extends unknown>() {
+    return ControlCreator<T>;
+  }
+
+  static create<C, Value, ValueGetter extends GetValueFromEvent<Value>>(
     Control: C,
     getValueFromEvent: ValueGetter,
     deriveRank: Ranker
   ): RankedControl<C, Value> {
-    return {
-      Control,
-      deriveRank,
-      getValueFromEvent,
-    };
+    return new this(Control, getValueFromEvent, deriveRank);
   }
 
-  DateControl<C extends T>(
+  static DateControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<Date | number | string>,
     customRanker?: Ranker
@@ -41,7 +46,7 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isDateRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  DateTimeControl<C extends T>(
+  static DateTimeControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<Date | number | string>,
     customRanker?: Ranker
@@ -49,7 +54,7 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isDateTimeRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  TimeControl<C extends T>(
+  static TimeControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<string>,
     customRanker?: Ranker
@@ -57,7 +62,7 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isTimeRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  TextControl<C extends T>(
+  static TextControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<string>,
     customRanker?: Ranker
@@ -65,7 +70,7 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isTextRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  NumberControl<C extends T>(
+  static NumberControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<string | number>,
     customRanker?: Ranker
@@ -73,7 +78,7 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isNumberRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  ArrayControl<C extends T, ValueType = unknown>(
+  static ArrayControl<C, ValueType = unknown>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<ValueType>,
     customRanker?: Ranker
@@ -81,11 +86,16 @@ export class ControlCreator<T = unknown> {
     return this.create(Control, getValueFromEvent, and.apply(null, [isArrayRanked, customRanker].filter((x) => x !== undefined)));
   }
 
-  BooleanControl<C extends T>(
+  static BooleanControl<C>(
     Control: C,
     getValueFromEvent: GetValueFromEvent<boolean>,
     customRanker?: Ranker
   ) {
     return this.create(Control, getValueFromEvent, and.apply(null, [isBooleanRanked, customRanker].filter((x) => x !== undefined)));
+  }
+
+  up() {
+    this.deriveRank = and(this.deriveRank, () => 1);
+    return this;
   }
 }

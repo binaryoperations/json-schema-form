@@ -1,17 +1,6 @@
-import type { ChangeEvent, SyntheticEvent } from 'react';
-
-import { createControl } from '../../core/hoc/createControl';
-import { withLabel } from './withLabel';
-
-type CheckboxAttributes = React.JSX.IntrinsicElements['input'];
-
-export interface CheckboxProps extends CheckboxAttributes {
-  type?: 'checkbox';
-}
-
-const Checkbox = withLabel<CheckboxProps>(function Checkbox(props) {
-  return <input {...props} />;
-});
+import { createControl } from "@binaryoperations/json-forms-react/core/hoc/createControl";
+import { Checkbox } from "../Inputs/Checkbox";
+import { ChangeEvent, SyntheticEvent } from "react";
 
 export const CheckboxControl = createControl.BooleanControl(
   Checkbox,

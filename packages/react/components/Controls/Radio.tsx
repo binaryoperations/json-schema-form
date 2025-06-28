@@ -1,17 +1,8 @@
-import { type ChangeEvent, forwardRef, type SyntheticEvent } from 'react';
+import { type ChangeEvent, type SyntheticEvent } from 'react';
 
 import { createControl } from '../../core/hoc/createControl';
-import { Input, type InputProps } from './Input';
+import { Radio } from '../Inputs/Radio';
 
-export interface RadioProps extends InputProps {
-  type?: 'radio';
-}
-
-const Radio = forwardRef<HTMLInputElement, RadioProps>(
-  function Radio(props, ref) {
-    return <Input {...props} type="radio" ref={ref} />;
-  }
-);
 
 export const RadioControl = createControl.BooleanControl(
   Radio,

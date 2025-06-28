@@ -16,9 +16,11 @@ import {
   TimeControl,
 } from '@binaryoperations/json-forms-react/components/Controls/DateTime';
 import {
-  Number as NumberInput,
   NumberControl,
 } from '@binaryoperations/json-forms-react/components/Controls/Number';
+import {
+  Number as NumberInput,
+} from '@binaryoperations/json-forms-react/components/Inputs/Number';
 import { RadioControl } from '@binaryoperations/json-forms-react/components/Controls/Radio';
 import { TextInputControl } from '@binaryoperations/json-forms-react/components/Controls/TextInput';
 import {

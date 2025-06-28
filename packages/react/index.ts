@@ -8,7 +8,6 @@ import { type RankedControl } from './core/hoc/createControl';
 export { type RankedControl, createControl } from './core/hoc/createControl';
 
 export * from './core/hoc/createControl';
-export * from './components/Controls/Input';
 export { Bootstrap } from './core/components/Form';
 
 
@@ -49,25 +48,21 @@ export const registerRenderers = (arg: Record<string, Layout> = {}) => {
 }
 
 
-  async function registerControl(name: string, renderer: RankedControl |  undefined, loadRenderer?: () => Promise<RankedControl> ) {
-    renderer = renderer ?? await loadRenderer?.();
-    if (!renderer) return;
-    if (ControlRepository.get(name) === renderer) return;
+async function registerControl(name: string, renderer: RankedControl |  undefined, loadRenderer?: () => Promise<RankedControl> ) {
+  renderer = renderer ?? await loadRenderer?.();
+  if (!renderer) return;
+  if (ControlRepository.get(name) === renderer) return;
 
-    ControlRepository.register(name, renderer)
-  }
+  ControlRepository.register(name, renderer)
+}
 
 
 
 export const regiserControlRenderers = (arg: Partial<Record<string, RankedControl>> = {}) => {
-  const defaultControlGetters: Partial<Record<string, () => Promise<RankedControl>>> = {
-    'number': () => {
-      return import('./components/Controls/Number').then((module) => module.NumberControl as RankedControl);
-    },
-   'string': () => {
-      return import('./components/Controls/TextInput').then((module) => module.TextInputControl as RankedControl);
-    },
-  };
+  const defaultControlGetters = {
+    'number': async () => import('./components/Controls/Number').then((module) => module.NumberControl),
+    'string': async () => import('./components/Controls/TextInput').then((module) => module.TextInputControl),
+  } as Record<string, () => Promise<RankedControl>>;
 
   const defaultControls = Object.fromEntries(Object.entries(defaultControlGetters).map(([key]) => [key, undefined]))
 

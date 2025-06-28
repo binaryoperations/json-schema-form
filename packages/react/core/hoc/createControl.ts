@@ -2,8 +2,8 @@ import { ControlCreator } from '@binaryoperations/json-forms-core/controls/creat
 import { BaseControlProps } from '@binaryoperations/json-forms-core/types/control';
 import type { ComponentType, SyntheticEvent } from 'react';
 
-export type RankedControl = ReturnType<typeof createControl.create>;
+export type RankedControl = ControlCreator<ComponentType<BaseControlProps<any, any, SyntheticEvent>>, unknown>;
 
-export const createControl = new ControlCreator<
+export const createControl = ControlCreator.withType<
   ComponentType<BaseControlProps<any, any, SyntheticEvent>>
 >();
