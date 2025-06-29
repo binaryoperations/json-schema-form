@@ -3,7 +3,7 @@ import {
   type AccordionPropsBase,
 } from '@binaryoperations/json-forms-react/components/Semantic/Accordion';
 import { ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FC } from 'react';
 
 import { items } from './accordionData';

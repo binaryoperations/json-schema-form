@@ -3,7 +3,7 @@ import {
   type TabsPropsBase,
 } from '@binaryoperations/json-forms-react/components/Semantic/Tabs';
 import { type ActiveStateProps } from '@binaryoperations/json-forms-react/context/ActiveStateContext';
-import type { Meta, StoryObj } from '@storybook/react';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 import { FC } from 'react';
 
 import { tabNodes, tabs } from './tabData';
