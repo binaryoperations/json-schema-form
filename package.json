@@ -1,5 +1,5 @@
 {
-  "name": "@binaryoperations/json-forms",
+  "name": "@binaryoperations/json-schema-form",
   "version": "0.0.0",
   "description": "",
   "main": "index.ts",
