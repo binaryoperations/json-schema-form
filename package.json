@@ -55,7 +55,7 @@
     "prebuild": "rm -rf packages/release/dist",
     "create:build": "pnpm prebuild && turbo run build",
     "turbo": "turbo run",
-    "prepublishOnly": "pnpm build"
+    "prepublishOnly": "pnpm create:build"
   },
   "devDependencies": {
     "@changesets/cli": "^2.27.9",
