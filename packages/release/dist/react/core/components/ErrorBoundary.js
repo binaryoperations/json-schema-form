@@ -26,8 +26,8 @@ export class ErrorBoundary extends PureComponent {
         return _jsx(_Fragment, { children: this.props.children });
     }
 }
-export const withErrorBoundary = (Component, Fallback) => {
-    return function withErrorBoundary(props) {
+export const WithErrorBoundary = (Component, Fallback) => {
+    return function WithErrorBoundary(props) {
         const { ...componentProps } = props;
         return (_jsx(ErrorBoundary, { Fallback: Fallback, children: _jsx(Component, { ...componentProps }) }));
     };

@@ -1,7 +1,7 @@
-import { ComponentType } from 'react';
+import { ComponentProps, ComponentType } from 'react';
 import { type FormDataProviderProps } from './FormDataProvider';
 import { type StoreContextProviderProps } from './StoreContextProvider';
-export type FormProps = Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & React.JSX.IntrinsicElements['form'] & {
+export type FormProps = Pick<StoreContextProviderProps, 'uiSchema' | 'schema'> & Omit<ComponentProps<'form'>, 'ref'> & {
     data: object;
     onDataChange?: FormDataProviderProps['onChange'];
     ref?: FormDataProviderProps['ref'];

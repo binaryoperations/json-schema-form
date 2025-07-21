@@ -1,2 +1,2 @@
 import { ControlCreator } from '../../../core/controls/createControl';
-export const createControl = new ControlCreator();
+export const createControl = ControlCreator.withType();

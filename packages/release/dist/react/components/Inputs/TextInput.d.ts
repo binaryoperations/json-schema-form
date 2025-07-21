@@ -1,7 +1,17 @@
-export declare const TextInputControl: import("../../../core/controls/createControl").RankedControl<import("react").ForwardRefExoticComponent<(Omit<{
+import type { Merge } from 'type-fest';
+import { type InputProps } from './Input';
+type InputBaseProps = {
     label?: string;
     multiline?: true;
-} & {
+};
+export type SingleLineTextInputProps = Merge<InputProps, Merge<InputBaseProps, {
+    multiline?: false;
+}>>;
+export type TextAreaProps = Merge<React.JSX.IntrinsicElements['textarea'], Merge<InputBaseProps, {
+    multiline: true;
+}>>;
+export type TextInputProps = InputBaseProps & (TextAreaProps | SingleLineTextInputProps);
+export declare const TextInput: import("react").ForwardRefExoticComponent<(Omit<InputBaseProps & {
     ref?: import("react").Ref<HTMLInputElement> | undefined;
     key?: import("react").Key | null | undefined;
     accept?: string | undefined | undefined;
@@ -318,10 +328,7 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLInputElement> | undefined;
     label?: string | undefined;
     multiline?: false | undefined;
-}, "ref"> | Omit<{
-    label?: string;
-    multiline?: true;
-} & {
+}, "ref"> | Omit<InputBaseProps & {
     ref?: import("react").Ref<HTMLTextAreaElement> | undefined;
     key?: import("react").Key | null | undefined;
     autoComplete?: string | undefined | undefined;
@@ -622,5 +629,6 @@ export declare const TextInputControl: import("../../../core/controls/createCont
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLTextAreaElement> | undefined;
     label?: string | undefined;
     multiline: true;
-}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>, unknown, import("../../../core/controls/createControl").GetValueFromEvent<unknown>>;
+}, "ref">) & import("react").RefAttributes<HTMLInputElement | HTMLTextAreaElement>>;
+export {};
 //# sourceMappingURL=TextInput.d.ts.map

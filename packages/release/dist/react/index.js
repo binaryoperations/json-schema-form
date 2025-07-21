@@ -3,7 +3,6 @@ import { Form } from "./components/Semantic/Form";
 import { createLayoutRenderer } from './core/hoc/createRenderer';
 export { createControl } from './core/hoc/createControl';
 export * from './core/hoc/createControl';
-export * from './components/Controls/Input';
 export { Bootstrap } from './core/components/Form';
 /** This serves as the root of the component tree */
 RendererRepository.register('form', createLayoutRenderer(Form));
@@ -40,12 +39,8 @@ async function registerControl(name, renderer, loadRenderer) {
 }
 export const regiserControlRenderers = (arg = {}) => {
     const defaultControlGetters = {
-        'number': () => {
-            return import('./components/Controls/Number').then((module) => module.NumberControl);
-        },
-        'string': () => {
-            return import('./components/Controls/TextInput').then((module) => module.TextInputControl);
-        },
+        'number': async () => import('./components/Controls/Number').then((module) => module.NumberControl),
+        'string': async () => import('./components/Controls/TextInput').then((module) => module.TextInputControl),
     };
     const defaultControls = Object.fromEntries(Object.entries(defaultControlGetters).map(([key]) => [key, undefined]));
     Object.entries({ ...defaultControls, ...ControlRepository.getAll(), ...arg }).forEach(([name, control]) => {
