@@ -34,8 +34,6 @@ export const registerRenderers = (arg: Record<string, Layout> = {}) => {
       return;
     }
 
-    if (RendererRepository.get(name) === layout) return;
-
 
     const renderer = createLayoutRenderer(layout);
     RendererRepository.register(name, renderer)
@@ -51,7 +49,6 @@ export const registerRenderers = (arg: Record<string, Layout> = {}) => {
 async function registerControl(name: string, renderer: RankedControl |  undefined, loadRenderer?: () => Promise<RankedControl> ) {
   renderer = renderer ?? await loadRenderer?.();
   if (!renderer) return;
-  if (ControlRepository.get(name) === renderer) return;
 
   ControlRepository.register(name, renderer)
 }
