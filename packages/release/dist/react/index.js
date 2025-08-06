@@ -20,8 +20,6 @@ export const registerRenderers = (arg = {}) => {
             registerControl(name, layout);
             return;
         }
-        if (RendererRepository.get(name) === layout)
-            return;
         const renderer = createLayoutRenderer(layout);
         RendererRepository.register(name, renderer);
     }
@@ -32,8 +30,6 @@ export const registerRenderers = (arg = {}) => {
 async function registerControl(name, renderer, loadRenderer) {
     renderer = renderer ?? await loadRenderer?.();
     if (!renderer)
-        return;
-    if (ControlRepository.get(name) === renderer)
         return;
     ControlRepository.register(name, renderer);
 }

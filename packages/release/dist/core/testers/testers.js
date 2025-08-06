@@ -3,29 +3,17 @@ import { get } from '../internals/object';
 export const and = (...functions) => {
     return (...arg) => {
         let acc = 0;
-        for (const next of functions) {
-            const value = next(...arg);
-            if (value <= 0)
+        for (const nextFunc of functions) {
+            const resolution = nextFunc(...arg);
+            if (+resolution <= 0)
                 return 0;
-            acc += value;
+            acc += resolution;
         }
         return acc;
     };
 };
 export const or = (...functions) => {
     return (...arg) => Math.max(0, ...functions.map((next) => next(...arg)));
-};
-export const ranked = (...functions) => {
-    return (...arg) => {
-        let counter = -1;
-        for (const nextFunc of functions) {
-            const resolution = nextFunc(...arg);
-            if (+resolution <= 0)
-                return counter;
-            counter += +resolution;
-        }
-        return counter;
-    };
 };
 /**
  *
@@ -35,7 +23,7 @@ const exactEqualsType = (type, multiplier = 2) => (object) => Number(type === ob
 export const uiSchemaMatches = (predicate) => {
     return (_, uiSchema) => predicate(uiSchema);
 };
-const isType = (type) => {
+export const isType = (type) => {
     return uiSchemaMatches(exactEqualsType(type, 1));
 };
 export const hasFieldSets = isType('fieldsets');
@@ -98,7 +86,7 @@ export const formatStartsWith = (expectedValue) => {
  * Rank Testers
  *
  */
-export const createRankedTester = (...testers) => ranked(isControl, ...testers);
+export const createRankedTester = (...testers) => and(isControl, ...testers);
 export const isTextRanked = createRankedTester(isStringSchema);
 export const isArrayRanked = createRankedTester(isArraySchema);
 export const isBooleanRanked = createRankedTester(isBooleanSchema);

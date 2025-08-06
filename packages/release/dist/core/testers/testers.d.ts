@@ -5,8 +5,8 @@ export type Ranker = (schema: ControlSchema, uiSchema: LayoutSchema, context: {
 }) => number;
 export declare const and: (...functions: Ranker[]) => Ranker;
 export declare const or: (...functions: Ranker[]) => Ranker;
-export declare const ranked: (...functions: Ranker[]) => Ranker;
 export declare const uiSchemaMatches: (predicate: (uiSchema: LayoutSchema) => number) => Ranker;
+export declare const isType: (type: string) => Ranker;
 export declare const hasFieldSets: Ranker;
 export declare const isFieldSet: Ranker;
 export declare const hasRows: Ranker;
