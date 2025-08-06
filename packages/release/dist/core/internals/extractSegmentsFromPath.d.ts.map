@@ -1,1 +1,1 @@
-{"version":3,"file":"extractSegmentsFromPath.d.ts","sourceRoot":"","sources":["../../../../core/internals/extractSegmentsFromPath.ts"],"names":[],"mappings":"AAEA,wBAAgB,uBAAuB,CAAC,IAAI,EAAE,MAAM,uBAInD;AAED,wBAAgB,6BAA6B,CAAC,IAAI,EAAE,MAAM,uBASzD"}
+{"version":3,"file":"extractSegmentsFromPath.d.ts","sourceRoot":"","sources":["../../../../core/internals/extractSegmentsFromPath.ts"],"names":[],"mappings":"AAEA,wBAAgB,uBAAuB,CAAC,IAAI,EAAE,MAAM,uBAqBnD;AAED,wBAAgB,6BAA6B,CAAC,IAAI,EAAE,MAAM,uBASzD"}
