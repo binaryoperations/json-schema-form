@@ -61,8 +61,6 @@ export const ControlNode = WithControlContext(
     return (
       <Control
         {...rest}
-        error={meta?.error}
-        label={path}
         value={(value ?? '') as any}
         onChange={handleSetValue}
         onBlur={onBlur}
