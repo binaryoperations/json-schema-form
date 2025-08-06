@@ -16,10 +16,10 @@ export type Ranker = (
 export const and = (...functions: Ranker[]): Ranker => {
   return (...arg) => {
     let acc = 0;
-    for (const next of functions) {
-      const value = next(...arg);
-      if (value <= 0) return 0;
-      acc += value;
+    for (const nextFunc of functions) {
+      const resolution = nextFunc(...arg);
+      if (+resolution <= 0) return 0;
+      acc += resolution;
     }
     return acc;
   };
@@ -27,20 +27,6 @@ export const and = (...functions: Ranker[]): Ranker => {
 
 export const or = (...functions: Ranker[]): Ranker => {
   return (...arg) => Math.max(0, ...functions.map((next) => next(...arg)));
-};
-
-export const ranked = (...functions: Ranker[]): Ranker => {
-  return (...arg) => {
-    let counter = -1;
-
-    for (const nextFunc of functions) {
-      const resolution = nextFunc(...arg);
-      if (+resolution <= 0) return counter;
-      counter += +resolution;
-    }
-
-    return counter;
-  };
 };
 
 /**
@@ -59,7 +45,7 @@ export const uiSchemaMatches = (
   return (_, uiSchema) => predicate(uiSchema);
 };
 
-const isType = (type: string): Ranker => {
+export const isType = (type: string): Ranker => {
   return uiSchemaMatches(exactEqualsType(type, 1));
 };
 
@@ -168,7 +154,7 @@ export const formatStartsWith = (expectedValue: string): Ranker => {
  */
 
 export const createRankedTester = (...testers: Ranker[]) =>
-  ranked(isControl, ...testers);
+  and(isControl, ...testers);
 
 export const isTextRanked = createRankedTester(isStringSchema);
 
