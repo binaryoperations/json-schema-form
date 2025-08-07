@@ -13,20 +13,32 @@ export type Ranker = (
   context: { rootSchema: ControlSchema }
 ) => number;
 
-export const and = (...functions: Ranker[]): Ranker => {
-  return (...arg) => {
-    let acc = 0;
-    for (const nextFunc of functions) {
-      const resolution = nextFunc(...arg);
-      if (+resolution <= 0) return 0;
-      acc += resolution;
+export function and (...functions: Ranker[]): Ranker {
+  return Object.defineProperties(
+    function (...arg) {
+      let acc = 0;
+      for (const nextFunc of functions) {
+        const resolution = nextFunc(...arg);
+        if (+resolution <= 0) return 0;
+        acc += resolution;
+      }
+      return acc;
+    }, {
+      handlers: {value: functions,},
+      name: { value: `And(${functions.map((f) => f.name).join(', ')})` },
     }
-    return acc;
-  };
+  );
 };
 
-export const or = (...functions: Ranker[]): Ranker => {
-  return (...arg) => Math.max(0, ...functions.map((next) => next(...arg)));
+export function or (...functions: Ranker[]): Ranker  {
+  return Object.defineProperties(
+    function OR(...arg) {
+      return Math.max(0, ...functions.map((next) => next(...arg)))
+    }, {
+      handlers: {value: functions,},
+      name: { value: `OR(${functions.map((f) => f.name || "Unknown").join(', ')})` },
+    }
+  );
 };
 
 /**
@@ -34,18 +46,18 @@ export const or = (...functions: Ranker[]): Ranker => {
  * Ui Schema Tester
  */
 
-const exactEqualsType =
-  <T extends { type?: any }>(type: string, multiplier = 2) =>
-  (object: T) =>
-    Number(type === object.type) * multiplier;
+function exactEqualsType
+  <T extends { type?: any }>(type: string, multiplier = 2) {
+    return (object: T) => Number(type === object.type) * multiplier;
+  }
 
-export const uiSchemaMatches = (
+export function uiSchemaMatches (
   predicate: (uiSchema: LayoutSchema) => number
-): Ranker => {
+): Ranker {
   return (_, uiSchema) => predicate(uiSchema);
 };
 
-export const isType = (type: string): Ranker => {
+export function isType (type: string): Ranker {
   return uiSchemaMatches(exactEqualsType(type, 1));
 };
 
@@ -55,28 +67,42 @@ export const hasRows: Ranker = isType('rows');
 export const hasColumns: Ranker = isType('columns');
 export const isControl: Ranker = isType('control');
 
-export const optionIs = (property: string, expectedValue: unknown): Ranker =>
-  and(
-    isControl,
-    uiSchemaMatches(
-      (uiSchema) =>
-        +(
-          get(cast<ControlNodeType>(uiSchema).options, property) === expectedValue
-        ) * 2
-    )
-  );
+export function optionIs (property: string, expectedValue: unknown): Ranker {
+  return Object.defineProperties(
+    and(
+      isControl,
+      uiSchemaMatches(
+        (uiSchema) =>
+          +(
+            get(cast<ControlNodeType>(uiSchema).options, property) === expectedValue
+          ) * 2
+      )
+    ),
+    {
+      property: { value: property },
+      expectedValue: { value: expectedValue },
+    }
+  )
+};
 
-export const optionStartsWith = (
+export function optionStartsWith (
   property: string,
   expectedValue: string
-): Ranker =>
-  and(
-    isControl,
-    uiSchemaMatches((uiSchema) => {
-      const value = get(cast<ControlNodeType>(uiSchema).options, property);
-      return +(typeof value === 'string' && value.startsWith(expectedValue));
-    })
-  );
+): Ranker{
+  return Object.defineProperties(
+    and(
+      isControl,
+      uiSchemaMatches((uiSchema) => {
+        const value = get(cast<ControlNodeType>(uiSchema).options, property);
+        return +(typeof value === 'string' && value.startsWith(expectedValue));
+      })
+    ),
+    {
+      property: { value: property },
+      expectedValue: { value: expectedValue },
+    }
+  )
+};
 
 /**
  *
@@ -91,25 +117,30 @@ export const optionStartsWith = (
  */
 
 export const checkInferableOneOfNotNullSchema =
-  (tester: Ranker): Ranker =>
-  (schema: ControlSchema, ...rest) => {
-    const rank = tester(schema, ...rest);
-    if (rank > 0) return rank;
-    if (!Array.isArray(schema.oneOf)) return 0;
-    const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
+  (tester: Ranker): Ranker => {
+    return Object.defineProperties(function (schema: ControlSchema, ...rest) {
+      const rank = tester(schema, ...rest);
+      if (rank > 0) return rank;
+      if (!Array.isArray(schema.oneOf)) return 0;
+      const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
 
-    return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
-  };
+      return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
+    }, {
+      name: { value: `checkInferableOneOfNotNullSchema(${tester.name})` },
+    })
+};
 
 export const checkInferableAnyOfNotNullSchema =
   (tester: Ranker): Ranker =>
-  (schema: ControlSchema, ...rest) => {
+  Object.defineProperties(function (schema: ControlSchema, ...rest) {
     const rank = tester(schema, ...rest);
     if (rank > 0) return rank;
     if (!Array.isArray(schema.anyOf)) return 0;
     const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
     return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
-  };
+  }, {
+    name: { value: `checkInferableAnyOfNotNullSchema(${tester.name})` },
+  });
 
 export const isStringSchema = checkInferableOneOfNotNullSchema(
   checkInferableAnyOfNotNullSchema(exactEqualsType('string'))
@@ -154,7 +185,7 @@ export const formatStartsWith = (expectedValue: string): Ranker => {
  */
 
 export const createRankedTester = (...testers: Ranker[]) =>
-  and(isControl, ...testers);
+  and(...testers);
 
 export const isTextRanked = createRankedTester(isStringSchema);
 
@@ -166,15 +197,15 @@ export const isNumberRanked = createRankedTester(isNumberSchema);
 
 export const isDateRanked = createRankedTester(
   or(exactEqualsType('string', 1), exactEqualsType('number', 1)),
-  formatIs('date'),
   or(optionIs('format', 'date'), optionStartsWith('format', 'date'))
 );
 export const isDateTimeRanked = createRankedTester(
-  formatStartsWith('date'),
-  or(formatIs('datetime'), optionIs('format', 'datetime')),
-  or(formatStartsWith('datetime'), optionStartsWith('format', 'datetime'))
+  or(
+    optionIs('format', 'datetime'),
+    optionStartsWith('format', 'datetime')
+  )
 );
 
 export const isTimeRanked = createRankedTester(
-  or(formatIs('time'), optionIs('format', 'time'))
+  or(optionIs("format", 'time'), optionStartsWith('format', 'time'))
 );
