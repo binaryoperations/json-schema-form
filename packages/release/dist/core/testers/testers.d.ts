@@ -34,13 +34,6 @@ export declare const isObjectSchema: Ranker;
 export declare const isArraySchema: Ranker;
 /**
  *
- * Option Testers
- *
- */
-export declare const formatIs: (expectedValue: string) => Ranker;
-export declare const formatStartsWith: (expectedValue: string) => Ranker;
-/**
- *
  * Rank Testers
  *
  */

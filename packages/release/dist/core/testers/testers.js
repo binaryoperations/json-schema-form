@@ -12,7 +12,7 @@ export function and(...functions) {
         return acc;
     }, {
         handlers: { value: functions, },
-        name: { value: `And(${functions.map((f) => f.name).join(', ')})` },
+        name: { value: `And(${functions.map((f) => f.name || "Unknown").join(', ')})`, writable: true },
     });
 }
 ;
@@ -21,7 +21,7 @@ export function or(...functions) {
         return Math.max(0, ...functions.map((next) => next(...arg)));
     }, {
         handlers: { value: functions, },
-        name: { value: `OR(${functions.map((f) => f.name || "Unknown").join(', ')})` },
+        name: { value: `OR(${functions.map((f) => f.name || "Unknown").join(', ')})`, writable: true },
     });
 }
 ;
@@ -30,10 +30,14 @@ export function or(...functions) {
  * Ui Schema Tester
  */
 function exactEqualsType(type, multiplier = 2) {
-    return (object) => Number(type === object.type) * multiplier;
+    return Object.defineProperties(function ExactEqualsType(object) {
+        return Number(type === object.type) * multiplier;
+    }, { name: { value: `ExactEqualsType(${type})`, writable: true } });
 }
 export function uiSchemaMatches(predicate) {
-    return (_, uiSchema) => predicate(uiSchema);
+    return Object.defineProperties(function UiSchemaMatches(_, uiSchema) {
+        return predicate(uiSchema);
+    }, { name: { value: `UiSchemaMatches(${predicate.name || "Unknown"})`, writable: true } });
 }
 ;
 export function isType(type) {
@@ -46,20 +50,28 @@ export const hasRows = isType('rows');
 export const hasColumns = isType('columns');
 export const isControl = isType('control');
 export function optionIs(property, expectedValue) {
-    return Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => +(get(cast(uiSchema).options, property) === expectedValue) * 2)), {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => +(get(cast(uiSchema).options, property) === expectedValue) * 2)), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
+    Object.assign(func, {
+        name: `optionIs(${property}, ${expectedValue})`
+    });
+    return func;
 }
 ;
 export function optionStartsWith(property, expectedValue) {
-    return Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => {
         const value = get(cast(uiSchema).options, property);
         return +(typeof value === 'string' && value.startsWith(expectedValue));
     })), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
+    Object.assign(func, {
+        name: `OptionStartsWith(${property}, ${expectedValue})`
+    });
+    return func;
 }
 ;
 /**
@@ -82,7 +94,7 @@ export const checkInferableOneOfNotNullSchema = (tester) => {
         const filteredSchema = schema.oneOf.filter((s) => s.type !== 'null');
         return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
     }, {
-        name: { value: `checkInferableOneOfNotNullSchema(${tester.name})` },
+        name: { value: `checkInferableOneOfNotNullSchema(${tester.name})`, writable: true },
     });
 };
 export const checkInferableAnyOfNotNullSchema = (tester) => Object.defineProperties(function (schema, ...rest) {
@@ -94,7 +106,7 @@ export const checkInferableAnyOfNotNullSchema = (tester) => Object.definePropert
     const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
     return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
 }, {
-    name: { value: `checkInferableAnyOfNotNullSchema(${tester.name})` },
+    name: { value: `checkInferableAnyOfNotNullSchema(${tester.name})`, writable: true },
 });
 export const isStringSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema(exactEqualsType('string')));
 export const isNumberSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema(exactEqualsType('number')));
@@ -102,17 +114,6 @@ export const isBooleanSchema = checkInferableOneOfNotNullSchema(checkInferableAn
 export const isNullSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema(exactEqualsType('null')));
 export const isObjectSchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema(exactEqualsType('object')));
 export const isArraySchema = checkInferableOneOfNotNullSchema(checkInferableAnyOfNotNullSchema(exactEqualsType('array')));
-/**
- *
- * Option Testers
- *
- */
-export const formatIs = (expectedValue) => {
-    return (schema) => (get(schema, 'format') === expectedValue ? 1 : 0);
-};
-export const formatStartsWith = (expectedValue) => {
-    return (schema) => (get(schema, 'format')?.startsWith(expectedValue) ? 1 : 0);
-};
 /**
  *
  * Rank Testers
