@@ -25,7 +25,7 @@ export function and (...functions: Ranker[]): Ranker {
       return acc;
     }, {
       handlers: {value: functions,},
-      name: { value: `And(${functions.map((f) => f.name).join(', ')})` },
+      name: { value: `And(${functions.map((f) => f.name || "Unknown").join(', ')})`, writable: true },
     }
   );
 };
@@ -36,7 +36,7 @@ export function or (...functions: Ranker[]): Ranker  {
       return Math.max(0, ...functions.map((next) => next(...arg)))
     }, {
       handlers: {value: functions,},
-      name: { value: `OR(${functions.map((f) => f.name || "Unknown").join(', ')})` },
+      name: { value: `OR(${functions.map((f) => f.name || "Unknown").join(', ')})`, writable: true },
     }
   );
 };
@@ -48,13 +48,23 @@ export function or (...functions: Ranker[]): Ranker  {
 
 function exactEqualsType
   <T extends { type?: any }>(type: string, multiplier = 2) {
-    return (object: T) => Number(type === object.type) * multiplier;
+    return Object.defineProperties(
+      function ExactEqualsType(object: T) {
+        return Number(type === object.type) * multiplier;
+      },
+      { name: {value: `ExactEqualsType(${type})`, writable: true} }
+    )
   }
 
 export function uiSchemaMatches (
   predicate: (uiSchema: LayoutSchema) => number
 ): Ranker {
-  return (_, uiSchema) => predicate(uiSchema);
+  return Object.defineProperties(
+      function UiSchemaMatches(_, uiSchema) {
+        return predicate(uiSchema);
+      },
+      { name: { value: `UiSchemaMatches(${predicate.name || "Unknown"})`, writable: true} }
+    )
 };
 
 export function isType (type: string): Ranker {
@@ -68,7 +78,7 @@ export const hasColumns: Ranker = isType('columns');
 export const isControl: Ranker = isType('control');
 
 export function optionIs (property: string, expectedValue: unknown): Ranker {
-  return Object.defineProperties(
+  const func = Object.defineProperties(
     and(
       isControl,
       uiSchemaMatches(
@@ -83,13 +93,20 @@ export function optionIs (property: string, expectedValue: unknown): Ranker {
       expectedValue: { value: expectedValue },
     }
   )
+
+  Object.assign(func, {
+    name: `optionIs(${property}, ${expectedValue})`
+  })
+
+  return func;
 };
 
 export function optionStartsWith (
   property: string,
   expectedValue: string
 ): Ranker{
-  return Object.defineProperties(
+
+  const func = Object.defineProperties(
     and(
       isControl,
       uiSchemaMatches((uiSchema) => {
@@ -102,6 +119,12 @@ export function optionStartsWith (
       expectedValue: { value: expectedValue },
     }
   )
+
+  Object.assign(func, {
+    name: `OptionStartsWith(${property}, ${expectedValue})`
+  })
+
+  return func;
 };
 
 /**
@@ -126,7 +149,7 @@ export const checkInferableOneOfNotNullSchema =
 
       return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
     }, {
-      name: { value: `checkInferableOneOfNotNullSchema(${tester.name})` },
+      name: { value: `checkInferableOneOfNotNullSchema(${tester.name})`, writable: true },
     })
 };
 
@@ -139,7 +162,7 @@ export const checkInferableAnyOfNotNullSchema =
     const filteredSchema = schema.anyOf.filter((s) => s.type !== 'null');
     return filteredSchema.length !== 1 ? 0 : tester(filteredSchema[0], ...rest);
   }, {
-    name: { value: `checkInferableAnyOfNotNullSchema(${tester.name})` },
+    name: { value: `checkInferableAnyOfNotNullSchema(${tester.name})`, writable: true },
   });
 
 export const isStringSchema = checkInferableOneOfNotNullSchema(
@@ -165,18 +188,6 @@ export const isObjectSchema = checkInferableOneOfNotNullSchema(
 export const isArraySchema = checkInferableOneOfNotNullSchema(
   checkInferableAnyOfNotNullSchema(exactEqualsType('array'))
 );
-
-/**
- *
- * Option Testers
- *
- */
-export const formatIs = (expectedValue: string): Ranker => {
-  return (schema) => (get(schema, 'format') === expectedValue ? 1 : 0);
-};
-export const formatStartsWith = (expectedValue: string): Ranker => {
-  return (schema) => (get(schema, 'format')?.startsWith(expectedValue) ? 1 : 0);
-};
 
 /**
  *
