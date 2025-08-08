@@ -7,9 +7,9 @@ import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { WithErrorBoundary } from './ErrorBoundary';
 const Unhandled = () => {
-    const [control] = useControl((control) => control);
-    const [value] = useControlValue(control.path);
-    return useMaybeDevValue(() => (_jsxs("div", { style: { backgroundColor: '#e5e5e5', wordBreak: 'break-all' }, children: ["value: ", JSON.stringify(value), " ", _jsx("br", {}), "scope: ", JSON.stringify(control.path), " ", _jsx("br", {})] })), () => null);
+    const [path] = useControl((control) => control.path);
+    const [value] = useControlValue(path);
+    return useMaybeDevValue(() => (_jsxs("div", { style: { backgroundColor: '#e5e5e5', wordBreak: 'break-all' }, children: ["value: ", JSON.stringify(value), " ", _jsx("br", {}), "scope: ", JSON.stringify(path), " ", _jsx("br", {})] })), () => null);
 };
 const WithControlContext = (Component) => {
     return function WithControlContext(props) {

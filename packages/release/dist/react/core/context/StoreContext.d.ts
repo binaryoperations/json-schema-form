@@ -19,6 +19,8 @@ export type UiStoreContextType = {
     setDirty: (path: string, value: any) => void;
     setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
     resetErrors: () => void;
+    onSubmit: (e?: SubmitEvent) => void | Promise<void>;
+    submit: () => void;
 };
 export declare const UiStoreContextProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<UiStoreContextType>> & {
     displayName: string | undefined;

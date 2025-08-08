@@ -4,7 +4,7 @@ import { FormDataProvider, } from './FormDataProvider';
 import { StoreContextProvider, } from './StoreContextProvider';
 import { LayoutNode } from './LayoutNode';
 export const Bootstrap = memo(function Bootsrap(props) {
-    const { data, onDataChange, ref, validationMode, uiSchema, schema, ...rest } = props;
+    const { data, onDataChange, ref, validationMode, uiSchema, schema, onSubmit, ...rest } = props;
     const [initialData] = useState(props.data);
-    return (_jsx(StoreContextProvider, { uiSchema: uiSchema, schema: schema, validationMode: validationMode ?? 'onBlur', initialData: initialData, children: _jsx(FormDataProvider, { value: data, onChange: onDataChange, ref: ref, children: _jsx(LayoutNode, { ...rest, id: "root" }) }) }));
+    return (_jsx(FormDataProvider, { value: data, onChange: onDataChange, children: _jsx(StoreContextProvider, { uiSchema: uiSchema, schema: schema, onSubmit: onSubmit, validationMode: validationMode ?? 'onBlur', initialData: initialData, ref: ref, children: _jsx(LayoutNode, { ...rest, id: "root" }) }) }));
 });

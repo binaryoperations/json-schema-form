@@ -80,7 +80,6 @@ export function useControlProps(path, props) {
         setTouched(path);
     }, [onFocus, setTouched, path]);
     const disabled = props.disabled || schema.readOnly;
-    schema;
     return {
         ...rest,
         ...schema.options,
