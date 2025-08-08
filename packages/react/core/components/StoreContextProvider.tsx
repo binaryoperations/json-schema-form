@@ -9,7 +9,7 @@ import type { ComponentType, PropsWithChildren, Ref } from 'react';
 import { memo, useImperativeHandle, useMemo, useRef } from 'react';
 import { useCallback } from 'react';
 
-import { UiStoreContextProvider, ValidateData } from '../context/StoreContext';
+import { UiStoreContextProvider, UiStoreContextType, ValidateData } from '../context/StoreContext';
 import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 
@@ -58,7 +58,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const onSubmitLatestRef = useRef(props.onSubmit);
     onSubmitLatestRef.current = props.onSubmit;
 
-    const onSubmit = useCallback((e?: SubmitEvent) => {
+    const onSubmit: UiStoreContextType['onSubmit'] = useCallback((e?) => {
       e?.preventDefault();
       e?.stopPropagation();
 
