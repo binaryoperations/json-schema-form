@@ -21,7 +21,7 @@ export class LogicalSchema {
         const schemaNode = this.deriveSchemaNode(schema);
         const { valid, errors } = schemaNode.validate(value);
         return {
-            isValid: !valid,
+            isValid: valid,
             errors,
         };
     }

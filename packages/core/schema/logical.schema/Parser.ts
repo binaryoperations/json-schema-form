@@ -44,7 +44,7 @@ export class LogicalSchema {
     const {valid, errors} = schemaNode.validate(value);
 
     return {
-      isValid: !valid,
+      isValid: valid,
       errors,
     };
   }
