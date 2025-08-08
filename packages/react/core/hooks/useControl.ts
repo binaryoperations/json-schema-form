@@ -145,7 +145,6 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const handleOnBlur = useCallback<Required<ControlProps>['onBlur']>(
     (e) => {
       onBlur?.(e);
-
       validate(proxyValue.value);
     },
     [onBlur, validate, proxyValue]
@@ -160,7 +159,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
   );
 
   const disabled = props.disabled || schema.readOnly;
-  schema
+
   return {
     ...rest as P,
     ...schema.options,
@@ -169,7 +168,6 @@ export function useControlProps<P extends Record<string, any> = {}>(
     onFocus: deriveValue(handleOnFocus, onFocus, disabled),
     setValue: deriveValue(setValue, noop, disabled),
     value,
-
     meta,
   };
 }

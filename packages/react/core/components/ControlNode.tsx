@@ -10,14 +10,14 @@ import { WithErrorBoundary } from './ErrorBoundary';
 
 
 const Unhandled = () => {
-  const [control] = useControl((control) => control);
-  const [value] = useControlValue(control.path);
+  const [path] = useControl((control) => control.path);
+  const [value] = useControlValue(path);
 
   return useMaybeDevValue(
     () => (
       <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
         value: {JSON.stringify(value)} <br />
-        scope: {JSON.stringify(control.path)} <br />
+        scope: {JSON.stringify(path)} <br />
       </div>
     ),
     () => null

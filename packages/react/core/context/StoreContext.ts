@@ -28,6 +28,9 @@ export type UiStoreContextType = {
   setDirty: (path: string, value: any) => void;
   setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
   resetErrors: () => void;
+  onSubmit: (e?: SubmitEvent) => void | Promise<void>;
+  submit: () => void;
+
 };
 
 const StoreContext = createFastContext<UiStoreContextType>('StoreContext', {
