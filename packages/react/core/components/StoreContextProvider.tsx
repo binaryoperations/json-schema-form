@@ -63,7 +63,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
 
     const validateOnSubmit = useLatest({
       uiContext,
-      validationMode: props.validationMode,
+      validationMode: "onSubmit",
       validate,
       onSubmit: noop,
       submit: noop,

@@ -1,13 +1,13 @@
 import { fastDeepEqual, get, } from '../../../core/internals/object';
 import { groupBy } from 'lodash';
 import { useCallback, useMemo, useReducer } from 'react';
-export function useControlState(initialData, draft) {
+export function useControlState(initialData, draftRef) {
     const [controlState, setControlState] = useReducer(reduceStoreState, {
         touchedControlPaths: new Map(),
         dirtyControlPaths: new Map(),
         errors: new Map(),
     });
-    const derivePath = useCallback((path) => draft.getSchemaNodeOf(path).evaluationPath, [draft]);
+    const derivePath = useCallback((path) => draftRef.current.getSchemaNodeOf(path).evaluationPath, [draftRef]);
     const setTouched = useCallback((path) => {
         setControlState({
             type: 'SET_TOUCHED',

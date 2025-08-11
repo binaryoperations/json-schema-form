@@ -1,30 +1,40 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import LogicalSchema from '../../../core/schema/logical.schema';
 import UiSchema from '../../../core/schema/ui.schema';
-import { memo, useImperativeHandle, useMemo, useRef } from 'react';
+import { memo, useImperativeHandle, useMemo } from 'react';
 import { useCallback } from 'react';
 import { UiStoreContextProvider } from '../context/StoreContext';
 import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
+import { useLatest } from '../hooks/useLatest';
+import { useValidateData } from '../hooks/useControl';
+import noop from 'lodash/noop';
 export const StoreContextProvider = memo(function StoreContextProvider(props) {
     const schemaDraft = useMemo(() => LogicalSchema.parse(props.schema), [props.schema]);
     const formDataRef = useFormDataRef();
-    const controlState = useControlState(props.initialData, schemaDraft);
-    const schemaDraftRef = useRef(schemaDraft);
-    schemaDraftRef.current = schemaDraft;
-    const validate = useCallback((value, schema) => schemaDraft.validate(value, schema), []);
+    const schemaDraftRef = useLatest(schemaDraft);
+    const onSubmitLatestRef = useLatest(props.onSubmit);
+    const controlState = useControlState(props.initialData, schemaDraftRef);
+    const validate = useCallback((value, schema) => schemaDraftRef.current.validate(value, schema), []);
     const uiContext = useMemo(() => UiSchema.prepare(props.uiSchema, schemaDraft), [props.uiSchema, schemaDraft]);
-    const onSubmitLatestRef = useRef(props.onSubmit);
-    onSubmitLatestRef.current = props.onSubmit;
+    const validateOnSubmit = useLatest({
+        uiContext,
+        validationMode: "onSubmit",
+        validate,
+        onSubmit: noop,
+        submit: noop,
+        ...controlState
+    });
+    const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit);
     const onSubmit = useCallback((e) => {
         e?.preventDefault();
         e?.stopPropagation();
-        const { isValid } = schemaDraftRef.current.validate(formDataRef.current, props.schema);
+        const isValid = validateFunc(formDataRef.current);
         if (!isValid)
             return;
         return onSubmitLatestRef.current?.(formDataRef.current);
-    }, [validate]);
-    useImperativeHandle(props.ref, () => ({ validate, resetErrors: controlState.resetErrors }), [validate, controlState.resetErrors]);
+    }, [validateFunc]);
+    useImperativeHandle(props.ref, () => ({ validate: validateFunc, resetErrors: controlState.resetErrors }), [validateOnSubmit, controlState.resetErrors]);
     const contextValue = useMemo(() => ({
         uiContext,
         validate,

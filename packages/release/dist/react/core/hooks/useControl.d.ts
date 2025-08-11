@@ -1,5 +1,6 @@
 import type { ControlNodeType, ControlSchema } from '../../../core/models';
 import type { Selector } from '../../../core/types/reducers';
+import { RefObject } from 'react';
 import { UiStoreContextType } from '../context/StoreContext';
 /**
  *
@@ -32,5 +33,9 @@ type ControlProps = {
     };
 };
 export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus'>): ControlProps & P;
+export declare function useValidateData(path: string, validateOn: UiStoreContextType['validationMode'], storeRef: RefObject<UiStoreContextType>): (value: any) => {
+    isValid: boolean;
+    errors: import("json-schema-library").JsonError[];
+};
 export {};
 //# sourceMappingURL=useControl.d.ts.map

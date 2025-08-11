@@ -27,5 +27,5 @@ export const ControlNode = WithControlContext(WithErrorBoundary(function Control
     const handleSetValue = useCallback((e) => {
         setValue(getValueFromEvent(e));
     }, [getValueFromEvent, setValue]);
-    return (_jsx(Control, { ...rest, value: (value ?? ''), onChange: handleSetValue, onBlur: onBlur, onFocus: onFocus }));
+    return (_jsx(Control, { ...rest, ...meta, value: (value ?? ''), onChange: handleSetValue, onBlur: onBlur, onFocus: onFocus }));
 }, Unhandled));
