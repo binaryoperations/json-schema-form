@@ -10,7 +10,7 @@ import type {
   ControlSchema,
 } from '@binaryoperations/json-forms-core/models';
 import type { Selector } from '@binaryoperations/json-forms-core/types/reducers';
-import { useCallback } from 'react';
+import { RefObject, useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
 import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';
@@ -82,19 +82,19 @@ export function useControlValue<V = unknown>(path: string) {
     shallowCompare
   );
 
-  const setDirty = useUiStoreRef().current.setDirty;
+  const storeRef = useUiStoreRef();
 
-  const validate = useValidateData(path, 'onChange');
+  const validate = useValidateData(path, 'onChange', storeRef);
 
   return [
     value,
     useCallback(
       (value: V) => {
         setFormData((oldValue) => set(oldValue, path, value));
-        setDirty(path, value);
+        storeRef.current.setDirty(path, value);
         validate(value);
       },
-      [validate, path, setFormData, setDirty]
+      [validate, path, setFormData, storeRef.current.setDirty]
     ),
   ] as [value: V, set: (value: V) => void];
 }
@@ -118,7 +118,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
   props: P & Pick<ControlProps, 'onBlur' | 'onFocus'>
 ): ControlProps & P {
   const { onBlur, onFocus, ...rest } = props;
-  const validate = useValidateData(path, 'onBlur');
+  const validate = useValidateData(path, 'onBlur', useUiStoreRef());
   const setTouched = useUiStoreRef().current.setTouched;
 
   const [value, setValue] = useControlValue(path);
@@ -172,37 +172,42 @@ export function useControlProps<P extends Record<string, any> = {}>(
   };
 }
 
-function useValidateData(
+export function useValidateData(
   path: string,
-  validateOn: UiStoreContextType['validationMode']
+  validateOn: UiStoreContextType['validationMode'],
+  storeRef: RefObject<UiStoreContextType>
 ) {
   const formDataRef = useFormDataRef();
-  const uiStoreRef = useUiStoreRef();
 
-  const [validate] = useUiStoreContext((state) =>
-    state.validationMode === validateOn ? state.validate : undefined
-  );
+  const { validationMode, validate: validateFn} = storeRef.current;
+
+  const validate = validationMode === validateOn ? validateFn : undefined;
 
   return useCallback(
     (value: any) => {
-      if (!validate) return;
+      if (!validate) return {
+        isValid: true,
+        errors: [],
+      };
 
       const shouldReset = validateOn === 'onSubmit';
 
       const schema =
-        uiStoreRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
+        storeRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
 
       const validateResult = shouldReset
         ? validate(value ?? formDataRef.current, schema)
         : validate(value, schema);
 
-      uiStoreRef.current.setErrors(
+      storeRef.current.setErrors(
         path,
         validateResult.isValid ? [] : validateResult.errors,
         shouldReset
       );
+
+      return validateResult;
     },
-    [path, validate, uiStoreRef, validateOn, formDataRef]
+    [path, validate, storeRef, validateOn, formDataRef]
   );
 }
 

@@ -5,7 +5,7 @@ import {
 import type { LogicalSchema } from '@binaryoperations/json-forms-core/schema/logical.schema/Parser';
 import type { JsonError } from 'json-schema-library';
 import { groupBy } from 'lodash';
-import { useCallback, useMemo, useReducer } from 'react';
+import { RefObject, useCallback, useMemo, useReducer } from 'react';
 
 import type { UiStoreContextType } from '../context/StoreContext';
 
@@ -23,7 +23,7 @@ type Action =
       payload: { path: string; errors: JsonError[]; reset?: boolean };
     };
 
-export function useControlState(initialData: object, draft: LogicalSchema) {
+export function useControlState(initialData: object, draftRef: RefObject<LogicalSchema>) {
   const [controlState, setControlState] = useReducer(reduceStoreState, {
     touchedControlPaths: new Map<string, true>(),
     dirtyControlPaths: new Map<string, true>(),
@@ -31,8 +31,8 @@ export function useControlState(initialData: object, draft: LogicalSchema) {
   });
 
   const derivePath = useCallback(
-    (path: string) => draft.getSchemaNodeOf(path).evaluationPath,
-    [draft]
+    (path: string) => draftRef.current.getSchemaNodeOf(path).evaluationPath,
+    [draftRef]
   );
 
   const setTouched = useCallback(
