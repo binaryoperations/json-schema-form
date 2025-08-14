@@ -4,7 +4,7 @@ import type {
 } from '@binaryoperations/json-forms-core/models';
 import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
 import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
-import type { JsonSchema } from 'json-schema-library';
+import type { JsonSchema, SchemaNode } from 'json-schema-library';
 import type { ComponentType, PropsWithChildren, Ref, RefObject } from 'react';
 import { memo, useImperativeHandle, useMemo } from 'react';
 import { useCallback } from 'react';
@@ -72,15 +72,21 @@ export const StoreContextProvider: StoreContextProvider = memo(
 
     const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit as RefObject<UiStoreContextType>);
 
-    const onSubmit: UiStoreContextType['onSubmit'] = useCallback((e?) => {
-      e?.preventDefault();
-      e?.stopPropagation();
 
-      const isValid = validateFunc(formDataRef.current);
+    const submit = useCallback((schemaNode?: SchemaNode) => {
+      const isValid = validateFunc(formDataRef.current, schemaNode);
       if (!isValid) return;
 
       return onSubmitLatestRef.current?.(formDataRef.current);
     }, [validateFunc]);
+
+
+    const onSubmit: UiStoreContextType['onSubmit'] = useCallback((e?) => {
+      e?.preventDefault();
+      e?.stopPropagation();
+
+      return submit();
+    }, [submit]);
 
 
     useImperativeHandle(
@@ -95,7 +101,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
         validate,
         validationMode: props.validationMode,
         onSubmit,
-        submit: onSubmit,
+        submit,
         ...controlState,
       }),
       [uiContext, validate, props.validationMode, controlState, onSubmit]

@@ -1,13 +1,12 @@
 
-import { useUiStoreRef } from '@binaryoperations/json-forms-react/core/context/StoreContext';
-import type { FC } from 'react';
+import { type ComponentProps } from 'react';
+import { useFormProps, useSubFormProps } from '../../core/hooks/useFormProps';
 
-export const Form: FC<React.JSX.IntrinsicElements['form']> = function Form(
-  props
-) {
-  const storeRef = useUiStoreRef();
-
-  return <form {...props} onSubmit={storeRef.current.onSubmit} />;
+export const Form = function Form(props: ComponentProps<'form'>) {
+  return <form {...useFormProps(props)}/>;
 };
 
 
+export const SubForm = function SubForm(props: Omit<ComponentProps<'form'>, 'onSubmit'>) {
+  return <form {...useSubFormProps(props)}/>;
+}

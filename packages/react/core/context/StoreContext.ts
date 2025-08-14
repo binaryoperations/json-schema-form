@@ -1,5 +1,5 @@
 import type { UiStore } from '@binaryoperations/json-forms-core/schema/ui.schema';
-import type { JsonError, JsonSchema } from 'json-schema-library';
+import type { JsonError, JsonSchema, SchemaNode } from 'json-schema-library';
 
 import { createFastContext } from '../fast-context';
 import type { FormEvent } from 'react';
@@ -30,7 +30,7 @@ export type UiStoreContextType = {
   setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
   resetErrors: () => void;
   onSubmit: (e?: FormEvent<HTMLFormElement>) => void | Promise<void>;
-  submit: () => void;
+  submit: (schemaNode: SchemaNode) => void;
 
 };
 

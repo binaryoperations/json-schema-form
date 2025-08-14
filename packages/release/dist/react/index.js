@@ -1,11 +1,12 @@
 import { RendererRepository, ControlRepository } from './core/context/RendererContext';
-import { Form } from "./components/Semantic/Form";
+import { Form, SubForm } from "./components/Semantic/Form";
 import { createLayoutRenderer } from './core/hoc/createRenderer';
 export { createControl } from './core/hoc/createControl';
 export * from './core/hoc/createControl';
 export { Bootstrap } from './core/components/Form';
 /** This serves as the root of the component tree */
 RendererRepository.register('form', createLayoutRenderer(Form));
+RendererRepository.register('sub-form', createLayoutRenderer(SubForm));
 const defaultLayoutGetters = {
     "rows": () => import('./components/Semantic/Row').then((module) => module.Row),
     "columns": () => import('./components/Semantic/Column').then((module) => module.Column),

@@ -1,5 +1,5 @@
 import { RendererRepository, ControlRepository } from './core/context/RendererContext';
-import {Form} from "./components/Semantic/Form";
+import {Form, SubForm} from "./components/Semantic/Form";
 
 import { createLayoutRenderer } from './core/hoc/createRenderer';
 import { type RankedControl } from './core/hoc/createControl';
@@ -13,6 +13,7 @@ export { Bootstrap } from './core/components/Form';
 
 /** This serves as the root of the component tree */
 RendererRepository.register('form', createLayoutRenderer(Form));
+RendererRepository.register('sub-form', createLayoutRenderer(SubForm));
 
 type Layout = ReturnType<typeof RendererRepository['get']>;
 

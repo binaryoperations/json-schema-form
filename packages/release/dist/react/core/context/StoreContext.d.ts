@@ -1,5 +1,5 @@
 import type { UiStore } from '../../../core/schema/ui.schema';
-import type { JsonError, JsonSchema } from 'json-schema-library';
+import type { JsonError, JsonSchema, SchemaNode } from 'json-schema-library';
 import type { FormEvent } from 'react';
 export type ValidateData = (value: any) => {
     isValid: boolean;
@@ -21,7 +21,7 @@ export type UiStoreContextType = {
     setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
     resetErrors: () => void;
     onSubmit: (e?: FormEvent<HTMLFormElement>) => void | Promise<void>;
-    submit: () => void;
+    submit: (schemaNode: SchemaNode) => void;
 };
 export declare const UiStoreContextProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<UiStoreContextType>> & {
     displayName: string | undefined;

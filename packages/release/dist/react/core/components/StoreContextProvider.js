@@ -26,21 +26,24 @@ export const StoreContextProvider = memo(function StoreContextProvider(props) {
         ...controlState
     });
     const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit);
-    const onSubmit = useCallback((e) => {
-        e?.preventDefault();
-        e?.stopPropagation();
-        const isValid = validateFunc(formDataRef.current);
+    const submit = useCallback((schemaNode) => {
+        const isValid = validateFunc(formDataRef.current, schemaNode);
         if (!isValid)
             return;
         return onSubmitLatestRef.current?.(formDataRef.current);
     }, [validateFunc]);
+    const onSubmit = useCallback((e) => {
+        e?.preventDefault();
+        e?.stopPropagation();
+        return submit();
+    }, [submit]);
     useImperativeHandle(props.ref, () => ({ validate: validateFunc, resetErrors: controlState.resetErrors }), [validateOnSubmit, controlState.resetErrors]);
     const contextValue = useMemo(() => ({
         uiContext,
         validate,
         validationMode: props.validationMode,
         onSubmit,
-        submit: onSubmit,
+        submit,
         ...controlState,
     }), [uiContext, validate, props.validationMode, controlState, onSubmit]);
     return (_jsx(UiStoreContextProvider, { value: contextValue, children: props.children }));

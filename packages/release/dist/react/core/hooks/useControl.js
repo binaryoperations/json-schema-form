@@ -95,17 +95,18 @@ export function useValidateData(path, validateOn, storeRef) {
     const formDataRef = useFormDataRef();
     const { validationMode, validate: validateFn } = storeRef.current;
     const validate = validationMode === validateOn ? validateFn : undefined;
-    return useCallback((value) => {
+    return useCallback((value, schema) => {
         if (!validate)
             return {
                 isValid: true,
                 errors: [],
             };
         const shouldReset = validateOn === 'onSubmit';
-        const schema = storeRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
+        const testSchema = schema?.schema ??
+            storeRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
         const validateResult = shouldReset
-            ? validate(value ?? formDataRef.current, schema)
-            : validate(value, schema);
+            ? validate(value ?? formDataRef.current, testSchema)
+            : validate(value, testSchema);
         storeRef.current.setErrors(path, validateResult.isValid ? [] : validateResult.errors, shouldReset);
         return validateResult;
     }, [path, validate, storeRef, validateOn, formDataRef]);

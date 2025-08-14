@@ -2,6 +2,7 @@ import type { ControlNodeType, ControlSchema } from '../../../core/models';
 import type { Selector } from '../../../core/types/reducers';
 import { RefObject } from 'react';
 import { UiStoreContextType } from '../context/StoreContext';
+import type { SchemaNode } from 'json-schema-library';
 /**
  *
  * Read the UI node for the current control
@@ -33,7 +34,7 @@ type ControlProps = {
     };
 };
 export declare function useControlProps<P extends Record<string, any> = {}>(path: string, props: P & Pick<ControlProps, 'onBlur' | 'onFocus'>): ControlProps & P;
-export declare function useValidateData(path: string, validateOn: UiStoreContextType['validationMode'], storeRef: RefObject<UiStoreContextType>): (value: any) => {
+export declare function useValidateData(path: string, validateOn: UiStoreContextType['validationMode'], storeRef: RefObject<UiStoreContextType>): (value: any, schema?: SchemaNode) => {
     isValid: boolean;
     errors: import("json-schema-library").JsonError[];
 };

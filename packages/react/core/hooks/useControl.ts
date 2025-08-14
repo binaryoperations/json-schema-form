@@ -22,6 +22,7 @@ import {
 import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 import useValue from './useValue';
+import type { SchemaNode } from 'json-schema-library';
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);
@@ -184,7 +185,7 @@ export function useValidateData(
   const validate = validationMode === validateOn ? validateFn : undefined;
 
   return useCallback(
-    (value: any) => {
+    (value: any, schema?: SchemaNode) => {
       if (!validate) return {
         isValid: true,
         errors: [],
@@ -192,12 +193,12 @@ export function useValidateData(
 
       const shouldReset = validateOn === 'onSubmit';
 
-      const schema =
+      const testSchema = schema?.schema ??
         storeRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
 
       const validateResult = shouldReset
-        ? validate(value ?? formDataRef.current, schema)
-        : validate(value, schema);
+        ? validate(value ?? formDataRef.current, testSchema)
+        : validate(value, testSchema);
 
       storeRef.current.setErrors(
         path,
