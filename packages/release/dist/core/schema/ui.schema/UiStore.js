@@ -9,6 +9,9 @@ export class UiStore {
     constructor(draftSchema) {
         this.draftSchema = draftSchema;
     }
+    get rootSchema() {
+        return this.draftSchema;
+    }
     getChildren(key) {
         return this.tree[key];
     }
@@ -16,7 +19,14 @@ export class UiStore {
         return this.keyMap[key];
     }
     getChildNodes(key) {
-        return this.getChildren(key).map(this.getNode.bind(this));
+        return this.getChildren(key)?.map(this.getNode.bind(this)) ?? [];
+    }
+    getChildControls(key) {
+        return this.getChildNodes(key).flatMap((node) => {
+            if (this.isControl(node.id))
+                return [node];
+            return [...this.getChildControls(node.id)];
+        });
     }
     getNodeType(key) {
         return this.getNode(key).type;

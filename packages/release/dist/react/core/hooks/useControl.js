@@ -8,6 +8,7 @@ import { useUiStoreContext, useUiStoreRef, } from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 import useValue from './useValue';
+import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
 /**
  *
@@ -58,17 +59,17 @@ export function useControlProps(path, props) {
     const proxyValue = useValue(value);
     const [{ pointer, schema, }] = useUiStoreContext((state) => {
         const node = state.uiContext.deriveSchemaNodeAtPointer(path);
-        node.evaluationPath;
         return {
             pointer: node.evaluationPath,
             schema: node?.schema,
         };
     }, shallowCompare);
     const [meta] = useUiStoreContext((state) => {
+        const resolvedPath = extractSegmentsFromPath(path).join('/');
         return {
             touched: state.touchedControlPaths.has(pointer),
             dirty: state.dirtyControlPaths.has(pointer),
-            error: state.errors.get(pointer)?.at(0)?.message,
+            error: state.errors.get(resolvedPath)?.at(0)?.message,
         };
     }, shallowCompare);
     const handleOnBlur = useCallback((e) => {

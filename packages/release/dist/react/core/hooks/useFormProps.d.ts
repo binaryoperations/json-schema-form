@@ -294,7 +294,7 @@ export declare const useFormProps: (props: ComponentProps<"form">) => {
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLFormElement> | undefined;
 };
 export declare const useSubFormProps: (props: ComponentProps<"form">) => {
-    onSubmit: import("react").FormEventHandler<HTMLFormElement>;
+    onSubmitCapture: import("react").FormEventHandler<HTMLFormElement>;
     ref?: import("react").Ref<HTMLFormElement> | undefined;
     key?: import("react").Key | null | undefined;
     acceptCharset?: string | undefined;
@@ -441,7 +441,7 @@ export declare const useSubFormProps: (props: ComponentProps<"form">) => {
     onInputCapture?: import("react").FormEventHandler<HTMLFormElement> | undefined;
     onReset?: import("react").FormEventHandler<HTMLFormElement> | undefined;
     onResetCapture?: import("react").FormEventHandler<HTMLFormElement> | undefined;
-    onSubmitCapture?: import("react").FormEventHandler<HTMLFormElement> | undefined;
+    onSubmit?: import("react").FormEventHandler<HTMLFormElement> | undefined;
     onInvalid?: import("react").FormEventHandler<HTMLFormElement> | undefined;
     onInvalidCapture?: import("react").FormEventHandler<HTMLFormElement> | undefined;
     onLoad?: import("react").ReactEventHandler<HTMLFormElement> | undefined;

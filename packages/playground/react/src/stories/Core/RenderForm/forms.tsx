@@ -361,6 +361,170 @@ export const customerWizard: FormConfig = {
   },
 };
 
+export const customerWizardSubForm: FormConfig = {
+  ...customerData,
+  uiSchema: {
+    type: "fieldsets", // fieldsets | fieldset | columns | rows | control
+    // order: 0,
+    nodes: [
+      {
+        options: {label: '',},
+        type:"fieldset",
+        nodes: [
+          {
+              type: "rows",
+              nodes: [
+                { type: "control", path: 'email', schema: schema.email },
+                {
+                  type: "control",
+                  path: 'firstName',
+                  schema: schema.firstName,
+                },
+                {
+                  type: "control",
+                  path: 'lastName',
+                  schema: schema.lastName,
+                },
+                {
+                  type: "columns",
+                  nodes: [
+                    {
+                      type: "control",
+                      path: 'phone/countryCode',
+                    },
+                    {
+                      type: "control",
+                      path: 'phone/number',
+                    },
+                  ],
+                },
+                {
+                  type: "control",
+                  path: 'dateOfBirth',
+                  schema: schema.dateOfBirth,
+                },
+                {
+                  type: "control",
+                  path: 'computedAge',
+                  schema: schema.computedAge,
+                  options: {
+                    readOnly: true,
+                    deriveFrom: 'dateOfBirth',
+                  },
+                },
+                {
+                  type: "control",
+                  path: 'rating',
+                },
+                {
+                  type: "control",
+                  path: 'gender',
+                  schema: cast<StringJsonSchema>(schema.gender),
+                },
+                {
+                  type: "control",
+                  path: 'website',
+                  schema: schema.website,
+                },
+                {
+                  type: "control",
+                  path: 'interests',
+                  schema: cast<StringJsonSchema>(schema.interests),
+                },
+              ],
+            }
+        ],
+      },
+      {
+        options: {label: '',},
+        type:"fieldset",
+        nodes: [
+          {
+            type: "columns",
+            nodes: [
+              {
+                type: "rows",
+                nodes: [
+                  {
+                    type: "control",
+                    path: 'address/lineOne',
+                  },
+                  {
+                    type: "control",
+                    path: 'address/lineTwo',
+                  },
+                  {
+                    type: "columns",
+                    nodes: [
+                      {
+                        type: "control",
+                        path: 'address/postalCode',
+                      },
+                      {
+                        type: "control",
+                        path: 'address/city',
+                      },
+                      {
+                        type: "control",
+                        path: 'address/country',
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+          {
+            type: "columns",
+            nodes: [
+              {
+                type: "rows",
+                nodes: [
+                  {
+                    type: "control",
+                    path: 'address/lineOne',
+
+                    options: { readOnly: true },
+                  },
+                  {
+                    type: "control",
+                    path: 'address/lineTwo',
+
+                    options: { readOnly: true },
+                  },
+                  {
+                    type: "columns",
+                    nodes: [
+                      {
+                        type: "control",
+                        path: 'address/postalCode',
+
+                        options: { readOnly: true },
+                      },
+                      {
+                        type: "control",
+                        path: 'address/city',
+
+                        options: { readOnly: true },
+                      },
+                      {
+                        type: "control",
+                        path: 'address/country',
+
+                        options: { readOnly: true },
+                      },
+                    ],
+                  },
+                ],
+              },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+};
+
 export const responsive: FormConfig = {
   data: {},
   schema: {

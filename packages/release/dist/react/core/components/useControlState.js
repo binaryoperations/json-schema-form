@@ -1,6 +1,7 @@
 import { fastDeepEqual, get, } from '../../../core/internals/object';
 import { groupBy } from 'lodash';
 import { useCallback, useMemo, useReducer } from 'react';
+import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
 export function useControlState(initialData, draftRef) {
     const [controlState, setControlState] = useReducer(reduceStoreState, {
         touchedControlPaths: new Map(),
@@ -66,17 +67,10 @@ function reduceStoreState(state, action) {
             const { reset, path, errors } = action.payload;
             const errorState = reset ? new Map() : state.errors;
             if (!errors.length)
-                errorState.delete(path);
+                errorState.delete(extractSegmentsFromPath(path).join('/'));
             const nextErrorsMap = new Map(Object.entries({
                 ...Object.fromEntries(errorState.entries()),
-                ...(reset
-                    ? groupBy(errors, (record) => record.data.pointer)
-                    : {
-                        [path]: errors.map((error) => ({
-                            ...error,
-                            data: { ...error.data, pointer: path },
-                        })),
-                    }),
+                ...groupBy(errors, (record) => extractSegmentsFromPath(record.data.pointer).join('/')),
             }));
             return {
                 ...state,

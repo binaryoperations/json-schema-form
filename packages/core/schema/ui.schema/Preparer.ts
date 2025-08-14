@@ -23,19 +23,24 @@ export class UiSchemaPreparer {
     const nextCount = this.counter++;
     const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
 
-
-    this.store.keyMap[id] = uiSchema;
+    this.store.keyMap[id] = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
+      id: { value: id, writable: false, enumerable: false },
+    });
 
 
     if (!uiSchema.nodes) return id;
 
 
     const treeNodes: string[] = [];
-
     const nodes = [uiSchema.nodes].flat().filter(Boolean) as LayoutSchema[];
 
     if (!Array.isArray(uiSchema.nodes)) {
       this.store.keyMap[id] = { ...(uiSchema as LayoutNodeType), nodes };
+      this.store.keyMap[id] = Object.hasOwn(this.store.keyMap[id], "id")
+        ? this.store.keyMap[id]
+        : Object.defineProperties(
+          this.store.keyMap[id],
+          { id: { value: id, writable: false, enumerable: false }, });
     }
 
     for (const nextUiSchema of nodes) {

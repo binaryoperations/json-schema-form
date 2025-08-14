@@ -48,7 +48,7 @@ export const LayoutChildren = memo(function LayoutChildren(props: {
     return <ControlNode id={props.id} />;
   }
 
-  const renderedNodes = nodes.map((node) => {
+  const renderedNodes = nodes?.map((node) => {
     return <LayoutNode key={node} id={node} />;
   });
 

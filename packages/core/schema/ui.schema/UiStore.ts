@@ -18,6 +18,10 @@ export class UiStore {
 
   constructor(private draftSchema: LogicalSchema) {}
 
+  get rootSchema() {
+    return this.draftSchema;
+  }
+
   getChildren(key: string) {
     return this.tree[key];
   }
@@ -27,7 +31,14 @@ export class UiStore {
   }
 
   getChildNodes(key: string) {
-    return this.getChildren(key).map(this.getNode.bind(this));
+    return this.getChildren(key)?.map(this.getNode.bind(this)) ?? [];
+  }
+
+  getChildControls(key: string) {
+    return this.getChildNodes(key).flatMap((node): ControlNodeType[] => {
+      if (this.isControl(node.id!)) return [node] as ControlNodeType[];
+      return [...this.getChildControls(node.id!)] as ControlNodeType[];
+    });
   }
 
   getNodeType(key: string) {

@@ -27,7 +27,7 @@ export const LayoutChildren = memo(function LayoutChildren(props) {
     if (isControl) {
         return _jsx(ControlNode, { id: props.id });
     }
-    const renderedNodes = nodes.map((node) => {
+    const renderedNodes = nodes?.map((node) => {
         return _jsx(LayoutNode, { id: node }, node);
     });
     return _jsx(_Fragment, { children: renderedNodes });

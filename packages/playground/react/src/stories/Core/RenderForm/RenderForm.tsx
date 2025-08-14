@@ -78,6 +78,26 @@ registerRenderers({
     );
   },
 
+  "submit-button": function SubmitButton(props: { id: string; }) {
+    return (
+      <button
+        form='root/1/2'
+        type="submit"
+        style={{
+          backgroundColor: '#007bff',
+          color: 'white',
+          padding: '8px 16px',
+          border: 'none',
+          borderRadius: '4px',
+          cursor: 'pointer',
+        }}
+        {...props}
+      >
+        Submit
+      </button>
+    );
+  },
+
   testCustomLayout: (props: PropsWithChildren) => {
     return (
       <>

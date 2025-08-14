@@ -8,6 +8,7 @@ import { groupBy } from 'lodash';
 import { RefObject, useCallback, useMemo, useReducer } from 'react';
 
 import type { UiStoreContextType } from '../context/StoreContext';
+import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
 
 type ControlState = Pick<
   UiStoreContextType,
@@ -109,19 +110,12 @@ function reduceStoreState(state: ControlState, action: Action) {
       const { reset, path, errors } = action.payload;
       const errorState = reset ? new Map<string, JsonError[]>() : state.errors;
 
-      if (!errors.length) errorState.delete(path);
+      if (!errors.length) errorState.delete(extractSegmentsFromPath(path).join('/'));
 
       const nextErrorsMap = new Map(
         Object.entries({
           ...Object.fromEntries(errorState.entries()),
-          ...(reset
-            ? groupBy(errors, (record) => record.data.pointer)
-            : {
-                [path]: errors.map((error) => ({
-                  ...error,
-                  data: { ...error.data, pointer: path },
-                })),
-              }),
+          ...groupBy(errors, (record) => extractSegmentsFromPath(record.data.pointer).join('/')),
         })
       );
 

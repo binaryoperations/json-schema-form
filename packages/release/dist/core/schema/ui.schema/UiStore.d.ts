@@ -1,4 +1,4 @@
-import { LayoutSchema } from '../../models/LayoutSchema';
+import { ControlNodeType, LayoutSchema } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
 export type { SchemaNode };
 export declare class UiStore {
@@ -6,9 +6,11 @@ export declare class UiStore {
     keyMap: Record<string, LayoutSchema>;
     tree: Record<string, string[]>;
     constructor(draftSchema: LogicalSchema);
+    get rootSchema(): LogicalSchema;
     getChildren(key: string): string[];
     getNode(key: string): LayoutSchema;
     getChildNodes(key: string): LayoutSchema[];
+    getChildControls(key: string): ControlNodeType<object, object>[];
     getNodeType(key: string): string | {};
     isControl(key: string): boolean;
     freeze(): this;

@@ -1,7 +1,7 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { PropsWithChildren } from 'react';
 
-import { composite, customer, customerWizard, frozenArray, responsive } from './forms';
+import { composite, customer, customerWizard, customerWizardSubForm, frozenArray, responsive } from './forms';
 import RenderFormApp from './RenderForm';
 
 // More on how to set up stories at: https://storybook.js.org/docs/writing-stories#default-export
@@ -59,6 +59,34 @@ export const CustomerWizardWithCustomUiSchema: Story = {
       ],
     },
     data: customerWizard.data!,
+  },
+};
+
+export const CustomerWizardWithSubForm: Story = {
+  args: {
+    schema: customer.schema,
+    uiSchema: {
+      type: 'rows',
+      nodes: [
+        {
+          type: "sub-form",
+          nodes:[
+            customerWizardSubForm.uiSchema,
+            { type: "submit-button"}
+          ]
+        },
+        {
+          nodes: (customerWizard.uiSchema)!.nodes,
+          type: (props: PropsWithChildren) => (
+            <div>
+              <h4>I'm another special snowflake</h4>
+              {props.children}
+            </div>
+          ),
+        },
+      ],
+    },
+    data: customerWizardSubForm.data!,
   },
 };
 
