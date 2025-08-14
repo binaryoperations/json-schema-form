@@ -13,7 +13,9 @@ export const useSubFormProps = function SubForm(props) {
     const [schemaNode] = useUiStoreContext((store) => {
         return store.uiContext.deriveSchemaNodeAtPointer(props.id);
     }, fastDeepEqual);
-    const handleSubmit = useCallback(() => {
+    const handleSubmit = useCallback((e) => {
+        e.preventDefault();
+        e.stopPropagation();
         return storeRef.current.submit(schemaNode);
     }, [schemaNode, storeRef]);
     return {

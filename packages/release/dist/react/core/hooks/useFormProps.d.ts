@@ -294,7 +294,7 @@ export declare const useFormProps: (props: ComponentProps<"form">) => {
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLFormElement> | undefined;
 };
 export declare const useSubFormProps: (props: ComponentProps<"form">) => {
-    onSubmit: () => void;
+    onSubmit: import("react").FormEventHandler<HTMLFormElement>;
     ref?: import("react").Ref<HTMLFormElement> | undefined;
     key?: import("react").Key | null | undefined;
     acceptCharset?: string | undefined;
