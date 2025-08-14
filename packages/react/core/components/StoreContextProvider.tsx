@@ -46,13 +46,10 @@ export const StoreContextProvider: StoreContextProvider = memo(
 
     const controlState = useControlState(props.initialData, schemaDraftRef as RefObject<ReturnType<typeof LogicalSchema['parse']>>);
 
-
-
     const validate = useCallback(
       (value: any, schema?: JsonSchema) => schemaDraftRef.current!.validate(value, schema),
       []
     );
-
 
     const uiContext = useMemo(
       () => UiSchema.prepare(props.uiSchema, schemaDraft),
@@ -73,8 +70,8 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit as RefObject<UiStoreContextType>);
 
 
-    const submit = useCallback((schemaNode?: SchemaNode) => {
-      const isValid = validateFunc(formDataRef.current, schemaNode);
+    const submit = useCallback((data = formDataRef.current, schemaNode?: SchemaNode) => {
+      const isValid = validateFunc(data, schemaNode);
       if (!isValid) return;
 
       return onSubmitLatestRef.current?.(formDataRef.current);
