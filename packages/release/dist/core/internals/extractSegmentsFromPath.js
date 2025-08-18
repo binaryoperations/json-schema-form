@@ -15,9 +15,9 @@ export function extractSegmentsFromPath(path) {
             return [next, part].filter(Boolean).join("/");
         if (hasValidPaths)
             return next;
-        if (["item", "properties"].includes(part))
+        if (["items", "properties"].includes(part))
             return next;
-        throw new Error(`Malformed path: ${path}. Error after ${next}. Expected '#properties' or '#item' but got '${part}'`);
+        throw new Error(`Malformed path: ${path}. Error after ${next}. Expected 'properties' or 'items' but got '${part}'`);
     }, "");
     return extractSchmeaSegmentsFromPath(path);
 }
