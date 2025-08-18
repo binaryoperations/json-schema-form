@@ -68,13 +68,7 @@ export const CustomerWizardWithSubForm: Story = {
     uiSchema: {
       type: 'rows',
       nodes: [
-        {
-          type: "sub-form",
-          nodes:[
-            customerWizardSubForm.uiSchema,
-            { type: "submit-button"}
-          ]
-        },
+        customerWizardSubForm.uiSchema,
         {
           nodes: (customerWizard.uiSchema)!.nodes,
           type: (props: PropsWithChildren) => (

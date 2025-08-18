@@ -6,19 +6,24 @@ export function extractSegmentsFromPath(path: string) {
     .split("/")
     .filter((part, index) => index !== 0 || !!part);
 
+    const pathHasPropertiesOrItem = path.match(/\/item\/|\/properties\//);
+
+    if (!pathHasPropertiesOrItem) return extractSchmeaSegmentsFromPath(path);
+
   // ODD number of segments means that the path doesn't have /properties or /items
-  if (!(segments.length % 2)) return extractSchmeaSegmentsFromPath(path);
+  const hasValidPaths = !(segments.length % 2);
 
 
   // If the path doesn't contain /#properties or /#item, return as is
-  if (!path.match(/\/#item|\/#properties/)) return extractSchmeaSegmentsFromPath(path);
 
   path = segments.reduce((next, part, index) => {
-    if (index % 2) return `${next}/${part}`;
-    if (["#item", "#properties"].includes(part)) return next;
+    if (index % 2) return [next, part].filter(Boolean).join("/");
+    if (hasValidPaths) return next;
+
+    if (["item", "properties"].includes(part)) return next;
 
     throw new Error(`Malformed path: ${path}. Error after ${next}. Expected '#properties' or '#item' but got '${part}'`);
-  }, "")
+  }, "");
 
   return extractSchmeaSegmentsFromPath(path);
 }

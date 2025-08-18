@@ -1,1 +1,0 @@
-{"version":3,"file":"SubFormContext.d.ts","sourceRoot":"","sources":["../../../../../react/core/context/SubFormContext.ts"],"names":[],"mappings":"AAAA,OAAO,EAAiB,gBAAgB,EAAO,MAAM,OAAO,CAAC;AAE7D,KAAK,cAAc,GAAG;IACpB,EAAE,CAAC,EAAE,MAAM,CAAC;IACZ,QAAQ,CAAC,EAAE,gBAAgB,CAAC;CAC7B,CAAC;AAEF,eAAO,MAAM,cAAc,gDAA2C,CAAC;AAGvE,eAAO,MAAM,iBAAiB,6BAA4B,CAAC"}

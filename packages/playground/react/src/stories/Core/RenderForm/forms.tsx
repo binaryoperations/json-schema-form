@@ -389,12 +389,18 @@ export const customerWizardSubForm: FormConfig = {
                   type: "columns",
                   nodes: [
                     {
-                      type: "control",
-                      path: 'phone/countryCode',
-                    },
-                    {
-                      type: "control",
-                      path: 'phone/number',
+                      type: "sub-form",
+                      nodes:[
+                        {
+                          type: "control",
+                          path: 'phone/countryCode',
+                        },
+                        {
+                          type: "control",
+                          path: 'phone/number',
+                        },
+                        { type: "submit-button"}
+                      ]
                     },
                   ],
                 },

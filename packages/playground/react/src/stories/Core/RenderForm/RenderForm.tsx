@@ -35,12 +35,14 @@ import { useFormDataContext } from '@binaryoperations/json-forms-react/core/cont
 import {
   type ComponentProps,
   type PropsWithChildren,
+  use,
   useCallback,
   useEffect,
   useRef,
   useState,
 } from 'react';
 import { registerRenderers } from '@binaryoperations/json-forms-react';
+import { useSubmitButtonProps } from '@binaryoperations/json-forms-react/core/hooks';
 
 
 const defaultStyles = {
@@ -61,7 +63,7 @@ registerRenderers({
   "fieldset": function LayoutFieldSet(props: { id: string; }) {
     return <Column data-type="fieldSet" style={defaultStyles} {...props} />;
   },
-  "control": function LayoutControl(props: { id: string; }) {
+  "control": function LayoutControl(props: PropsWithChildren<{ id: string; }>) {
     return (
       <Row
         data-type="control"
@@ -73,16 +75,15 @@ registerRenderers({
           alignItems: 'flex-start',
           flex: 1,
         }}
-        {...props}
-      />
+      >{props.children}</Row>
     );
   },
 
   "submit-button": function SubmitButton(props: { id: string; }) {
+    const submitButtonProps = useSubmitButtonProps();
+
     return (
       <button
-        form='root/1/2'
-        type="submit"
         style={{
           backgroundColor: '#007bff',
           color: 'white',
@@ -92,6 +93,7 @@ registerRenderers({
           cursor: 'pointer',
         }}
         {...props}
+        {...submitButtonProps}
       >
         Submit
       </button>

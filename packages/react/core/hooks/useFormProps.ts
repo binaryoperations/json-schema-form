@@ -1,7 +1,6 @@
 
-import { useCallback, type ComponentProps } from 'react';
+import type { ComponentProps, FormEvent } from 'react';
 import { useUiStoreRef } from '../context/StoreContext';
-import { useFormDataRef } from '../context/FormDataContext';
 
 export const useFormProps = function Form(props: ComponentProps<'form'>) {
   const storeRef = useUiStoreRef();
@@ -13,33 +12,17 @@ export const useFormProps = function Form(props: ComponentProps<'form'>) {
 };
 
 
-export const useSubFormProps = function SubForm(props: ComponentProps<'form'>) {
+export const useSubmitButtonProps = function useSubmitButtonProps(): ComponentProps<'button'> {
   const storeRef = useUiStoreRef();
-  const formDataRef = useFormDataRef();
-
-  const handleSubmit = useCallback<Exclude<ComponentProps<'form'>['onSubmit'], undefined>>((e) => {
-    const uiContext = storeRef.current.uiContext;
-    const errors = uiContext.rootSchema
-      .getSchemaNodeOf("#")
-      .validate(formDataRef.current, "#", uiContext.getChildControls(props.id ?? 'root').map((control) => {
-        const node = uiContext.deriveSchemaNodeAtPointer(control.path);
-        return {
-          pointer: node.evaluationPath,
-          node,
-        }
-      })).errors
-
-      storeRef.current.setErrors("#", errors, false);
-
-      if (errors.length) {
-          e.preventDefault();
-          e.stopPropagation();
-          return;
-      }
-  }, [storeRef]);
 
   return {
-    ...props,
-    onSubmitCapture: handleSubmit,
-  }
+    type: 'submit',
+    // disabled: storeRef.current.isSubmitting,
+    onClick: (e: FormEvent) => {
+      e.preventDefault();
+      e.stopPropagation();
+
+      storeRef.current.onSubmit(e);
+    },
+  };
 }
