@@ -2,10 +2,9 @@ import {
   fastDeepEqual,
   get,
 } from '@binaryoperations/json-forms-core/internals/object';
-import type { LogicalSchema } from '@binaryoperations/json-forms-core/schema/logical.schema/Parser';
 import type { JsonError } from 'json-schema-library';
 import { groupBy } from 'lodash';
-import { RefObject, useCallback, useMemo, useReducer } from 'react';
+import { useCallback, useMemo, useReducer } from 'react';
 
 import type { UiStoreContextType } from '../context/StoreContext';
 import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
@@ -24,28 +23,23 @@ type Action =
       payload: { path: string; errors: JsonError[]; reset?: boolean };
     };
 
-export function useControlState(initialData: object, draftRef: RefObject<LogicalSchema>) {
+export function useControlState(initialData: object) {
   const [controlState, setControlState] = useReducer(reduceStoreState, {
     touchedControlPaths: new Map<string, true>(),
     dirtyControlPaths: new Map<string, true>(),
     errors: new Map<string, JsonError[]>(),
   });
 
-  const derivePath = useCallback(
-    (path: string) => draftRef.current.getSchemaNodeOf(path).evaluationPath,
-    [draftRef]
-  );
-
   const setTouched = useCallback(
     (path: string) => {
       setControlState({
         type: 'SET_TOUCHED',
         payload: {
-          path: derivePath(path),
+          path,
         },
       });
     },
-    [derivePath]
+    []
   );
 
   const setDirty = useCallback(
@@ -53,22 +47,22 @@ export function useControlState(initialData: object, draftRef: RefObject<Logical
       setControlState({
         type: 'SET_DIRTY',
         payload: {
-          path: derivePath(path),
+          path,
           isDirty: !fastDeepEqual(get(initialData, path), value),
         },
       });
     },
-    [derivePath, initialData]
+    [initialData]
   );
 
   const setErrors = useCallback(
     (path: string, errors: JsonError[], reset = false) => {
       setControlState({
         type: 'SET_ERRORS',
-        payload: { path: derivePath(path), errors, reset },
+        payload: { path, errors, reset },
       });
     },
-    [derivePath]
+    []
   );
 
   const resetErrors = useCallback(() => {

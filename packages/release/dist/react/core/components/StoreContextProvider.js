@@ -14,7 +14,7 @@ export const StoreContextProvider = memo(function StoreContextProvider(props) {
     const formDataRef = useFormDataRef();
     const schemaDraftRef = useLatest(schemaDraft);
     const onSubmitLatestRef = useLatest(props.onSubmit);
-    const controlState = useControlState(props.initialData, schemaDraftRef);
+    const controlState = useControlState(props.initialData);
     const validate = useCallback((value, schema) => schemaDraftRef.current.validate(value, schema), []);
     const uiContext = useMemo(() => UiSchema.prepare(props.uiSchema, schemaDraft), [props.uiSchema, schemaDraft]);
     const validateOnSubmit = useLatest({

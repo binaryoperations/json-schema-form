@@ -2,36 +2,35 @@ import { fastDeepEqual, get, } from '../../../core/internals/object';
 import { groupBy } from 'lodash';
 import { useCallback, useMemo, useReducer } from 'react';
 import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
-export function useControlState(initialData, draftRef) {
+export function useControlState(initialData) {
     const [controlState, setControlState] = useReducer(reduceStoreState, {
         touchedControlPaths: new Map(),
         dirtyControlPaths: new Map(),
         errors: new Map(),
     });
-    const derivePath = useCallback((path) => draftRef.current.getSchemaNodeOf(path).evaluationPath, [draftRef]);
     const setTouched = useCallback((path) => {
         setControlState({
             type: 'SET_TOUCHED',
             payload: {
-                path: derivePath(path),
+                path,
             },
         });
-    }, [derivePath]);
+    }, []);
     const setDirty = useCallback((path, value) => {
         setControlState({
             type: 'SET_DIRTY',
             payload: {
-                path: derivePath(path),
+                path,
                 isDirty: !fastDeepEqual(get(initialData, path), value),
             },
         });
-    }, [derivePath, initialData]);
+    }, [initialData]);
     const setErrors = useCallback((path, errors, reset = false) => {
         setControlState({
             type: 'SET_ERRORS',
-            payload: { path: derivePath(path), errors, reset },
+            payload: { path, errors, reset },
         });
-    }, [derivePath]);
+    }, []);
     const resetErrors = useCallback(() => {
         setControlState({
             type: 'RESET_ERRORS',

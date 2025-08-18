@@ -44,7 +44,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const schemaDraftRef = useLatest(schemaDraft);
     const onSubmitLatestRef = useLatest(props.onSubmit);
 
-    const controlState = useControlState(props.initialData, schemaDraftRef as RefObject<ReturnType<typeof LogicalSchema['parse']>>);
+    const controlState = useControlState(props.initialData);
 
     const validate = useCallback(
       (value: any, schema?: JsonSchema) => schemaDraftRef.current!.validate(value, schema),
