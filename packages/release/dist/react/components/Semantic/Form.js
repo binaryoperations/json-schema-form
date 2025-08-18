@@ -45,7 +45,7 @@ function useSubFormProps(props) {
             onSubmit(e);
         else
             storeRef.current.submit?.(e, undefined, undefined, true);
-    }, [storeRef]);
+    }, [storeRef, props.id]);
     return useMemo(() => ({
         onSubmit: handleSubmit,
     }), [handleSubmit]);
