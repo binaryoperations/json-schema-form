@@ -1,6 +1,6 @@
 {
   "name": "@binaryoperations/json-schema-form",
-  "version": "0.0.1-dev.18",
+  "version": "0.0.1-dev.19",
   "description": "",
   "main": "index.ts",
   "private": false,
