@@ -3,6 +3,7 @@ export { JsonError, SchemaNode };
 export declare class LogicalSchema {
     private draft;
     static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
+    get rootSchema(): SchemaNode;
     constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
     private deriveSchemaNode;
     prepareTemplate<T extends Record<string, any>>(defaultValues?: T): any;

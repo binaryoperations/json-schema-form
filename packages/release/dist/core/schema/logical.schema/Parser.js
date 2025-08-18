@@ -5,6 +5,9 @@ export class LogicalSchema {
         const ClassConstructor = Object.assign(this);
         return new ClassConstructor(schema, draft);
     }
+    get rootSchema() {
+        return this.draft;
+    }
     constructor(schema, draft = draft2020) {
         this.draft = this.deriveSchemaNode(schema, draft);
     }
@@ -15,7 +18,7 @@ export class LogicalSchema {
         return node;
     }
     prepareTemplate(defaultValues) {
-        return this.draft.getData(defaultValues);
+        return this.draft.getData(defaultValues, { useTypeDefaults: true });
     }
     validate(value, schema = this.draft) {
         const schemaNode = this.deriveSchemaNode(schema);

@@ -8,13 +8,14 @@ import type { SchemaNode } from 'json-schema-library';
  * Read the UI node for the current control
  *
  */
-export declare function useControl<SelectorOutput>(selector: Selector<ControlNodeType, SelectorOutput>, equalityCheck?: (value1: any, value2: any) => boolean): [value: SelectorOutput, set: (value: (prev: UiStoreContextType) => Partial<UiStoreContextType>) => void];
+export declare function useControl<SelectorOutput = ControlNodeType>(selector: Selector<ControlNodeType, SelectorOutput>, equalityCheck?: (value1: any, value2: any) => boolean): [value: SelectorOutput, set: (value: (prev: UiStoreContextType) => Partial<UiStoreContextType>) => void];
 /**
  *
  * Read the schema of the control
  *
  */
 export declare function useControlSchema<SelectorOutput>(selector: Selector<ControlSchema, SelectorOutput>, equalityCheck?: typeof Object.is): SelectorOutput;
+export declare const useControlPointer: (path: string) => [value: string, set: (value: (prev: UiStoreContextType) => Partial<UiStoreContextType>) => void];
 /**
  *
  * Read the schema of the control

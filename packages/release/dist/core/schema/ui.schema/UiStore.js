@@ -1,16 +1,17 @@
 import { cast } from '../../internals/cast';
-import { fpPick, cloneDeep } from '../../internals/object';
+import { fpPick, cloneDeep, keyBy } from '../../internals/object';
 import resolvers from '../../internals/resolvers';
 import { EnumUiNode, } from '../../models/LayoutSchema';
 export class UiStore {
     draftSchema;
     keyMap = {};
     tree = {};
+    $$dataCache = new WeakMap();
     constructor(draftSchema) {
         this.draftSchema = draftSchema;
     }
     get rootSchema() {
-        return this.draftSchema;
+        return this.draftSchema.rootSchema;
     }
     getChildren(key) {
         return this.tree[key];
@@ -39,7 +40,10 @@ export class UiStore {
         this.tree = Object.freeze(this.tree);
         return this;
     }
-    deriveSchemaAtPointer(key, data) {
+    prepareTemplate(data) {
+        return this.draftSchema.prepareTemplate(data);
+    }
+    deriveControlSchema(key, data) {
         if (!this.isControl(key))
             return null;
         const node = cast(this.getNode(key));
@@ -58,7 +62,20 @@ export class UiStore {
         }
         return schema;
     }
-    deriveSchemaNodeAtPointer(key, data) {
-        return this.draftSchema.getSchemaNodeOf(key, data);
+    deriveControlSchemaNode(path, data) {
+        return this.draftSchema.getSchemaNodeOf(path, data);
+    }
+    deriveDataNodes(data) {
+        if (!this.$$dataCache.has(data)) {
+            const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.node.evaluationPath);
+            this.$$dataCache.set(data, dataNodes);
+        }
+        return this.$$dataCache.get(data);
+    }
+    deriveDataNodeAtPath(data, pointer) {
+        return this.deriveDataNodes(data)[pointer] ?? null;
+    }
+    deriveDataAtPointer(data, pointer) {
+        return this.deriveDataNodeAtPath(data, pointer)?.value ?? null;
     }
 }

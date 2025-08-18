@@ -17,6 +17,10 @@ export class LogicalSchema {
     return new ClassConstructor(schema, draft);
   }
 
+  get rootSchema() {
+    return this.draft;
+  }
+
   constructor(
     schema: JsonSchema | SchemaNode,
     draft: Draft = draft2020
@@ -36,7 +40,7 @@ export class LogicalSchema {
     }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
-    return this.draft.getData(defaultValues);
+    return this.draft.getData(defaultValues, { useTypeDefaults: true });
   }
 
   validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {

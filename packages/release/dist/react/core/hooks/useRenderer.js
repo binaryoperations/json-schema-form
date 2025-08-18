@@ -9,6 +9,6 @@ export const useLayoutNode = (type) => {
 export const useControlNode = (id) => {
     const controls = Object.values(ControlRepository.getAll());
     return useStore((store) => {
-        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveSchemaAtPointer(id));
+        return findControl(controls, store.uiContext.getNode(id), store.uiContext.deriveControlSchema(id));
     }, shallowCompare)[0];
 };

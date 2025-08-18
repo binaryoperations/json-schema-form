@@ -1,6 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useMemo } from 'react';
-import resolvers from '../../../core/internals/resolvers';
 import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
@@ -23,8 +22,9 @@ function useSubFormProps(props) {
     const handleSubmit = useCallback((e, onSubmit) => {
         const uiContext = storeRef.current.uiContext;
         const { errors } = uiContext.getChildControls(props.id ?? 'root').reduce((x, control) => {
-            const node = uiContext.deriveSchemaNodeAtPointer(control.path);
-            const validateState = node.validate(resolvers.resolvePath(formDataRef.current, control.path) ?? node.getData(), node.evaluationPath);
+            const node = uiContext.deriveControlSchemaNode(control.path);
+            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, node.evaluationPath) ?? {};
+            const validateState = node.validate(value, pointer);
             return {
                 ...x,
                 valid: x.valid && validateState.valid,

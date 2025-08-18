@@ -1,5 +1,5 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { fpPick, cloneDeep } from '@binaryoperations/json-forms-core/internals/object';
+import { fpPick, cloneDeep, keyBy } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { ControlSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 
@@ -9,6 +9,7 @@ import {
   EnumUiNode,
 } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
+import type { DataNode } from 'json-schema-library/dist/src/methods/toDataNodes';
 
 export type { SchemaNode };
 
@@ -16,10 +17,12 @@ export class UiStore {
   keyMap: Record<string, LayoutSchema> = {};
   tree: Record<string, string[]> = {};
 
+  private $$dataCache = new WeakMap<object, Record<string, DataNode>>();
+
   constructor(private draftSchema: LogicalSchema) {}
 
   get rootSchema() {
-    return this.draftSchema;
+    return this.draftSchema.rootSchema;
   }
 
   getChildren(key: string) {
@@ -56,7 +59,11 @@ export class UiStore {
     return this;
   }
 
-  deriveSchemaAtPointer(key: string, data?: object) {
+  prepareTemplate(data?: object) {
+    return this.draftSchema.prepareTemplate(data);
+  }
+
+  deriveControlSchema(key: string, data?: object) {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNodeType>(this.getNode(key));
@@ -83,7 +90,24 @@ export class UiStore {
     return schema;
   }
 
-  deriveSchemaNodeAtPointer(key: string, data?: object) {
-    return this.draftSchema.getSchemaNodeOf(key, data);
+  deriveControlSchemaNode(path: string, data?: object) {
+    return this.draftSchema.getSchemaNodeOf(path, data);
+  }
+
+  deriveDataNodes(data: object) {
+    if (!this.$$dataCache.has(data)) {
+      const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.node.evaluationPath);
+      this.$$dataCache.set(data, dataNodes);
+    }
+
+    return this.$$dataCache.get(data)!;
+  }
+
+  deriveDataNodeAtPath(data: object, pointer: string) {
+    return this.deriveDataNodes(data)[pointer] ?? null;
+  }
+
+  deriveDataAtPointer(data: object, pointer: string) {
+    return this.deriveDataNodeAtPath(data, pointer)?.value ?? null;
   }
 }

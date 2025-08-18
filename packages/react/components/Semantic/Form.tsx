@@ -2,7 +2,6 @@
 import { FormEvent, useCallback, useMemo, type ComponentProps } from 'react';
 import { ValidateReturnType } from 'json-schema-library';
 
-import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
@@ -35,11 +34,12 @@ function useSubFormProps(props: {id: string}) {
     const uiContext = storeRef.current.uiContext;
 
     const {errors} = uiContext.getChildControls(props.id ?? 'root').reduce((x: ValidateReturnType, control) => {
-      const node = uiContext.deriveSchemaNodeAtPointer(control.path);
+      const node = uiContext.deriveControlSchemaNode(control.path);
 
+      const {value = null, pointer} = uiContext.deriveDataNodeAtPath(formDataRef.current, node.evaluationPath) ?? {};
       const validateState = node.validate(
-        resolvers.resolvePath(formDataRef.current, control.path) ?? node.getData(),
-        node.evaluationPath
+        value,
+        pointer
       );
 
       return {

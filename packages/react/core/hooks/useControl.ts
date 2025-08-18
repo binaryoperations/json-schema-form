@@ -4,7 +4,6 @@ import {
   shallowCompare,
   noop,
 } from '@binaryoperations/json-forms-core/internals/object';
-import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import type {
   ControlNodeType,
   ControlSchema,
@@ -24,6 +23,7 @@ import { useStore } from './useStore';
 import useValue from './useValue';
 import type { SchemaNode } from 'json-schema-library';
 import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
+import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);
@@ -33,7 +33,7 @@ const useInvariantControl = (message: string) =>
  * Read the UI node for the current control
  *
  */
-export function useControl<SelectorOutput>(
+export function useControl<SelectorOutput = ControlNodeType>(
   selector: Selector<ControlNodeType, SelectorOutput>,
   equalityCheck = Object.is
 ) {
@@ -57,7 +57,7 @@ export function useControlSchema<SelectorOutput>(
   selector: Selector<ControlSchema, SelectorOutput>,
   equalityCheck?: typeof Object.is
 ) {
-  const currentControl = useInvariantControl(
+  const [currentControlId] = useInvariantControl(
     'useControlSchema can only be called inside ControlContext'
   );
 
@@ -65,12 +65,19 @@ export function useControlSchema<SelectorOutput>(
 
   return useStore((store) => {
     return selector(
-      store.uiContext.deriveSchemaAtPointer(
-        currentControl,
+      store.uiContext.deriveControlSchema(
+        currentControlId,
         formDataRef.current
       )!
     );
   }, equalityCheck)[0];
+}
+
+export const useControlPointer = (path: string) => {
+  return useStore((context) => invariant(
+    context.uiContext.deriveControlSchemaNode(path).evaluationPath,
+    "Control not found at path: " + path
+  ));
 }
 
 /**
@@ -79,12 +86,15 @@ export function useControlSchema<SelectorOutput>(
  *
  */
 export function useControlValue<V = unknown>(path: string) {
+  const storeRef = useUiStoreRef();
+
+  const [pointer] = useControlPointer(path);
+
   const [value, setFormData] = useFormDataContext(
-    (data) => resolvers.resolvePath<V>(data, path),
+    (data) => storeRef.current.uiContext.deriveDataAtPointer(data, pointer),
     shallowCompare
   );
 
-  const storeRef = useUiStoreRef();
 
   const validate = useValidateData(path, 'onChange', storeRef);
 
@@ -128,7 +138,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const proxyValue = useValue(value);
 
   const [{ pointer, schema, }] = useUiStoreContext((state) => {
-    const node = state.uiContext.deriveSchemaNodeAtPointer(path);
+    const node = state.uiContext.deriveControlSchemaNode(path);
     return {
       pointer: node.evaluationPath,
       schema: node?.schema,
@@ -195,7 +205,7 @@ export function useValidateData(
       const shouldReset = validateOn === 'onSubmit';
 
       const testSchema = schema?.schema ??
-        storeRef.current.uiContext.deriveSchemaNodeAtPointer(path).schema;
+        storeRef.current.uiContext.deriveControlSchemaNode(path).schema;
 
       const validateResult = shouldReset
         ? validate(value ?? formDataRef.current, testSchema)
