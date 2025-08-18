@@ -1,5 +1,5 @@
 
-import type { ComponentProps, FormEvent } from 'react';
+import type { ComponentProps } from 'react';
 import { useUiStoreRef } from '../context/StoreContext';
 
 export const useFormProps = function Form(props: ComponentProps<'form'>) {
@@ -12,17 +12,12 @@ export const useFormProps = function Form(props: ComponentProps<'form'>) {
 };
 
 
-export const useSubmitButtonProps = function useSubmitButtonProps(): ComponentProps<'button'> {
+export const useSubmitButtonProps = function useSubmitButtonProps() {
   const storeRef = useUiStoreRef();
 
   return {
     type: 'submit',
     // disabled: storeRef.current.isSubmitting,
-    onClick: (e: FormEvent) => {
-      e.preventDefault();
-      e.stopPropagation();
-
-      storeRef.current.onSubmit(e);
-    },
-  };
+    onClick: storeRef.current.onSubmit,
+  }
 }

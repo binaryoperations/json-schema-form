@@ -20,8 +20,8 @@ export type UiStoreContextType = {
     setDirty: (path: string, value: any) => void;
     setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
     resetErrors: () => void;
-    onSubmit: (e?: FormEvent) => void | Promise<void>;
-    submit: (data?: object, schemaNode?: SchemaNode, shouldValidate?: boolean) => void;
+    onSubmit: (e?: FormEvent, onSubmit?: (e?: FormEvent) => void | Promise<void>) => void | Promise<void>;
+    submit: (e?: FormEvent, data?: object, schemaNode?: SchemaNode, shouldValidate?: boolean) => void;
 };
 export declare const UiStoreContextProvider: import("react").NamedExoticComponent<import("../fast-context").ProviderProps<UiStoreContextType>> & {
     displayName: string | undefined;

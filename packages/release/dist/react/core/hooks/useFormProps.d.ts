@@ -1,6 +1,6 @@
-import type { ComponentProps, FormEvent } from 'react';
+import type { ComponentProps } from 'react';
 export declare const useFormProps: (props: ComponentProps<"form">) => {
-    onSubmit: (e?: FormEvent) => void | Promise<void>;
+    onSubmit: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>;
     ref?: import("react").Ref<HTMLFormElement> | undefined;
     key?: import("react").Key | null | undefined;
     acceptCharset?: string | undefined;
@@ -293,5 +293,8 @@ export declare const useFormProps: (props: ComponentProps<"form">) => {
     onTransitionStart?: import("react").TransitionEventHandler<HTMLFormElement> | undefined;
     onTransitionStartCapture?: import("react").TransitionEventHandler<HTMLFormElement> | undefined;
 };
-export declare const useSubmitButtonProps: () => ComponentProps<"button">;
+export declare const useSubmitButtonProps: () => {
+    type: string;
+    onClick: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>;
+};
 //# sourceMappingURL=useFormProps.d.ts.map

@@ -20,7 +20,7 @@ export const SubForm = function SubForm(props) {
 function useSubFormProps(props) {
     const storeRef = useUiStoreRef();
     const formDataRef = useFormDataRef();
-    const handleSubmit = useCallback((e) => {
+    const handleSubmit = useCallback((e, onSubmit) => {
         const uiContext = storeRef.current.uiContext;
         const { errors } = uiContext.getChildControls(props.id ?? 'root').reduce((x, control) => {
             const node = uiContext.deriveSchemaNodeAtPointer(control.path);
@@ -41,7 +41,10 @@ function useSubFormProps(props) {
             e?.stopPropagation();
             return;
         }
-        storeRef.current.submit?.(undefined, undefined, true);
+        if (onSubmit)
+            onSubmit(e);
+        else
+            storeRef.current.submit?.(e, undefined, undefined, true);
     }, [storeRef]);
     return useMemo(() => ({
         onSubmit: handleSubmit,

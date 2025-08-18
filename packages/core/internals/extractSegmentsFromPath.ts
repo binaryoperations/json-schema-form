@@ -13,9 +13,7 @@ export function extractSegmentsFromPath(path: string) {
   // ODD number of segments means that the path doesn't have /properties or /items
   const hasValidPaths = !(segments.length % 2);
 
-
   // If the path doesn't contain /#properties or /#item, return as is
-
   path = segments.reduce((next, part, index) => {
     if (index % 2) return [next, part].filter(Boolean).join("/");
     if (hasValidPaths) return next;

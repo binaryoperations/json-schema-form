@@ -31,7 +31,7 @@ function useSubFormProps(props: {id: string}) {
   const storeRef = useUiStoreRef();
   const formDataRef = useFormDataRef();
 
-  const handleSubmit = useCallback((e?: FormEvent) => {
+  const handleSubmit = useCallback((e?: FormEvent, onSubmit?: (e?: FormEvent) => void) => {
     const uiContext = storeRef.current.uiContext;
 
     const {errors} = uiContext.getChildControls(props.id ?? 'root').reduce((x: ValidateReturnType, control) => {
@@ -57,7 +57,8 @@ function useSubFormProps(props: {id: string}) {
         return;
     }
 
-    storeRef.current.submit?.(undefined, undefined, true);
+    if (onSubmit) onSubmit(e);
+    else storeRef.current.submit?.(e, undefined, undefined, true);
   }, [storeRef]);
 
   return useMemo(() => ({

@@ -11,10 +11,6 @@ export const useSubmitButtonProps = function useSubmitButtonProps() {
     return {
         type: 'submit',
         // disabled: storeRef.current.isSubmitting,
-        onClick: (e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            storeRef.current.onSubmit(e);
-        },
+        onClick: storeRef.current.onSubmit,
     };
 };

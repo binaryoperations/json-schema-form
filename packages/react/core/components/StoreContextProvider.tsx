@@ -5,11 +5,11 @@ import type {
 import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
 import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
 import type { JsonSchema, SchemaNode } from 'json-schema-library';
-import type { ComponentType, PropsWithChildren, Ref, RefObject } from 'react';
+import type { ComponentType, FormEvent, PropsWithChildren, Ref, RefObject } from 'react';
 import { memo, useImperativeHandle, useMemo } from 'react';
 import { useCallback } from 'react';
 
-import { UiStoreContextProvider, UiStoreContextType, ValidateData } from '../context/StoreContext';
+import { UiStoreContextProvider, type UiStoreContextType, type ValidateData } from '../context/StoreContext';
 import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 import { useLatest } from '../hooks/useLatest';
@@ -28,7 +28,7 @@ export type StoreContextProviderProps = PropsWithChildren<{
   validationMode: 'onBlur' | 'onChange' | 'onSubmit';
   initialData: object;
   ref?: Ref<FormRef>;
-  onSubmit?: (data: object) => void | Promise<void>;
+  onSubmit?: (e: FormEvent | undefined, data: object) => void | Promise<void>;
 }>;
 export type StoreContextProvider = ComponentType<StoreContextProviderProps>;
 
@@ -69,18 +69,19 @@ export const StoreContextProvider: StoreContextProvider = memo(
 
     const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit as RefObject<UiStoreContextType>);
 
-    const submit = useCallback((data = formDataRef.current, schemaNode?: SchemaNode, shouldValidate = true) => {
+    const submit = useCallback((e?: FormEvent, data = formDataRef.current, schemaNode?: SchemaNode, shouldValidate = true) => {
       const isValid = !shouldValidate || validateFunc(data, schemaNode);
       if (!isValid) return;
 
-      return onSubmitLatestRef.current?.(formDataRef.current);
+      return onSubmitLatestRef.current?.(e, formDataRef.current);
     }, [validateFunc]);
 
 
-    const onSubmit: UiStoreContextType['onSubmit'] = useCallback((e?) => {
+    const onSubmit = useCallback<UiStoreContextType['onSubmit']>((e?, handleSubmit? ) => {
       e?.preventDefault();
       e?.stopPropagation();
 
+      if (handleSubmit) return handleSubmit(e);
       return submit();
     }, [submit]);
 
