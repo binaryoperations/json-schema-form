@@ -5,6 +5,7 @@ import type { ComponentType } from 'react';
 
 import { ControlRepository, RendererRepository } from '@binaryoperations/json-forms-react/core/context/RendererContext';
 import { useStore } from './useStore';
+import { useFormDataRef } from '../context/FormDataContext';
 
 
 export const useLayoutNode = (type: string | ComponentType<object>) => {
@@ -16,12 +17,13 @@ export const useLayoutNode = (type: string | ComponentType<object>) => {
 
 export const useControlNode = (id: string) => {
   const controls = Object.values(ControlRepository.getAll());
+  const formDataRef = useFormDataRef();
 
   return useStore((store) => {
     return findControl(
       controls,
       store.uiContext.getNode(id),
-      store.uiContext.deriveControlSchema(id)!
+      store.uiContext.deriveControlSchema(id, formDataRef.current)!
     );
   }, shallowCompare)[0];
 };

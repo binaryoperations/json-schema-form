@@ -33,9 +33,13 @@ function useSubFormProps(props: {id: string}) {
   const handleSubmit = useCallback((e?: FormEvent, onSubmit?: (e?: FormEvent) => void) => {
     const uiContext = storeRef.current.uiContext;
 
+    const formData = formDataRef.current;
+
+    uiContext.prepareTemplate(formDataRef.current);
+
     const {errors} = uiContext.getChildControls(props.id ?? 'root').reduce((x: ValidateReturnType, control) => {
       const node = uiContext.deriveControlSchemaNode(control.path);
-      const {value = null, pointer} = uiContext.deriveDataNodeAtPath(formDataRef.current, control.path) ?? {};
+      const {value = null, pointer} = uiContext.deriveDataNodeAtPath(formData, control.path) ?? {};
       const validateState = node.validate(
         value,
         pointer

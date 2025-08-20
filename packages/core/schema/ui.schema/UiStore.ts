@@ -1,5 +1,5 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { fpPick, cloneDeep, keyBy } from '@binaryoperations/json-forms-core/internals/object';
+import { cloneDeep, keyBy } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { ControlSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 
@@ -70,7 +70,7 @@ export class UiStore {
 
     let schema = node.schema;
     // this might break references/computed values
-    const template = this.draftSchema.prepareTemplate(cloneDeep(fpPick(node.path.split("/"), data)));
+    const template = this.draftSchema.prepareTemplate(cloneDeep(this.deriveDataAtPointer(data ?? {}, node.path) ?? {}));
 
     if (!schema) {
       schema = this.draftSchema.getSchemaOf(

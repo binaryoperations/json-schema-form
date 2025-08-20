@@ -1,5 +1,5 @@
 import { cast } from '../../internals/cast';
-import { fpPick, cloneDeep, keyBy } from '../../internals/object';
+import { cloneDeep, keyBy } from '../../internals/object';
 import resolvers from '../../internals/resolvers';
 import { EnumUiNode, } from '../../models/LayoutSchema';
 export class UiStore {
@@ -49,7 +49,7 @@ export class UiStore {
         const node = cast(this.getNode(key));
         let schema = node.schema;
         // this might break references/computed values
-        const template = this.draftSchema.prepareTemplate(cloneDeep(fpPick(node.path.split("/"), data)));
+        const template = this.draftSchema.prepareTemplate(cloneDeep(this.deriveDataAtPointer(data ?? {}, node.path) ?? {}));
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
