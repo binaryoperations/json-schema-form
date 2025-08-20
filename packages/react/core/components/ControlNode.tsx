@@ -7,6 +7,7 @@ import { useControl, useControlProps, useControlValue } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { WithErrorBoundary } from './ErrorBoundary';
+import { fastDeepEqual } from '@binaryoperations/json-forms-core/internals/object';
 
 
 const Unhandled = () => {
@@ -38,17 +39,17 @@ const WithControlContext = <Props extends { id: string }>(
 
 export const ControlNode = WithControlContext(
   WithErrorBoundary(function ControlNode(props: { id: string }) {
-    const [control] = useControl((control) => control);
+    const [path] = useControl((control) => control.path);
+    const [options] = useControl((control) => control.options, fastDeepEqual);
 
     const { Control, getValueFromEvent } = invariant(
       useControlNode(props.id),
       `Cannot find a relevant control for id: ${props.id}`
     );
 
-    const path = control.path;
     const { value, setValue, meta, onBlur, onFocus, id: _id, ...rest } = useControlProps(path, {
       ...props,
-      ...control.options,
+      ...options,
     });
 
     const handleSetValue = useCallback(

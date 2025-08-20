@@ -23,9 +23,18 @@ export class UiSchemaPreparer {
     const nextCount = this.counter++;
     const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
 
+
+    if ("path" in  uiSchema && !uiSchema.path.startsWith("#")) {
+      uiSchema = {
+        ...uiSchema,
+        path: `#/${uiSchema.path}`.split("/").filter(Boolean).join("/")
+      };
+    }
+
     this.store.keyMap[id] = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
       id: { value: id, writable: false, enumerable: false },
     });
+
 
 
     if (!uiSchema.nodes) return id;

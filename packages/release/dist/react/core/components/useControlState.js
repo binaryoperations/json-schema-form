@@ -2,12 +2,14 @@ import { fastDeepEqual, get, } from '../../../core/internals/object';
 import { groupBy } from 'lodash';
 import { useCallback, useMemo, useReducer } from 'react';
 import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
+import { useLatest } from '../hooks/useLatest';
 export function useControlState(initialData) {
     const [controlState, setControlState] = useReducer(reduceStoreState, {
         touchedControlPaths: new Map(),
         dirtyControlPaths: new Map(),
         errors: new Map(),
     });
+    const initialDataRef = useLatest(initialData);
     const setTouched = useCallback((path) => {
         setControlState({
             type: 'SET_TOUCHED',
@@ -21,10 +23,10 @@ export function useControlState(initialData) {
             type: 'SET_DIRTY',
             payload: {
                 path,
-                isDirty: !fastDeepEqual(get(initialData, path), value),
+                isDirty: !fastDeepEqual(get(initialDataRef.current, path), value),
             },
         });
-    }, [initialData]);
+    }, [initialDataRef]);
     const setErrors = useCallback((path, errors, reset = false) => {
         setControlState({
             type: 'SET_ERRORS',

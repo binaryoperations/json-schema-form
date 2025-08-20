@@ -8,7 +8,6 @@ import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 import useValue from './useValue';
 import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
-import invariant from '../../../core/internals/invariant';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
 /**
  *
@@ -33,9 +32,6 @@ export function useControlSchema(selector, equalityCheck) {
         return selector(store.uiContext.deriveControlSchema(currentControlId, formDataRef.current));
     }, equalityCheck)[0];
 }
-export const useControlPointer = (path) => {
-    return useStore((context) => invariant(context.uiContext.deriveControlSchemaNode(path).evaluationPath, "Control not found at path: " + path));
-};
 /**
  *
  * Read the schema of the control
@@ -43,8 +39,7 @@ export const useControlPointer = (path) => {
  */
 export function useControlValue(path) {
     const storeRef = useUiStoreRef();
-    const [pointer] = useControlPointer(path);
-    const [value, setFormData] = useFormDataContext((data) => storeRef.current.uiContext.deriveDataAtPointer(data, pointer), shallowCompare);
+    const [value, setFormData] = useFormDataContext((data) => storeRef.current.uiContext.deriveDataAtPointer(data, path), shallowCompare);
     const validate = useValidateData(path, 'onChange', storeRef);
     return [
         value,
@@ -64,7 +59,7 @@ export function useControlProps(path, props) {
     const [{ pointer, schema, }] = useUiStoreContext((state) => {
         const node = state.uiContext.deriveControlSchemaNode(path);
         return {
-            pointer: node.evaluationPath,
+            pointer: path,
             schema: node?.schema,
         };
     }, shallowCompare);

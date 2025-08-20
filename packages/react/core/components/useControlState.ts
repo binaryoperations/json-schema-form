@@ -8,6 +8,7 @@ import { useCallback, useMemo, useReducer } from 'react';
 
 import type { UiStoreContextType } from '../context/StoreContext';
 import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
+import { useLatest } from '../hooks/useLatest';
 
 type ControlState = Pick<
   UiStoreContextType,
@@ -30,6 +31,8 @@ export function useControlState(initialData: object) {
     errors: new Map<string, JsonError[]>(),
   });
 
+  const initialDataRef = useLatest(initialData);
+
   const setTouched = useCallback(
     (path: string) => {
       setControlState({
@@ -48,11 +51,11 @@ export function useControlState(initialData: object) {
         type: 'SET_DIRTY',
         payload: {
           path,
-          isDirty: !fastDeepEqual(get(initialData, path), value),
+          isDirty: !fastDeepEqual(get(initialDataRef.current, path), value),
         },
       });
     },
-    [initialData]
+    [initialDataRef]
   );
 
   const setErrors = useCallback(

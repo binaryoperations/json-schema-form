@@ -15,7 +15,6 @@ export declare function useControl<SelectorOutput = ControlNodeType>(selector: S
  *
  */
 export declare function useControlSchema<SelectorOutput>(selector: Selector<ControlSchema, SelectorOutput>, equalityCheck?: typeof Object.is): SelectorOutput;
-export declare const useControlPointer: (path: string) => [value: string, set: (value: (prev: UiStoreContextType) => Partial<UiStoreContextType>) => void];
 /**
  *
  * Read the schema of the control

@@ -32,7 +32,7 @@ export class LogicalSchema {
         return this.getSchemaNodeOf(pointer, data).schema;
     }
     getSchemaNodeOf(pointer, data = {}) {
-        const schemaNode = this.draft.getNode(pointer, data);
+        const schemaNode = this.draft.getNode(pointer, data, { pointer });
         if (schemaNode.error)
             throw new Error(schemaNode.error.message, { cause: schemaNode.error });
         return schemaNode.node;

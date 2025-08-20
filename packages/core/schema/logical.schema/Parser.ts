@@ -58,7 +58,7 @@ export class LogicalSchema {
   }
 
   getSchemaNodeOf(pointer: string, data: Record<string, any> = {}) {
-    const schemaNode = this.draft.getNode(pointer, data);
+    const schemaNode = this.draft.getNode(pointer, data, { pointer });
 
     if (schemaNode.error)
       throw new Error(schemaNode.error.message, { cause: schemaNode.error });

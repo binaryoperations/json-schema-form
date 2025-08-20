@@ -23,7 +23,7 @@ function useSubFormProps(props) {
         const uiContext = storeRef.current.uiContext;
         const { errors } = uiContext.getChildControls(props.id ?? 'root').reduce((x, control) => {
             const node = uiContext.deriveControlSchemaNode(control.path);
-            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, node.evaluationPath) ?? {};
+            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, control.path) ?? {};
             const validateState = node.validate(value, pointer);
             return {
                 ...x,

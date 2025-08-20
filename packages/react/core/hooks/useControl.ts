@@ -23,7 +23,6 @@ import { useStore } from './useStore';
 import useValue from './useValue';
 import type { SchemaNode } from 'json-schema-library';
 import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
-import invariant from '@binaryoperations/json-forms-core/internals/invariant';
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);
@@ -73,12 +72,6 @@ export function useControlSchema<SelectorOutput>(
   }, equalityCheck)[0];
 }
 
-export const useControlPointer = (path: string) => {
-  return useStore((context) => invariant(
-    context.uiContext.deriveControlSchemaNode(path).evaluationPath,
-    "Control not found at path: " + path
-  ));
-}
 
 /**
  *
@@ -88,10 +81,9 @@ export const useControlPointer = (path: string) => {
 export function useControlValue<V = unknown>(path: string) {
   const storeRef = useUiStoreRef();
 
-  const [pointer] = useControlPointer(path);
 
   const [value, setFormData] = useFormDataContext(
-    (data) => storeRef.current.uiContext.deriveDataAtPointer(data, pointer),
+    (data) => storeRef.current.uiContext.deriveDataAtPointer(data, path),
     shallowCompare
   );
 
@@ -140,7 +132,7 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const [{ pointer, schema, }] = useUiStoreContext((state) => {
     const node = state.uiContext.deriveControlSchemaNode(path);
     return {
-      pointer: node.evaluationPath,
+      pointer: path,
       schema: node?.schema,
     };
   }, shallowCompare);

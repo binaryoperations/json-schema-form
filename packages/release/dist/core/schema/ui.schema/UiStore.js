@@ -67,7 +67,7 @@ export class UiStore {
     }
     deriveDataNodes(data) {
         if (!this.$$dataCache.has(data)) {
-            const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.node.evaluationPath);
+            const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.pointer);
             this.$$dataCache.set(data, dataNodes);
         }
         return this.$$dataCache.get(data);
