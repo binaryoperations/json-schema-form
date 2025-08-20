@@ -18,7 +18,7 @@ export declare class UiStore {
     freeze(): this;
     prepareTemplate(data?: object): any;
     deriveControlSchema(key: string, data?: object): (import("../../models/ControlSchema").CompositeSchema | import("../../models/ControlSchema").StringJsonSchema | import("../../models/ControlSchema").NumberJsonSchema | import("../../models/ControlSchema").ArrayJsonSchema | import("../../models/ControlSchema").ObjectJsonSchema | import("../../models/ControlSchema").NullJsonSchema | import("../../models/ControlSchema").BooleanJsonSchema | import("../../models/ControlSchema").OneOfRootSchema | import("../../models/ControlSchema").AnyOfRootSchema) | null;
-    deriveControlSchemaNode(path: string, data?: object): SchemaNode;
+    deriveControlSchemaNode(path: string, data: object): SchemaNode;
     deriveDataNodes(data: object): Record<string, DataNode>;
     deriveDataNodeAtPath(data: object, pointer: string): DataNode;
     deriveDataAtPointer(data: object, pointer: string): {} | null;

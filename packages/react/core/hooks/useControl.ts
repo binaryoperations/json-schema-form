@@ -128,9 +128,10 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const [value, setValue] = useControlValue(path);
 
   const proxyValue = useValue(value);
+  const formDataRef = useFormDataRef();
 
   const [{ pointer, schema, }] = useUiStoreContext((state) => {
-    const node = state.uiContext.deriveControlSchemaNode(path);
+    const node = state.uiContext.deriveControlSchemaNode(path, formDataRef.current);
     return {
       pointer: path,
       schema: node?.schema,
@@ -197,7 +198,7 @@ export function useValidateData(
       const shouldReset = validateOn === 'onSubmit';
 
       const testSchema = schema?.schema ??
-        storeRef.current.uiContext.deriveControlSchemaNode(path).schema;
+        storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current).schema;
 
       const validateResult = shouldReset
         ? validate(value ?? formDataRef.current, testSchema)

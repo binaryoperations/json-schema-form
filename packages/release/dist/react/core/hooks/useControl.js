@@ -56,8 +56,9 @@ export function useControlProps(path, props) {
     const setTouched = useUiStoreRef().current.setTouched;
     const [value, setValue] = useControlValue(path);
     const proxyValue = useValue(value);
+    const formDataRef = useFormDataRef();
     const [{ pointer, schema, }] = useUiStoreContext((state) => {
-        const node = state.uiContext.deriveControlSchemaNode(path);
+        const node = state.uiContext.deriveControlSchemaNode(path, formDataRef.current);
         return {
             pointer: path,
             schema: node?.schema,
@@ -103,7 +104,7 @@ export function useValidateData(path, validateOn, storeRef) {
             };
         const shouldReset = validateOn === 'onSubmit';
         const testSchema = schema?.schema ??
-            storeRef.current.uiContext.deriveControlSchemaNode(path).schema;
+            storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current).schema;
         const validateResult = shouldReset
             ? validate(value ?? formDataRef.current, testSchema)
             : validate(value, testSchema);

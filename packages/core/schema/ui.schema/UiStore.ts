@@ -90,7 +90,7 @@ export class UiStore {
     return schema;
   }
 
-  deriveControlSchemaNode(path: string, data?: object) {
+  deriveControlSchemaNode(path: string, data: object) {
     return this.draftSchema.getSchemaNodeOf(path, data);
   }
 
