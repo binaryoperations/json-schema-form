@@ -49,7 +49,7 @@ export class UiStore {
         const node = cast(this.getNode(key));
         let schema = node.schema;
         // this might break references/computed values
-        const template = this.draftSchema.prepareTemplate(cloneDeep(this.deriveDataAtPointer(data ?? {}, node.path) ?? {}));
+        const template = this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
