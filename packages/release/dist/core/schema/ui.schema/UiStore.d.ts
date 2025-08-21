@@ -2,16 +2,24 @@ import { ControlNodeType, LayoutSchema } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
 import type { DataNode } from 'json-schema-library/dist/src/methods/toDataNodes';
 export type { SchemaNode };
+type Extensions = {
+    required?: boolean;
+    parent?: string;
+};
+export type ExtendedLayoutSchema = LayoutSchema & Extensions;
+export type ExtendedControlSchema = ControlNodeType & Extensions;
 export declare class UiStore {
     private draftSchema;
-    keyMap: Record<string, LayoutSchema>;
+    keyMap: Record<string, ExtendedLayoutSchema>;
+    pathMap: Record<string, ExtendedControlSchema>;
     tree: Record<string, string[]>;
     private $$dataNodesCache;
     constructor(draftSchema: LogicalSchema);
     get rootSchema(): SchemaNode;
     getChildren(key: string): string[];
-    getNode(key: string): LayoutSchema;
-    getChildNodes(key: string): LayoutSchema[];
+    getNode(key: string): ExtendedLayoutSchema;
+    getNodeByPath(path: string): ExtendedControlSchema;
+    getChildNodes(key: string): ExtendedLayoutSchema[];
     getChildControls(key: string): ControlNodeType<object, object>[];
     getNodeType(key: string): string | {};
     isControl(key: string): boolean;

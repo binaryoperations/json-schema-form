@@ -13,8 +13,17 @@ import type { DataNode } from 'json-schema-library/dist/src/methods/toDataNodes'
 
 export type { SchemaNode };
 
+type Extensions = {
+  required?: boolean;
+  parent?: string
+}
+
+export type ExtendedLayoutSchema = LayoutSchema & Extensions;
+export type ExtendedControlSchema = ControlNodeType & Extensions;
+
 export class UiStore {
-  keyMap: Record<string, LayoutSchema> = {};
+  keyMap: Record<string, ExtendedLayoutSchema> = {};
+  pathMap: Record<string, ExtendedControlSchema> = {};
   tree: Record<string, string[]> = {};
 
   private $$dataNodesCache = new WeakMap<object, Record<string, DataNode>>();
@@ -31,6 +40,10 @@ export class UiStore {
 
   getNode(key: string) {
     return this.keyMap[key];
+  }
+
+  getNodeByPath(path: string) {
+    return this.pathMap[path];
   }
 
   getChildNodes(key: string) {

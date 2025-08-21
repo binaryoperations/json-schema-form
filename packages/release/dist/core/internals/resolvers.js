@@ -1,5 +1,5 @@
-import isEmpty from 'lodash/isEmpty';
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
+import { isEmpty } from './object';
 function resolvePath(data, path) {
     if (isEmpty(path))
         return data;

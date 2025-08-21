@@ -8,7 +8,7 @@ import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 import { useLatest } from '../hooks/useLatest';
 import { useValidateData } from '../hooks/useControl';
-import noop from 'lodash/noop';
+import { noop } from '../../../core/internals/object';
 export const StoreContextProvider = memo(function StoreContextProvider(props) {
     const schemaDraft = useMemo(() => LogicalSchema.parse(props.schema), [props.schema]);
     const formDataRef = useFormDataRef();

@@ -1,11 +1,9 @@
-import orderBy from 'lodash/orderBy';
 
-import {
-  type LayoutNodeType,
-  type LayoutSchema,
-} from '../../models/LayoutSchema';
+
+import { orderBy } from '@binaryoperations/json-forms-core/internals/object';
+import type { LayoutNodeType, LayoutSchema, } from '../../models/LayoutSchema';
 import { LogicalSchema } from '../logical.schema/Parser';
-import { UiStore } from './UiStore';
+import { ExtendedControlSchema, UiStore } from './UiStore';
 
 export class UiSchemaPreparer {
   private counter = 0;
@@ -24,21 +22,32 @@ export class UiSchemaPreparer {
     const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
 
 
-    if ("path" in  uiSchema && !uiSchema.path.startsWith("#")) {
-      uiSchema = {
-        ...uiSchema,
-        path: `#/${uiSchema.path}`.split("/").filter(Boolean).join("/")
-      };
+    if ("path" in  uiSchema) {
+      uiSchema.path = uiSchema.path.startsWith("#") ? uiSchema.path : `#/${uiSchema.path}`.split("/").filter(Boolean).join("/")
+
+      const dataPath = uiSchema.path.split("/");
+      const parentNode = dataPath.slice(0, -1).join("/");
+      const item = dataPath.pop();
+
+      uiSchema = Object.defineProperty(uiSchema, 'required', {
+        value: !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item),
+        writable: false,
+        enumerable: false,
+      });
     }
 
     this.store.keyMap[id] = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
       id: { value: id, writable: false, enumerable: false },
     });
 
+    this.store.keyMap[id] = Object.defineProperty(this.store.keyMap[id], "parent", { value: idRoot, writable: false, enumerable: false});
 
+    if ("path" in uiSchema) {
+      this.store.pathMap[uiSchema.path] = this.store.keyMap[id] as ExtendedControlSchema;
+      return id;
+    }
 
     if (!uiSchema.nodes) return id;
-
 
     const treeNodes: string[] = [];
     const nodes = [uiSchema.nodes].flat().filter(Boolean) as LayoutSchema[];
@@ -53,7 +62,7 @@ export class UiSchemaPreparer {
     }
 
     for (const nextUiSchema of nodes) {
-      treeNodes.push(this.traverse(nextUiSchema, id));
+      treeNodes.push(this.traverse({...nextUiSchema}, id));
     }
 
     this.store.tree[id] = orderBy(

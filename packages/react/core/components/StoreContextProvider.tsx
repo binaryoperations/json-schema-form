@@ -14,7 +14,7 @@ import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 import { useLatest } from '../hooks/useLatest';
 import { useValidateData } from '../hooks/useControl';
-import noop from 'lodash/noop';
+import { noop } from '@binaryoperations/json-forms-core/internals/object';
 
 
 type FormRef = {

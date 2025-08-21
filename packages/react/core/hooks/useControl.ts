@@ -3,6 +3,7 @@ import {
   set,
   shallowCompare,
   noop,
+  fastDeepEqual,
 } from '@binaryoperations/json-forms-core/internals/object';
 import type {
   ControlNodeType,
@@ -22,7 +23,7 @@ import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 import useValue from './useValue';
 import type { SchemaNode } from 'json-schema-library';
-import { extractSegmentsFromPath } from '@binaryoperations/json-forms-core/internals/extractSegmentsFromPath';
+
 
 const useInvariantControl = (message: string) =>
   useInvariantContext(ControlContext, message);
@@ -130,20 +131,17 @@ export function useControlProps<P extends Record<string, any> = {}>(
   const proxyValue = useValue(value);
   const formDataRef = useFormDataRef();
 
-  const [{ pointer, schema, }] = useUiStoreContext((state) => {
+  const [schema] = useUiStoreContext((state) => {
     const node = state.uiContext.deriveControlSchemaNode(path, formDataRef.current);
-    return {
-      pointer: path,
-      schema: node?.schema,
-    };
-  }, shallowCompare);
+    return node?.schema;
+  }, fastDeepEqual);
 
   const [meta] = useUiStoreContext((state) => {
-    const resolvedPath = extractSegmentsFromPath(path).join('/');
     return {
-      touched: state.touchedControlPaths.has(pointer),
-      dirty: state.dirtyControlPaths.has(pointer),
-      error: state.errors.get(resolvedPath)?.at(0)?.message,
+      touched: state.touchedControlPaths.has(path),
+      dirty: state.dirtyControlPaths.has(path),
+      error: state.errors.get(path)?.at(0)?.message,
+      required: !!state.uiContext.getNodeByPath(path)?.required
     }
   }, shallowCompare);
 

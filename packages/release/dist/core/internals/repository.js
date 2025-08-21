@@ -1,4 +1,4 @@
-import debounce from 'lodash/debounce';
+import { debounce } from "./object";
 export class Repository extends EventTarget {
     registry = {};
     #name;

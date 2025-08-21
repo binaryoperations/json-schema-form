@@ -1,4 +1,4 @@
-import orderBy from 'lodash/orderBy';
+import { orderBy } from '../../internals/object';
 import { UiStore } from './UiStore';
 export class UiSchemaPreparer {
     counter = 0;
@@ -12,15 +12,25 @@ export class UiSchemaPreparer {
     traverse(uiSchema, idRoot) {
         const nextCount = this.counter++;
         const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
-        if ("path" in uiSchema && !uiSchema.path.startsWith("#")) {
-            uiSchema = {
-                ...uiSchema,
-                path: `#/${uiSchema.path}`.split("/").filter(Boolean).join("/")
-            };
+        if ("path" in uiSchema) {
+            uiSchema.path = uiSchema.path.startsWith("#") ? uiSchema.path : `#/${uiSchema.path}`.split("/").filter(Boolean).join("/");
+            const dataPath = uiSchema.path.split("/");
+            const parentNode = dataPath.slice(0, -1).join("/");
+            const item = dataPath.pop();
+            uiSchema = Object.defineProperty(uiSchema, 'required', {
+                value: !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item),
+                writable: false,
+                enumerable: false,
+            });
         }
         this.store.keyMap[id] = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
             id: { value: id, writable: false, enumerable: false },
         });
+        this.store.keyMap[id] = Object.defineProperty(this.store.keyMap[id], "parent", { value: idRoot, writable: false, enumerable: false });
+        if ("path" in uiSchema) {
+            this.store.pathMap[uiSchema.path] = this.store.keyMap[id];
+            return id;
+        }
         if (!uiSchema.nodes)
             return id;
         const treeNodes = [];
@@ -32,7 +42,7 @@ export class UiSchemaPreparer {
                 : Object.defineProperties(this.store.keyMap[id], { id: { value: id, writable: false, enumerable: false }, });
         }
         for (const nextUiSchema of nodes) {
-            treeNodes.push(this.traverse(nextUiSchema, id));
+            treeNodes.push(this.traverse({ ...nextUiSchema }, id));
         }
         this.store.tree[id] = orderBy(treeNodes, (nodeId) => this.store.keyMap[nodeId].order ?? 0, 'asc');
         return id;

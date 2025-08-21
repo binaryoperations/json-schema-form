@@ -1,4 +1,4 @@
-import { type LayoutSchema } from '../../models/LayoutSchema';
+import type { LayoutSchema } from '../../models/LayoutSchema';
 import { LogicalSchema } from '../logical.schema/Parser';
 import { UiStore } from './UiStore';
 export declare class UiSchemaPreparer {

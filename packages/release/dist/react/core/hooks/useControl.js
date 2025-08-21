@@ -1,5 +1,5 @@
 import { cast } from '../../../core/internals/cast';
-import { set, shallowCompare, noop, } from '../../../core/internals/object';
+import { set, shallowCompare, noop, fastDeepEqual, } from '../../../core/internals/object';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
 import { useFormDataContext, useFormDataRef } from '../context/FormDataContext';
@@ -7,7 +7,6 @@ import { useUiStoreContext, useUiStoreRef, } from '../context/StoreContext';
 import { useInvariantContext } from './useInvariantContext';
 import { useStore } from './useStore';
 import useValue from './useValue';
-import { extractSegmentsFromPath } from '../../../core/internals/extractSegmentsFromPath';
 const useInvariantControl = (message) => useInvariantContext(ControlContext, message);
 /**
  *
@@ -57,19 +56,16 @@ export function useControlProps(path, props) {
     const [value, setValue] = useControlValue(path);
     const proxyValue = useValue(value);
     const formDataRef = useFormDataRef();
-    const [{ pointer, schema, }] = useUiStoreContext((state) => {
+    const [schema] = useUiStoreContext((state) => {
         const node = state.uiContext.deriveControlSchemaNode(path, formDataRef.current);
-        return {
-            pointer: path,
-            schema: node?.schema,
-        };
-    }, shallowCompare);
+        return node?.schema;
+    }, fastDeepEqual);
     const [meta] = useUiStoreContext((state) => {
-        const resolvedPath = extractSegmentsFromPath(path).join('/');
         return {
-            touched: state.touchedControlPaths.has(pointer),
-            dirty: state.dirtyControlPaths.has(pointer),
-            error: state.errors.get(resolvedPath)?.at(0)?.message,
+            touched: state.touchedControlPaths.has(path),
+            dirty: state.dirtyControlPaths.has(path),
+            error: state.errors.get(path)?.at(0)?.message,
+            required: !!state.uiContext.getNodeByPath(path)?.required
         };
     }, shallowCompare);
     const handleOnBlur = useCallback((e) => {

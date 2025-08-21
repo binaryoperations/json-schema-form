@@ -1,4 +1,5 @@
-import debounce from 'lodash/debounce';
+import { debounce } from "./object";
+
 
 interface RepositoryConstructor<
   T extends Record<string, any>,

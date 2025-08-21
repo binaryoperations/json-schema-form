@@ -5,6 +5,7 @@ import { EnumUiNode, } from '../../models/LayoutSchema';
 export class UiStore {
     draftSchema;
     keyMap = {};
+    pathMap = {};
     tree = {};
     $$dataNodesCache = new WeakMap();
     constructor(draftSchema) {
@@ -18,6 +19,9 @@ export class UiStore {
     }
     getNode(key) {
         return this.keyMap[key];
+    }
+    getNodeByPath(path) {
+        return this.pathMap[path];
     }
     getChildNodes(key) {
         return this.getChildren(key)?.map(this.getNode.bind(this)) ?? [];
