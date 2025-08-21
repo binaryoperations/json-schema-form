@@ -13,7 +13,7 @@ export const useFormProps = function Form(props: ComponentProps<'form'>) {
 
 
 export const useSubmitButtonProps = function useSubmitButtonProps() {
-  const onClick = useUiStoreContext((store) => store.onSubmit);
+  const [onClick] = useUiStoreContext((store) => store.onSubmit);
 
   return {
     type: 'submit' as const,

@@ -14,7 +14,7 @@ export const SubForm = function SubForm(props) {
         ...storeRef,
         ...subFormProps,
     }), [storeRef]);
-    return _jsx(UiStoreContextProvider, { value: contextValue, children: props.children }, props.id);
+    return _jsx(UiStoreContextProvider, { value: contextValue, children: props.children });
 };
 function useSubFormProps(props) {
     const storeRef = useUiStoreRef();

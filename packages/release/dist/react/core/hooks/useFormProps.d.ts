@@ -295,6 +295,6 @@ export declare const useFormProps: (props: ComponentProps<"form">) => {
 };
 export declare const useSubmitButtonProps: () => {
     type: "submit";
-    onClick: [value: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>, set: (value: (prev: import("../context/StoreContext").UiStoreContextType) => Partial<import("../context/StoreContext").UiStoreContextType>) => void];
+    onClick: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>;
 };
 //# sourceMappingURL=useFormProps.d.ts.map

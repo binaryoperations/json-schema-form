@@ -7,7 +7,7 @@ export const useFormProps = function Form(props) {
     };
 };
 export const useSubmitButtonProps = function useSubmitButtonProps() {
-    const onClick = useUiStoreContext((store) => store.onSubmit);
+    const [onClick] = useUiStoreContext((store) => store.onSubmit);
     return {
         type: 'submit',
         // disabled: storeRef.current.isSubmitting,
