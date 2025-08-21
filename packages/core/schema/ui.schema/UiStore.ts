@@ -17,7 +17,7 @@ export class UiStore {
   keyMap: Record<string, LayoutSchema> = {};
   tree: Record<string, string[]> = {};
 
-  private $$dataCache = new WeakMap<object, Record<string, DataNode>>();
+  private $$dataNodesCache = new WeakMap<object, Record<string, DataNode>>();
 
   constructor(private draftSchema: LogicalSchema) {}
 
@@ -60,7 +60,7 @@ export class UiStore {
   }
 
   prepareTemplate(data?: object) {
-    return this.draftSchema.prepareTemplate(data);
+    return this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
   }
 
   deriveControlSchema(key: string, data?: object) {
@@ -70,7 +70,7 @@ export class UiStore {
 
     let schema = node.schema;
     // this might break references/computed values
-    const template = this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
+    const template = this.prepareTemplate(data);
 
     if (!schema) {
       schema = this.draftSchema.getSchemaOf(
@@ -95,12 +95,12 @@ export class UiStore {
   }
 
   deriveDataNodes(data: object) {
-    if (!this.$$dataCache.has(data)) {
+    if (!this.$$dataNodesCache.has(data)) {
       const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.pointer);
-      this.$$dataCache.set(data, dataNodes);
+      this.$$dataNodesCache.set(data, dataNodes);
     }
 
-    return this.$$dataCache.get(data)!;
+    return this.$$dataNodesCache.get(data)!;
   }
 
   deriveDataNodeAtPath(data: object, pointer: string) {

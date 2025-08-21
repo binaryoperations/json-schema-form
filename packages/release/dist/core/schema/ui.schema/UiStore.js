@@ -6,7 +6,7 @@ export class UiStore {
     draftSchema;
     keyMap = {};
     tree = {};
-    $$dataCache = new WeakMap();
+    $$dataNodesCache = new WeakMap();
     constructor(draftSchema) {
         this.draftSchema = draftSchema;
     }
@@ -41,7 +41,7 @@ export class UiStore {
         return this;
     }
     prepareTemplate(data) {
-        return this.draftSchema.prepareTemplate(data);
+        return this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
     }
     deriveControlSchema(key, data) {
         if (!this.isControl(key))
@@ -49,7 +49,7 @@ export class UiStore {
         const node = cast(this.getNode(key));
         let schema = node.schema;
         // this might break references/computed values
-        const template = this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
+        const template = this.prepareTemplate(data);
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
@@ -66,11 +66,11 @@ export class UiStore {
         return this.draftSchema.getSchemaNodeOf(path, data);
     }
     deriveDataNodes(data) {
-        if (!this.$$dataCache.has(data)) {
+        if (!this.$$dataNodesCache.has(data)) {
             const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.pointer);
-            this.$$dataCache.set(data, dataNodes);
+            this.$$dataNodesCache.set(data, dataNodes);
         }
-        return this.$$dataCache.get(data);
+        return this.$$dataNodesCache.get(data);
     }
     deriveDataNodeAtPath(data, pointer) {
         return this.deriveDataNodes(data)[pointer] ?? null;

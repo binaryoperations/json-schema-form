@@ -40,7 +40,7 @@ export class LogicalSchema {
     }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
-    return this.draft.getData(defaultValues, { useTypeDefaults: true });
+    return this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true });
   }
 
   validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {

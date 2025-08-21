@@ -18,7 +18,7 @@ export class LogicalSchema {
         return node;
     }
     prepareTemplate(defaultValues) {
-        return this.draft.getData(defaultValues, { useTypeDefaults: true });
+        return this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true });
     }
     validate(value, schema = this.draft) {
         const schemaNode = this.deriveSchemaNode(schema);

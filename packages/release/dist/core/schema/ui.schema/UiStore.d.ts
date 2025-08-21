@@ -6,7 +6,7 @@ export declare class UiStore {
     private draftSchema;
     keyMap: Record<string, LayoutSchema>;
     tree: Record<string, string[]>;
-    private $$dataCache;
+    private $$dataNodesCache;
     constructor(draftSchema: LogicalSchema);
     get rootSchema(): SchemaNode;
     getChildren(key: string): string[];

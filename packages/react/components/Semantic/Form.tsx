@@ -22,7 +22,7 @@ export const SubForm = function SubForm(props: Pick<ComponentProps<'form'>, 'chi
     ...subFormProps,
   }), [storeRef]);
 
-  return <UiStoreContextProvider value={contextValue}>{props.children}</UiStoreContextProvider>
+  return <UiStoreContextProvider key={props.id} value={contextValue}>{props.children}</UiStoreContextProvider>
 }
 
 
