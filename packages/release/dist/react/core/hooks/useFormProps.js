@@ -1,4 +1,4 @@
-import { useUiStoreRef } from '../context/StoreContext';
+import { useUiStoreRef, useUiStoreContext } from '../context/StoreContext';
 export const useFormProps = function Form(props) {
     const storeRef = useUiStoreRef();
     return {
@@ -7,10 +7,10 @@ export const useFormProps = function Form(props) {
     };
 };
 export const useSubmitButtonProps = function useSubmitButtonProps() {
-    const storeRef = useUiStoreRef();
+    const onClick = useUiStoreContext((store) => store.onSubmit);
     return {
         type: 'submit',
         // disabled: storeRef.current.isSubmitting,
-        onClick: storeRef.current.onSubmit,
+        onClick,
     };
 };

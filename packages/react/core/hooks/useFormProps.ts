@@ -1,6 +1,6 @@
 
 import type { ComponentProps } from 'react';
-import { useUiStoreRef } from '../context/StoreContext';
+import { useUiStoreRef, useUiStoreContext } from '../context/StoreContext';
 
 export const useFormProps = function Form(props: ComponentProps<'form'>) {
   const storeRef = useUiStoreRef();
@@ -13,11 +13,11 @@ export const useFormProps = function Form(props: ComponentProps<'form'>) {
 
 
 export const useSubmitButtonProps = function useSubmitButtonProps() {
-  const storeRef = useUiStoreRef();
+  const onClick = useUiStoreContext((store) => store.onSubmit);
 
   return {
-    type: 'submit',
+    type: 'submit' as const,
     // disabled: storeRef.current.isSubmitting,
-    onClick: storeRef.current.onSubmit,
+    onClick,
   }
 }
