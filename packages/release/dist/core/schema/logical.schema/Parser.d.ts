@@ -2,11 +2,14 @@ import { type Draft, type JsonError, type JsonSchema, type SchemaNode } from 'js
 export { JsonError, SchemaNode };
 export declare class LogicalSchema {
     private draft;
+    private cachedDefaultValues;
     static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
-    get rootSchema(): SchemaNode;
+    get rootSchema(): SchemaNode & {
+        cache: WeakMap<object, object>;
+    };
     constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
     private deriveSchemaNode;
-    prepareTemplate<T extends Record<string, any>>(defaultValues?: T): any;
+    prepareTemplate<T extends Record<string, any>>(defaultValues?: T): object | undefined;
     validate(value: any, schema?: JsonSchema | SchemaNode): {
         isValid: boolean;
         errors: JsonError[];

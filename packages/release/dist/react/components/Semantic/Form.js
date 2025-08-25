@@ -4,6 +4,7 @@ import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreC
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
 import { useStore } from '../../core/hooks';
+import { uniq } from '../../../core/internals/object';
 export const Form = function Form(props) {
     return _jsx("form", { ...useFormProps(props) });
 };
@@ -21,10 +22,13 @@ function useSubFormProps(props) {
     const formDataRef = useFormDataRef();
     const handleSubmit = useCallback((e, onSubmit) => {
         const uiContext = storeRef.current.uiContext;
-        const { errors } = uiContext.getChildControls(props.id ?? 'root').reduce((x, control) => {
-            const node = uiContext.deriveControlSchemaNode(control.path, formDataRef.current);
-            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, control.path) ?? {};
-            const validateState = node.validate(value, pointer);
+        const allPathsToValidate = !props.id ? ["#"] : uniq(uiContext.getChildControls(props.id)
+            .map((node) => node.required
+            ? node.path.split("/").slice(0, -1).join("/")
+            : node.path));
+        const { errors } = allPathsToValidate.reduce((x, path) => {
+            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, path) ?? {};
+            const validateState = uiContext.deriveControlSchemaNode(path, formDataRef.current).validate(value, pointer);
             return {
                 ...x,
                 valid: x.valid && validateState.valid,

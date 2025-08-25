@@ -45,7 +45,7 @@ export class UiStore {
         return this;
     }
     prepareTemplate(data) {
-        return this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
+        return this.draftSchema.prepareTemplate(data && cloneDeep(data));
     }
     deriveControlSchema(key, data) {
         if (!this.isControl(key))

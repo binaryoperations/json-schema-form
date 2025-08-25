@@ -51,9 +51,9 @@ export class UiStore {
   }
 
   getChildControls(key: string) {
-    return this.getChildNodes(key).flatMap((node): ControlNodeType[] => {
-      if (this.isControl(node.id!)) return [node] as ControlNodeType[];
-      return [...this.getChildControls(node.id!)] as ControlNodeType[];
+    return this.getChildNodes(key).flatMap((node): ExtendedControlSchema[] => {
+      if (this.isControl(node.id!)) return [node] as ExtendedControlSchema[];
+      return [...this.getChildControls(node.id!)] as ExtendedControlSchema[];
     });
   }
 
@@ -73,7 +73,7 @@ export class UiStore {
   }
 
   prepareTemplate(data?: object) {
-    return this.draftSchema.prepareTemplate(cloneDeep(data ?? {}));
+    return this.draftSchema.prepareTemplate(data && cloneDeep(data));
   }
 
   deriveControlSchema(key: string, data?: object) {

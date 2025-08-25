@@ -10,7 +10,8 @@ import {
 export { JsonError, SchemaNode };
 
 export class LogicalSchema {
-  private draft: SchemaNode;
+  private draft: SchemaNode & { cache: WeakMap<object, object> };
+  private cachedDefaultValues = {};
 
   static prepare(schema: JsonSchema, draft?: Draft) {
     const ClassConstructor: typeof LogicalSchema = Object.assign(this);
@@ -32,15 +33,28 @@ export class LogicalSchema {
     node: SchemaNode | JsonSchema,
     draft: Draft = draft2020) {
 
+      const attachCache = (schemaNode: SchemaNode) => {
+        const cache = new WeakMap<object, object>();
+        return Object.defineProperty(schemaNode, "cache", { value: cache }) as SchemaNode & { cache: WeakMap<object, object> };
+      }
+
     if (!("validate" in (node as SchemaNode))) {
-      return compileSchema(node, {drafts: [draft]});
+      return attachCache(compileSchema(node, {drafts: [draft]}));
     }
 
-      return node as SchemaNode;
+      return attachCache(node as SchemaNode);
     }
 
   prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
-    return this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true });
+    defaultValues = defaultValues ? defaultValues : this.cachedDefaultValues as T;
+    if (!this.draft.cache.has(defaultValues)) {
+      this.draft.cache.set(
+        defaultValues,
+        this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true })
+      );
+    }
+
+    return this.draft.cache.get(defaultValues);
   }
 
   validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {

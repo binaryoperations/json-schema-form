@@ -15,16 +15,18 @@ export declare class UiStore {
     tree: Record<string, string[]>;
     private $$dataNodesCache;
     constructor(draftSchema: LogicalSchema);
-    get rootSchema(): SchemaNode;
+    get rootSchema(): SchemaNode & {
+        cache: WeakMap<object, object>;
+    };
     getChildren(key: string): string[];
     getNode(key: string): ExtendedLayoutSchema;
     getNodeByPath(path: string): ExtendedControlSchema;
     getChildNodes(key: string): ExtendedLayoutSchema[];
-    getChildControls(key: string): ControlNodeType<object, object>[];
+    getChildControls(key: string): ExtendedControlSchema[];
     getNodeType(key: string): string | {};
     isControl(key: string): boolean;
     freeze(): this;
-    prepareTemplate(data?: object): any;
+    prepareTemplate(data?: object): object | undefined;
     deriveControlSchema(key: string, data?: object): (import("../../models/ControlSchema").CompositeSchema | import("../../models/ControlSchema").StringJsonSchema | import("../../models/ControlSchema").NumberJsonSchema | import("../../models/ControlSchema").ArrayJsonSchema | import("../../models/ControlSchema").ObjectJsonSchema | import("../../models/ControlSchema").NullJsonSchema | import("../../models/ControlSchema").BooleanJsonSchema | import("../../models/ControlSchema").OneOfRootSchema | import("../../models/ControlSchema").AnyOfRootSchema) | null;
     deriveControlSchemaNode(path: string, data: object): SchemaNode;
     deriveDataNodes(data: object): Record<string, DataNode>;

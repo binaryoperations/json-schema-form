@@ -1,6 +1,7 @@
 import { compileSchema, draft2020, } from 'json-schema-library';
 export class LogicalSchema {
     draft;
+    cachedDefaultValues = {};
     static prepare(schema, draft) {
         const ClassConstructor = Object.assign(this);
         return new ClassConstructor(schema, draft);
@@ -12,13 +13,21 @@ export class LogicalSchema {
         this.draft = this.deriveSchemaNode(schema, draft);
     }
     deriveSchemaNode(node, draft = draft2020) {
+        const attachCache = (schemaNode) => {
+            const cache = new WeakMap();
+            return Object.defineProperty(schemaNode, "cache", { value: cache });
+        };
         if (!("validate" in node)) {
-            return compileSchema(node, { drafts: [draft] });
+            return attachCache(compileSchema(node, { drafts: [draft] }));
         }
-        return node;
+        return attachCache(node);
     }
     prepareTemplate(defaultValues) {
-        return this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true });
+        defaultValues = defaultValues ? defaultValues : this.cachedDefaultValues;
+        if (!this.draft.cache.has(defaultValues)) {
+            this.draft.cache.set(defaultValues, this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true }));
+        }
+        return this.draft.cache.get(defaultValues);
     }
     validate(value, schema = this.draft) {
         const schemaNode = this.deriveSchemaNode(schema);
