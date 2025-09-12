@@ -5,6 +5,7 @@ import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import maxBy from 'lodash/maxBy';
+import merge from 'lodash/merge';
 import orderBy from 'lodash/orderBy';
 import cloneDeep from 'lodash/cloneDeep';
 import type _set from 'lodash/set';
@@ -16,7 +17,7 @@ export { default as fastDeepEqual } from 'fast-deep-equal';
 
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
 
-export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq };
+export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq, merge };
 
 export const set: typeof _set = (data: object, path: string, value: any) => {
   if (Object.is(get(data, path), value)) return data;

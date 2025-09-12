@@ -14,7 +14,8 @@ import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 import { useLatest } from '../hooks/useLatest';
 import { useValidateData } from '../hooks/useControl';
-import { noop } from '@binaryoperations/json-forms-core/internals/object';
+import { fastDeepEqual, noop } from '@binaryoperations/json-forms-core/internals/object';
+import { useMemoizedValue } from '../hooks/useMemoizedValue';
 
 
 type FormRef = {
@@ -34,9 +35,10 @@ export type StoreContextProvider = ComponentType<StoreContextProviderProps>;
 
 export const StoreContextProvider: StoreContextProvider = memo(
   function StoreContextProvider(props) {
+    const schema = useMemoizedValue(props.schema, fastDeepEqual);
     const schemaDraft = useMemo(
-      () => LogicalSchema.parse(props.schema),
-      [props.schema]
+      () => LogicalSchema.parse(schema),
+      [schema]
     );
 
 
@@ -51,9 +53,10 @@ export const StoreContextProvider: StoreContextProvider = memo(
       []
     );
 
+    const uiSchema = useMemoizedValue(props.uiSchema, fastDeepEqual);
     const uiContext = useMemo(
-      () => UiSchema.prepare(props.uiSchema, schemaDraft),
-      [props.uiSchema, schemaDraft]
+      () => UiSchema.prepare(uiSchema, schemaDraft),
+      [uiSchema, schemaDraft]
     );
 
 

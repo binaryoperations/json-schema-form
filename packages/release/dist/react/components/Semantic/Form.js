@@ -5,6 +5,7 @@ import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
 import { useStore } from '../../core/hooks';
 import { uniq } from '../../../core/internals/object';
+import { split } from "@sagold/json-pointer";
 export const Form = function Form(props) {
     return _jsx("form", { ...useFormProps(props) });
 };
@@ -24,7 +25,7 @@ function useSubFormProps(props) {
         const uiContext = storeRef.current.uiContext;
         const allPathsToValidate = !props.id ? ["#"] : uniq(uiContext.getChildControls(props.id)
             .map((node) => node.required
-            ? node.path.split("/").slice(0, -1).join("/")
+            ? "#/" + split(node.path).slice(0, -1).join("/")
             : node.path));
         const { errors } = allPathsToValidate.reduce((x, path) => {
             const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, path) ?? {};

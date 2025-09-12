@@ -1,22 +1,34 @@
+import { merge, get } from '@binaryoperations/json-forms-core/internals/object';
 import {
   compileSchema,
-  type Draft,
   draft2020,
+  type Draft,
   type JsonError,
   type JsonSchema,
   type SchemaNode,
 } from 'json-schema-library';
+import {split} from "@sagold/json-pointer"
+
 
 export { JsonError, SchemaNode };
 
-export class LogicalSchema {
-  private draft: SchemaNode & { cache: WeakMap<object, object> };
-  private cachedDefaultValues = {};
 
+export class LogicalSchema {
+  private static counter = 0;
   static prepare(schema: JsonSchema, draft?: Draft) {
     const ClassConstructor: typeof LogicalSchema = Object.assign(this);
     return new ClassConstructor(schema, draft);
   }
+
+  declare private readonly $$id;
+  declare private readonly draft: SchemaNode & { cache: WeakMap<object, object> };
+
+
+  get uniqueId() {
+    const id = this.$$id;
+    return id
+  }
+
 
   get rootSchema() {
     return this.draft;
@@ -24,8 +36,9 @@ export class LogicalSchema {
 
   constructor(
     schema: JsonSchema | SchemaNode,
-    draft: Draft = draft2020
+    draft: Draft = draft2020,
   ) {
+    this.$$id = ++LogicalSchema.counter;
     this.draft = this.deriveSchemaNode(schema, draft);
   }
 
@@ -45,16 +58,29 @@ export class LogicalSchema {
       return attachCache(node as SchemaNode);
     }
 
-  prepareTemplate<T extends Record<string, any>>(defaultValues?: T) {
-    defaultValues = defaultValues ? defaultValues : this.cachedDefaultValues as T;
-    if (!this.draft.cache.has(defaultValues)) {
+  getData(data: object = {}, pointer = "#" ) {
+    const parts = split(pointer);
+    return get(data, parts)
+  }
+
+  prepareTemplate(controlSchema: JsonSchema | SchemaNode = this.draft, data?: object) {
+    if (!this.draft.cache.has(controlSchema)) {
+      const template = this.draft.cache.set(
+        controlSchema,
+        this.draft.getData({}, { useTypeDefaults: true, addOptionalProps: true })
+      );
+      this.draft.cache.set(template, template);
+    }
+
+    if (data && !this.draft.cache.has(data)) {
       this.draft.cache.set(
-        defaultValues,
-        this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true })
+        data,
+        merge({}, this.draft.cache.has(controlSchema), data)
       );
     }
 
-    return this.draft.cache.get(defaultValues);
+
+    return this.draft.cache.get(data ?? controlSchema)!;
   }
 
   validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {

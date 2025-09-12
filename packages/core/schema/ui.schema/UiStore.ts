@@ -1,5 +1,4 @@
 import { cast } from '@binaryoperations/json-forms-core/internals/cast';
-import { cloneDeep, keyBy } from '@binaryoperations/json-forms-core/internals/object';
 import resolvers from '@binaryoperations/json-forms-core/internals/resolvers';
 import { ControlSchema } from '@binaryoperations/json-forms-core/models/ControlSchema';
 
@@ -9,7 +8,7 @@ import {
   EnumUiNode,
 } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
-import type { DataNode } from 'json-schema-library/dist/src/methods/toDataNodes';
+
 
 export type { SchemaNode };
 
@@ -26,7 +25,6 @@ export class UiStore {
   pathMap: Record<string, ExtendedControlSchema> = {};
   tree: Record<string, string[]> = {};
 
-  private $$dataNodesCache = new WeakMap<object, Record<string, DataNode>>();
 
   constructor(private draftSchema: LogicalSchema) {}
 
@@ -72,18 +70,18 @@ export class UiStore {
     return this;
   }
 
-  prepareTemplate(data?: object) {
-    return this.draftSchema.prepareTemplate(data && cloneDeep(data));
+  prepareTemplate(schema?: ControlSchema, data?: object) {
+    return this.draftSchema.prepareTemplate(schema, data);
   }
 
-  deriveControlSchema(key: string, data?: object) {
+  deriveControlSchema(key: string, data?: object): ControlSchema | null {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNodeType>(this.getNode(key));
 
     let schema = node.schema;
     // this might break references/computed values
-    const template = this.prepareTemplate(data);
+    const template = this.prepareTemplate(node.schema, data);
 
     if (!schema) {
       schema = this.draftSchema.getSchemaOf(
@@ -107,17 +105,12 @@ export class UiStore {
     return this.draftSchema.getSchemaNodeOf(path, data);
   }
 
-  deriveDataNodes(data: object) {
-    if (!this.$$dataNodesCache.has(data)) {
-      const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.pointer);
-      this.$$dataNodesCache.set(data, dataNodes);
+
+   deriveDataNodeAtPath(data: object, pointer: string) {
+    return {
+      pointer: pointer,
+      value: this.draftSchema.getData(data, pointer) // ensure data exists at pointer
     }
-
-    return this.$$dataNodesCache.get(data)!;
-  }
-
-  deriveDataNodeAtPath(data: object, pointer: string) {
-    return this.deriveDataNodes(data)[pointer] ?? null;
   }
 
   deriveDataAtPointer(data: object, pointer: string) {

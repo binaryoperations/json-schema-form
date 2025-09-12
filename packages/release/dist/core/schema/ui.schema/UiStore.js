@@ -1,5 +1,4 @@
 import { cast } from '../../internals/cast';
-import { cloneDeep, keyBy } from '../../internals/object';
 import resolvers from '../../internals/resolvers';
 import { EnumUiNode, } from '../../models/LayoutSchema';
 export class UiStore {
@@ -7,7 +6,6 @@ export class UiStore {
     keyMap = {};
     pathMap = {};
     tree = {};
-    $$dataNodesCache = new WeakMap();
     constructor(draftSchema) {
         this.draftSchema = draftSchema;
     }
@@ -44,8 +42,8 @@ export class UiStore {
         this.tree = Object.freeze(this.tree);
         return this;
     }
-    prepareTemplate(data) {
-        return this.draftSchema.prepareTemplate(data && cloneDeep(data));
+    prepareTemplate(schema, data) {
+        return this.draftSchema.prepareTemplate(schema, data);
     }
     deriveControlSchema(key, data) {
         if (!this.isControl(key))
@@ -53,7 +51,7 @@ export class UiStore {
         const node = cast(this.getNode(key));
         let schema = node.schema;
         // this might break references/computed values
-        const template = this.prepareTemplate(data);
+        const template = this.prepareTemplate(node.schema, data);
         if (!schema) {
             schema = this.draftSchema.getSchemaOf(node.path, template);
         }
@@ -69,15 +67,11 @@ export class UiStore {
     deriveControlSchemaNode(path, data) {
         return this.draftSchema.getSchemaNodeOf(path, data);
     }
-    deriveDataNodes(data) {
-        if (!this.$$dataNodesCache.has(data)) {
-            const dataNodes = keyBy(this.rootSchema.toDataNodes(this.prepareTemplate(data)), (dataNode) => dataNode.pointer);
-            this.$$dataNodesCache.set(data, dataNodes);
-        }
-        return this.$$dataNodesCache.get(data);
-    }
     deriveDataNodeAtPath(data, pointer) {
-        return this.deriveDataNodes(data)[pointer] ?? null;
+        return {
+            pointer: pointer,
+            value: this.draftSchema.getData(data, pointer) // ensure data exists at pointer
+        };
     }
     deriveDataAtPointer(data, pointer) {
         return this.deriveDataNodeAtPath(data, pointer)?.value ?? null;

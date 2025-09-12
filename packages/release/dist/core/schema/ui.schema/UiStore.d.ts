@@ -1,6 +1,6 @@
+import { ControlSchema } from '../../models/ControlSchema';
 import { ControlNodeType, LayoutSchema } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
-import type { DataNode } from 'json-schema-library/dist/src/methods/toDataNodes';
 export type { SchemaNode };
 type Extensions = {
     required?: boolean;
@@ -13,7 +13,6 @@ export declare class UiStore {
     keyMap: Record<string, ExtendedLayoutSchema>;
     pathMap: Record<string, ExtendedControlSchema>;
     tree: Record<string, string[]>;
-    private $$dataNodesCache;
     constructor(draftSchema: LogicalSchema);
     get rootSchema(): SchemaNode & {
         cache: WeakMap<object, object>;
@@ -26,11 +25,13 @@ export declare class UiStore {
     getNodeType(key: string): string | {};
     isControl(key: string): boolean;
     freeze(): this;
-    prepareTemplate(data?: object): object | undefined;
-    deriveControlSchema(key: string, data?: object): (import("../../models/ControlSchema").CompositeSchema | import("../../models/ControlSchema").StringJsonSchema | import("../../models/ControlSchema").NumberJsonSchema | import("../../models/ControlSchema").ArrayJsonSchema | import("../../models/ControlSchema").ObjectJsonSchema | import("../../models/ControlSchema").NullJsonSchema | import("../../models/ControlSchema").BooleanJsonSchema | import("../../models/ControlSchema").OneOfRootSchema | import("../../models/ControlSchema").AnyOfRootSchema) | null;
+    prepareTemplate(schema?: ControlSchema, data?: object): object;
+    deriveControlSchema(key: string, data?: object): ControlSchema | null;
     deriveControlSchemaNode(path: string, data: object): SchemaNode;
-    deriveDataNodes(data: object): Record<string, DataNode>;
-    deriveDataNodeAtPath(data: object, pointer: string): DataNode;
-    deriveDataAtPointer(data: object, pointer: string): {} | null;
+    deriveDataNodeAtPath(data: object, pointer: string): {
+        pointer: string;
+        value: any;
+    };
+    deriveDataAtPointer(data: object, pointer: string): any;
 }
 //# sourceMappingURL=UiStore.d.ts.map

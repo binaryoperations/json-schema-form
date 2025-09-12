@@ -99,7 +99,7 @@ export function useControlValue<V = unknown>(path: string) {
         storeRef.current.setDirty(path, value);
         validate(value);
       },
-      [validate, path, setFormData, storeRef.current.setDirty]
+      [validate, path, setFormData, storeRef]
     ),
   ] as [value: V, set: (value: V) => void];
 }
@@ -182,9 +182,8 @@ export function useValidateData(
 ) {
   const formDataRef = useFormDataRef();
 
-  const { validationMode, validate: validateFn} = storeRef.current;
 
-  const validate = validationMode === validateOn ? validateFn : undefined;
+  const validate = storeRef.current.validationMode === validateOn ? storeRef : undefined;
 
   return useCallback(
     (value: any, schema?: SchemaNode) => {
@@ -199,8 +198,8 @@ export function useValidateData(
         storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current).schema;
 
       const validateResult = shouldReset
-        ? validate(value ?? formDataRef.current, testSchema)
-        : validate(value, testSchema);
+        ? storeRef.current.validate(value ?? formDataRef.current, testSchema)
+        : storeRef.current.validate(value, testSchema);
 
       storeRef.current.setErrors(
         path,
@@ -210,7 +209,7 @@ export function useValidateData(
 
       return validateResult;
     },
-    [path, validate, storeRef, validateOn, formDataRef]
+    [path, storeRef, validateOn, formDataRef]
   );
 }
 

@@ -8,15 +8,18 @@ import { useControlState } from './useControlState';
 import { useFormDataRef } from '../context/FormDataContext';
 import { useLatest } from '../hooks/useLatest';
 import { useValidateData } from '../hooks/useControl';
-import { noop } from '../../../core/internals/object';
+import { fastDeepEqual, noop } from '../../../core/internals/object';
+import { useMemoizedValue } from '../hooks/useMemoizedValue';
 export const StoreContextProvider = memo(function StoreContextProvider(props) {
-    const schemaDraft = useMemo(() => LogicalSchema.parse(props.schema), [props.schema]);
+    const schema = useMemoizedValue(props.schema, fastDeepEqual);
+    const schemaDraft = useMemo(() => LogicalSchema.parse(schema), [schema]);
     const formDataRef = useFormDataRef();
     const schemaDraftRef = useLatest(schemaDraft);
     const onSubmitLatestRef = useLatest(props.onSubmit);
     const controlState = useControlState(props.initialData);
     const validate = useCallback((value, schema) => schemaDraftRef.current.validate(value, schema), []);
-    const uiContext = useMemo(() => UiSchema.prepare(props.uiSchema, schemaDraft), [props.uiSchema, schemaDraft]);
+    const uiSchema = useMemoizedValue(props.uiSchema, fastDeepEqual);
+    const uiContext = useMemo(() => UiSchema.prepare(uiSchema, schemaDraft), [uiSchema, schemaDraft]);
     const validateOnSubmit = useLatest({
         uiContext,
         validationMode: "onSubmit",

@@ -1,15 +1,18 @@
 import { type Draft, type JsonError, type JsonSchema, type SchemaNode } from 'json-schema-library';
 export { JsonError, SchemaNode };
 export declare class LogicalSchema {
-    private draft;
-    private cachedDefaultValues;
+    private static counter;
     static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
+    private readonly $$id;
+    private readonly draft;
+    get uniqueId(): number;
     get rootSchema(): SchemaNode & {
         cache: WeakMap<object, object>;
     };
     constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
     private deriveSchemaNode;
-    prepareTemplate<T extends Record<string, any>>(defaultValues?: T): object | undefined;
+    getData(data?: object, pointer?: string): any;
+    prepareTemplate(controlSchema?: JsonSchema | SchemaNode, data?: object): object;
     validate(value: any, schema?: JsonSchema | SchemaNode): {
         isValid: boolean;
         errors: JsonError[];

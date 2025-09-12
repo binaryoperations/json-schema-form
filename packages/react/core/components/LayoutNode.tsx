@@ -1,4 +1,4 @@
-import { shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
+import { fastDeepEqual, shallowCompare } from '@binaryoperations/json-forms-core/internals/object';
 import { memo } from 'react';
 
 import { useStore } from '../hooks';
@@ -13,10 +13,16 @@ import { LayoutNodeType } from '@binaryoperations/json-forms-core/models';
 import { useBreakpoints } from '../hooks/useBreakpoints';
 
 export const LayoutNode = function CustomLayoutRendererRoot(props: ComponentRendererProps<PropsWithChildren<any>>) {
-  const [{ type, options, nodes, breakpoints }] = useStore((store) => {
+  const [{ type, options, breakpoints }] = useStore((store) => {
     const node = store.uiContext.getNode(props.id) as LayoutNodeType<ComponentType>;
-    return node;
-  });
+    return {
+      type: node.type,
+      options: node.options,
+      breakpoints: node.breakpoints,
+    };
+  }, fastDeepEqual);
+
+
 
   const { value, props: restProps } = useBreakpoints({...props, breakpoints });
 
@@ -26,14 +32,9 @@ export const LayoutNode = function CustomLayoutRendererRoot(props: ComponentRend
     throw new Error("Unexpected Control rendererd");
   }
 
-  const nodesArray = [nodes ?? []].flat();
-  const children = !nodesArray.length
-    ? null
-    : <LayoutChildren id={props.id} />;
-
   return (
     <Actor {...options} {...restProps} {...value} breakpoints={breakpoints}>
-      {children}
+      <LayoutChildren id={props.id} />
     </Actor>
   );
 }

@@ -4,6 +4,7 @@ import get from 'lodash/get';
 import groupBy from 'lodash/groupBy';
 import keyBy from 'lodash/keyBy';
 import maxBy from 'lodash/maxBy';
+import merge from 'lodash/merge';
 import orderBy from 'lodash/orderBy';
 import cloneDeep from 'lodash/cloneDeep';
 import type _set from 'lodash/set';
@@ -11,7 +12,7 @@ import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
 export { default as fastDeepEqual } from 'fast-deep-equal';
-export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq };
+export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq, merge };
 export declare const set: typeof _set;
 /**
  * Performs equality by iterating through keys on an object and returning false

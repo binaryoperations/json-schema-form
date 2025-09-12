@@ -35,6 +35,7 @@
   },
   "dependencies": {
     "@binaryoperations/json-forms-core": "workspace:^",
+    "@sagold/json-pointer": "^7.1.2",
     "json-schema-library": "catalog:"
   },
   "devDependencies": {

@@ -8,6 +8,9 @@ import { useFormProps } from '../../core/hooks/useFormProps';
 import { useStore } from '@binaryoperations/json-forms-react/core/hooks';
 import { uniq } from '@binaryoperations/json-forms-core/internals/object';
 
+import {split} from "@sagold/json-pointer"
+
+
 export const Form = function Form(props: ComponentProps<'form'>) {
   return <form {...useFormProps(props)}/>;
 };
@@ -38,7 +41,7 @@ function useSubFormProps(props: {id: string}) {
       uiContext.getChildControls(props.id)
         .map((node) =>
           node.required
-          ? node.path.split("/").slice(0, -1).join("/")
+          ? "#/" + split(node.path).slice(0, -1).join("/")
           : node.path
         )
     );

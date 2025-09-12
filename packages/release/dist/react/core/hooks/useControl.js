@@ -46,7 +46,7 @@ export function useControlValue(path) {
             setFormData((oldValue) => set(oldValue, path, value));
             storeRef.current.setDirty(path, value);
             validate(value);
-        }, [validate, path, setFormData, storeRef.current.setDirty]),
+        }, [validate, path, setFormData, storeRef]),
     ];
 }
 export function useControlProps(path, props) {
@@ -90,8 +90,7 @@ export function useControlProps(path, props) {
 }
 export function useValidateData(path, validateOn, storeRef) {
     const formDataRef = useFormDataRef();
-    const { validationMode, validate: validateFn } = storeRef.current;
-    const validate = validationMode === validateOn ? validateFn : undefined;
+    const validate = storeRef.current.validationMode === validateOn ? storeRef : undefined;
     return useCallback((value, schema) => {
         if (!validate)
             return {
@@ -102,11 +101,11 @@ export function useValidateData(path, validateOn, storeRef) {
         const testSchema = schema?.schema ??
             storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current).schema;
         const validateResult = shouldReset
-            ? validate(value ?? formDataRef.current, testSchema)
-            : validate(value, testSchema);
+            ? storeRef.current.validate(value ?? formDataRef.current, testSchema)
+            : storeRef.current.validate(value, testSchema);
         storeRef.current.setErrors(path, validateResult.isValid ? [] : validateResult.errors, shouldReset);
         return validateResult;
-    }, [path, validate, storeRef, validateOn, formDataRef]);
+    }, [path, storeRef, validateOn, formDataRef]);
 }
 function deriveValue(value, readOnlyValue, readOnly) {
     if (readOnly) {

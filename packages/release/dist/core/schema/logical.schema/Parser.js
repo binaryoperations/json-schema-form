@@ -1,15 +1,21 @@
+import { merge, get } from '../../internals/object';
 import { compileSchema, draft2020, } from 'json-schema-library';
+import { split } from "@sagold/json-pointer";
 export class LogicalSchema {
-    draft;
-    cachedDefaultValues = {};
+    static counter = 0;
     static prepare(schema, draft) {
         const ClassConstructor = Object.assign(this);
         return new ClassConstructor(schema, draft);
+    }
+    get uniqueId() {
+        const id = this.$$id;
+        return id;
     }
     get rootSchema() {
         return this.draft;
     }
     constructor(schema, draft = draft2020) {
+        this.$$id = ++LogicalSchema.counter;
         this.draft = this.deriveSchemaNode(schema, draft);
     }
     deriveSchemaNode(node, draft = draft2020) {
@@ -22,12 +28,19 @@ export class LogicalSchema {
         }
         return attachCache(node);
     }
-    prepareTemplate(defaultValues) {
-        defaultValues = defaultValues ? defaultValues : this.cachedDefaultValues;
-        if (!this.draft.cache.has(defaultValues)) {
-            this.draft.cache.set(defaultValues, this.draft.getData(defaultValues, { useTypeDefaults: true, addOptionalProps: true }));
+    getData(data = {}, pointer = "#") {
+        const parts = split(pointer);
+        return get(data, parts);
+    }
+    prepareTemplate(controlSchema = this.draft, data) {
+        if (!this.draft.cache.has(controlSchema)) {
+            const template = this.draft.cache.set(controlSchema, this.draft.getData({}, { useTypeDefaults: true, addOptionalProps: true }));
+            this.draft.cache.set(template, template);
         }
-        return this.draft.cache.get(defaultValues);
+        if (data && !this.draft.cache.has(data)) {
+            this.draft.cache.set(data, merge({}, this.draft.cache.has(controlSchema), data));
+        }
+        return this.draft.cache.get(data ?? controlSchema);
     }
     validate(value, schema = this.draft) {
         const schemaNode = this.deriveSchemaNode(schema);
