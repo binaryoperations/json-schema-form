@@ -21,7 +21,7 @@ export const SubForm = function SubForm(props: Pick<ComponentProps<'form'>, 'chi
   const contextValue = useMemo(() => ({
     ...storeRef,
     ...subFormProps,
-  }), [storeRef]);
+  }), [storeRef, subFormProps]);
 
   return <UiStoreContextProvider value={contextValue}>{props.children}</UiStoreContextProvider>
 }
