@@ -5,6 +5,7 @@ export declare class LogicalSchema {
     static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
     private readonly $$id;
     private readonly draft;
+    private schemaCache;
     get uniqueId(): number;
     get rootSchema(): SchemaNode & {
         cache: WeakMap<object, object>;

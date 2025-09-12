@@ -17,6 +17,7 @@ export class LogicalSchema {
     constructor(schema, draft = draft2020) {
         this.$$id = ++LogicalSchema.counter;
         this.draft = this.deriveSchemaNode(schema, draft);
+        this.schemaCache = new Map();
     }
     deriveSchemaNode(node, draft = draft2020) {
         const attachCache = (schemaNode) => {
@@ -54,9 +55,12 @@ export class LogicalSchema {
         return this.getSchemaNodeOf(pointer, data).schema;
     }
     getSchemaNodeOf(pointer, data = {}) {
-        const schemaNode = this.draft.getNode(pointer, data, { pointer });
-        if (schemaNode.error)
-            throw new Error(schemaNode.error.message, { cause: schemaNode.error });
-        return schemaNode.node;
+        if (!this.schemaCache.has(pointer)) {
+            const schemaNode = this.draft.getNode(pointer, data, { pointer });
+            if (schemaNode.error)
+                throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+            this.schemaCache.set(pointer, schemaNode.node);
+        }
+        return this.schemaCache.get(pointer);
     }
 }

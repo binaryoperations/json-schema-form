@@ -23,6 +23,7 @@ export class LogicalSchema {
   declare private readonly $$id;
   declare private readonly draft: SchemaNode & { cache: WeakMap<object, object> };
 
+  declare private schemaCache: Map<string, SchemaNode>;
 
   get uniqueId() {
     const id = this.$$id;
@@ -40,6 +41,7 @@ export class LogicalSchema {
   ) {
     this.$$id = ++LogicalSchema.counter;
     this.draft = this.deriveSchemaNode(schema, draft);
+    this.schemaCache = new Map<string, SchemaNode>();
   }
 
   private deriveSchemaNode(
@@ -79,7 +81,6 @@ export class LogicalSchema {
       );
     }
 
-
     return this.draft.cache.get(data ?? controlSchema)!;
   }
 
@@ -98,11 +99,15 @@ export class LogicalSchema {
   }
 
   getSchemaNodeOf(pointer: string, data: Record<string, any> = {}) {
-    const schemaNode = this.draft.getNode(pointer, data, { pointer });
+    if (!this.schemaCache.has(pointer)) {
+      const schemaNode = this.draft.getNode(pointer, data, { pointer });
 
-    if (schemaNode.error)
-      throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+      if (schemaNode.error)
+        throw new Error(schemaNode.error.message, { cause: schemaNode.error });
 
-    return schemaNode.node!;
+      this.schemaCache.set(pointer, schemaNode.node!);
+    }
+
+    return this.schemaCache.get(pointer)!;
   }
 }

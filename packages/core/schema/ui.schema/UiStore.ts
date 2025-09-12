@@ -25,7 +25,6 @@ export class UiStore {
   pathMap: Record<string, ExtendedControlSchema> = {};
   tree: Record<string, string[]> = {};
 
-
   constructor(private draftSchema: LogicalSchema) {}
 
   get rootSchema() {
@@ -106,7 +105,7 @@ export class UiStore {
   }
 
 
-   deriveDataNodeAtPath(data: object, pointer: string) {
+  deriveDataNodeAtPath(data: object, pointer: string) {
     return {
       pointer: pointer,
       value: this.draftSchema.getData(data, pointer) // ensure data exists at pointer
