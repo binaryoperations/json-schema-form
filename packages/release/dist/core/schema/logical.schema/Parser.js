@@ -16,8 +16,12 @@ export class LogicalSchema {
     }
     constructor(schema, draft = draft2020) {
         this.$$id = ++LogicalSchema.counter;
+        this.$$draftType = draft;
         this.draft = this.deriveSchemaNode(schema, draft);
         this.schemaCache = new Map();
+    }
+    get draftType() {
+        return this.$$draftType;
     }
     deriveSchemaNode(node, draft = draft2020) {
         const attachCache = (schemaNode) => {

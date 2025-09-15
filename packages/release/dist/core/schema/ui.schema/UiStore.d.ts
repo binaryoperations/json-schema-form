@@ -17,6 +17,7 @@ export declare class UiStore {
     get rootSchema(): SchemaNode & {
         cache: WeakMap<object, object>;
     };
+    get draftType(): import("json-schema-library").Draft;
     getChildren(key: string): string[];
     getNode(key: string): ExtendedLayoutSchema;
     getNodeByPath(path: string): ExtendedControlSchema;

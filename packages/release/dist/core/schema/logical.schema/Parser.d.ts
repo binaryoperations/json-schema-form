@@ -4,6 +4,7 @@ export declare class LogicalSchema {
     private static counter;
     static prepare(schema: JsonSchema, draft?: Draft): LogicalSchema;
     private readonly $$id;
+    private readonly $$draftType;
     private readonly draft;
     private schemaCache;
     get uniqueId(): number;
@@ -11,6 +12,7 @@ export declare class LogicalSchema {
         cache: WeakMap<object, object>;
     };
     constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
+    get draftType(): Draft;
     private deriveSchemaNode;
     getData(data?: object, pointer?: string): unknown;
     prepareTemplate(controlSchema?: JsonSchema | SchemaNode, data?: object): object;

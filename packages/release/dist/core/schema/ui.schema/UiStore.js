@@ -12,6 +12,9 @@ export class UiStore {
     get rootSchema() {
         return this.draftSchema.rootSchema;
     }
+    get draftType() {
+        return this.draftSchema.draftType;
+    }
     getChildren(key) {
         return this.tree[key];
     }

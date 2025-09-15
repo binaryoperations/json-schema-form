@@ -21,6 +21,7 @@ export class LogicalSchema {
   }
 
   declare private readonly $$id;
+  declare private readonly $$draftType: Draft;
   declare private readonly draft: SchemaNode & { cache: WeakMap<object, object> };
 
   declare private schemaCache: Map<string, SchemaNode>;
@@ -40,8 +41,15 @@ export class LogicalSchema {
     draft: Draft = draft2020,
   ) {
     this.$$id = ++LogicalSchema.counter;
+
+    this.$$draftType = draft;
+
     this.draft = this.deriveSchemaNode(schema, draft);
     this.schemaCache = new Map<string, SchemaNode>();
+  }
+
+  get draftType() {
+    return this.$$draftType;
   }
 
   private deriveSchemaNode(
