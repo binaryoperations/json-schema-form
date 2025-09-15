@@ -12,7 +12,7 @@ export declare class LogicalSchema {
     };
     constructor(schema: JsonSchema | SchemaNode, draft?: Draft);
     private deriveSchemaNode;
-    getData(data?: object, pointer?: string): any;
+    getData(data?: object, pointer?: string): unknown;
     prepareTemplate(controlSchema?: JsonSchema | SchemaNode, data?: object): object;
     validate(value: any, schema?: JsonSchema | SchemaNode): {
         isValid: boolean;

@@ -1,5 +1,6 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useMemo } from 'react';
+import { compileSchema } from 'json-schema-library';
 import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
@@ -23,13 +24,36 @@ function useSubFormProps(props) {
     const formDataRef = useFormDataRef();
     const handleSubmit = useCallback((e, onSubmit) => {
         const uiContext = storeRef.current.uiContext;
-        const allPathsToValidate = !props.id ? ["#"] : uniq(uiContext.getChildControls(props.id)
-            .map((node) => node.required
-            ? "#/" + split(node.path).slice(0, -1).join("/")
-            : node.path));
-        const { errors } = allPathsToValidate.reduce((x, path) => {
+        const parentSchemaMap = new Map();
+        let allNonRequiredPathsToValidate = !props.id ? ["#"] : uniq(uiContext.getChildControls(props.id)
+            .map((node) => {
+            const splitSlices = split(node.path);
+            const parentPath = "#/" + splitSlices.slice(0, -1).join("/");
+            if (!node.required)
+                return parentSchemaMap.has(parentPath) ? null : node.path;
+            const parentSchema = parentSchemaMap.get(parentPath) ?? {
+                schema: { type: "object", properties: {}, required: [] },
+                node: uiContext.deriveControlSchemaNode(parentPath, formDataRef.current)
+            };
+            parentSchemaMap.set(parentPath, {
+                ...parentSchema,
+                schema: {
+                    ...parentSchema.schema,
+                    required: [
+                        ...(parentSchema.schema?.required ?? []),
+                    ].concat(parentSchema.node.schema.required?.includes(splitSlices.at(-1))
+                        ? splitSlices.at(-1) : [])
+                }
+            });
+            return null;
+        }));
+        allNonRequiredPathsToValidate = Array.from(parentSchemaMap.keys()).reduce((nodes, key) => {
+            return nodes.filter((node) => node && !node.startsWith(key));
+        }, allNonRequiredPathsToValidate);
+        // Validate Parent schema
+        const validationState = Array.from(parentSchemaMap.entries()).reduce((x, [path, { schema }]) => {
             const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, path) ?? {};
-            const validateState = uiContext.deriveControlSchemaNode(path, formDataRef.current).validate(value, pointer);
+            const validateState = compileSchema(schema).validate(value, pointer);
             return {
                 ...x,
                 valid: x.valid && validateState.valid,
@@ -40,6 +64,18 @@ function useSubFormProps(props) {
             errors: [],
             errorsAsync: [],
         });
+        // Validate other properties schema
+        const { errors } = allNonRequiredPathsToValidate.reduce((x, path) => {
+            if (!path)
+                return x;
+            const { value = null, pointer } = uiContext.deriveDataNodeAtPath(formDataRef.current, path) ?? {};
+            const validateState = uiContext.deriveControlSchemaNode(path, formDataRef.current).validate(value, pointer);
+            return {
+                ...x,
+                valid: x.valid && validateState.valid,
+                errors: [...x.errors, ...validateState.errors],
+            };
+        }, validationState);
         storeRef.current.setErrors("#", errors, true);
         if (errors.length) {
             e?.preventDefault();

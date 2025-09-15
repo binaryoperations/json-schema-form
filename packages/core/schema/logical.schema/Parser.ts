@@ -1,4 +1,4 @@
-import { merge, get } from '@binaryoperations/json-forms-core/internals/object';
+import { merge } from '@binaryoperations/json-forms-core/internals/object';
 import {
   compileSchema,
   draft2020,
@@ -7,7 +7,7 @@ import {
   type JsonSchema,
   type SchemaNode,
 } from 'json-schema-library';
-import {split} from "@sagold/json-pointer"
+import { get } from "@sagold/json-pointer"
 
 
 export { JsonError, SchemaNode };
@@ -61,8 +61,7 @@ export class LogicalSchema {
     }
 
   getData(data: object = {}, pointer = "#" ) {
-    const parts = split(pointer);
-    return get(data, parts)
+    return get(data, pointer)
   }
 
   prepareTemplate(controlSchema: JsonSchema | SchemaNode = this.draft, data?: object) {

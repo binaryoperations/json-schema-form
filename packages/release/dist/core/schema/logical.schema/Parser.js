@@ -1,6 +1,6 @@
-import { merge, get } from '../../internals/object';
+import { merge } from '../../internals/object';
 import { compileSchema, draft2020, } from 'json-schema-library';
-import { split } from "@sagold/json-pointer";
+import { get } from "@sagold/json-pointer";
 export class LogicalSchema {
     static counter = 0;
     static prepare(schema, draft) {
@@ -30,8 +30,7 @@ export class LogicalSchema {
         return attachCache(node);
     }
     getData(data = {}, pointer = "#") {
-        const parts = split(pointer);
-        return get(data, parts);
+        return get(data, pointer);
     }
     prepareTemplate(controlSchema = this.draft, data) {
         if (!this.draft.cache.has(controlSchema)) {

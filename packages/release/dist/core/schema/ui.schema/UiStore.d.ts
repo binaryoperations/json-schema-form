@@ -30,8 +30,8 @@ export declare class UiStore {
     deriveControlSchemaNode(path: string, data: object): SchemaNode;
     deriveDataNodeAtPath(data: object, pointer: string): {
         pointer: string;
-        value: any;
+        value: unknown;
     };
-    deriveDataAtPointer(data: object, pointer: string): any;
+    deriveDataAtPointer(data: object, pointer: string): {} | null;
 }
 //# sourceMappingURL=UiStore.d.ts.map
