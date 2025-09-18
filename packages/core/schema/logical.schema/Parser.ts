@@ -1,16 +1,25 @@
-import { merge } from '@binaryoperations/json-forms-core/internals/object';
+import { merge, assign } from '@binaryoperations/json-forms-core/internals/object';
 import {
+  addKeywords,
   compileSchema,
   draft2020,
+  JsonSchemaValidator,
+  Keyword,
   type Draft,
   type JsonError,
   type JsonSchema,
   type SchemaNode,
-} from 'json-schema-library';
+} from '../../lib';
 import { get } from "@sagold/json-pointer"
+import { mapValues } from 'lodash';
+import { getNode } from './nodeStore';
+import { getDefaultKeywords } from '@binaryoperations/json-forms-core/utils/keywords';
+import { extendDraft } from 'json-schema-library';
 
 
 export { JsonError, SchemaNode };
+
+
 
 
 export class LogicalSchema {
@@ -22,7 +31,11 @@ export class LogicalSchema {
 
   declare private readonly $$id;
   declare private readonly $$draftType: Draft;
-  declare private readonly draft: SchemaNode & { cache: WeakMap<object, object> };
+  declare private readonly draftSchema: SchemaNode & { cache: WeakMap<object, object> };
+
+  declare beforeValidate?: () => void;
+  declare afterValidate?: () => void;
+
 
   declare private schemaCache: Map<string, SchemaNode>;
 
@@ -31,9 +44,12 @@ export class LogicalSchema {
     return id
   }
 
-
   get rootSchema() {
-    return this.draft;
+    return this.draftSchema;
+  }
+
+  get draftType() {
+    return this.$$draftType;
   }
 
   constructor(
@@ -44,56 +60,74 @@ export class LogicalSchema {
 
     this.$$draftType = draft;
 
-    this.draft = this.deriveSchemaNode(schema, draft);
+    this.draftSchema = this.deriveSchemaNode(schema, draft);
     this.schemaCache = new Map<string, SchemaNode>();
   }
 
-  get draftType() {
-    return this.$$draftType;
+  private prepareValidator = (validator: JsonSchemaValidator): JsonSchemaValidator => (data) => {
+    const result = validator(assign(data, { uiNode: getNode(data.pointer) }));
+    return result;
   }
 
-  private deriveSchemaNode(
+  private prepareKeywords = (keywords: Keyword[]) => {
+    return keywords.map((keyword) => ({...keyword, validate: keyword.validate && this.prepareValidator(keyword.validate)}))
+  }
+
+  deriveSchemaNode(
     node: SchemaNode | JsonSchema,
-    draft: Draft = draft2020) {
+    draft: Draft = this.$$draftType) {
 
-      const attachCache = (schemaNode: SchemaNode) => {
-        const cache = new WeakMap<object, object>();
-        return Object.defineProperty(schemaNode, "cache", { value: cache }) as SchemaNode & { cache: WeakMap<object, object> };
-      }
+    const attachCache = <T extends SchemaNode = SchemaNode>(schemaNode:  T) => {
+      if ("cache" in schemaNode && schemaNode.cache) return schemaNode as T & { cache: WeakMap<object, object> };
 
-    if (!("validate" in (node as SchemaNode))) {
-      return attachCache(compileSchema(node, {drafts: [draft]}));
+      const cache = new WeakMap<object, object>();
+      return Object.defineProperty(schemaNode, "cache", { value: cache }) as T & { cache: WeakMap<object, object> };
+    }
+
+    if (!("schema" in (node as SchemaNode))) {
+      let extendedDraft = extendDraft(draft, {
+        formats: mapValues(draft.formats, this.prepareValidator),
+        keywords: this.prepareKeywords(draft.keywords),
+      });
+
+      extendedDraft = addKeywords(extendedDraft, ...this.prepareKeywords(getDefaultKeywords()));
+
+      return attachCache(compileSchema(node, { drafts: [extendedDraft] }));
     }
 
       return attachCache(node as SchemaNode);
-    }
+  }
 
   getData(data: object = {}, pointer = "#" ) {
     return get(data, pointer)
   }
 
-  prepareTemplate(controlSchema: JsonSchema | SchemaNode = this.draft, data?: object) {
-    if (!this.draft.cache.has(controlSchema)) {
-      const template = this.draft.cache.set(
+  prepareTemplate(controlSchema: JsonSchema | SchemaNode = this.draftSchema, data?: object) {
+    if (!this.draftSchema.cache.has(controlSchema)) {
+      const template = this.draftSchema.cache.set(
         controlSchema,
-        this.draft.getData({}, { useTypeDefaults: true, addOptionalProps: true })
+        this.draftSchema.getData({}, { useTypeDefaults: true, addOptionalProps: true })
       );
-      this.draft.cache.set(template, template);
+      this.draftSchema.cache.set(template, template);
     }
 
-    if (data && !this.draft.cache.has(data)) {
-      this.draft.cache.set(
+    if (data && !this.draftSchema.cache.has(data)) {
+      this.draftSchema.cache.set(
         data,
-        merge({}, this.draft.cache.has(controlSchema), data)
+        merge({}, this.draftSchema.cache.has(controlSchema), data)
       );
     }
 
-    return this.draft.cache.get(data ?? controlSchema)!;
+    return this.draftSchema.cache.get(data ?? controlSchema)!;
   }
 
-  validate(value: any, schema: JsonSchema | SchemaNode = this.draft) {
+  validate = (value: any, schema: JsonSchema | SchemaNode = this.draftSchema, pointer?: string, path = pointer) => {
+    this.beforeValidate?.();
+
     const schemaNode = this.deriveSchemaNode(schema);
-    const {valid, errors} = schemaNode.validate(value);
+    const {valid, errors} = schemaNode.validate(this.getData(value, path), pointer);
+
+    this.afterValidate?.();
 
     return {
       isValid: valid,
@@ -107,7 +141,7 @@ export class LogicalSchema {
 
   getSchemaNodeOf(pointer: string, data: Record<string, any> = {}) {
     if (!this.schemaCache.has(pointer)) {
-      const schemaNode = this.draft.getNode(pointer, data, { pointer });
+      const schemaNode = this.draftSchema.getNode(pointer, data, { pointer });
 
       if (schemaNode.error)
         throw new Error(schemaNode.error.message, { cause: schemaNode.error });

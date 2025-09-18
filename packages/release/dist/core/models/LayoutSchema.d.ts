@@ -60,9 +60,12 @@ export interface ControlNodeType<CP = object, T extends object = object> extends
     schema?: ControlSchema;
     label?: string;
     path: string;
-    options?: T;
+    options?: T & {
+        required?: boolean;
+        label?: string;
+    };
 }
 type PossibleRootNodes<CP = object, T extends object = object> = LayoutNodeType<CP, T> | ControlNodeType<CP, T>;
-export type LayoutSchema<T extends {} = {}> = PossibleRootNodes<T>;
+export type LayoutSchema<CP extends {} = {}, T extends object = object> = PossibleRootNodes<CP, T>;
 export {};
 //# sourceMappingURL=LayoutSchema.d.ts.map

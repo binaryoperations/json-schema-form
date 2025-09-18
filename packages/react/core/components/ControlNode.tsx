@@ -1,24 +1,22 @@
 import invariant from '@binaryoperations/json-forms-core/internals/invariant';
-import { ComponentType, SyntheticEvent } from 'react';
+import { ComponentType, SyntheticEvent, use } from 'react';
 import { useCallback } from 'react';
 
 import { ControlContext } from '../context/ControlContext';
-import { useControl, useControlProps, useControlValue } from '../hooks';
+import { useControl, useControlProps } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { WithErrorBoundary } from './ErrorBoundary';
 import { fastDeepEqual } from '@binaryoperations/json-forms-core/internals/object';
 
 
-const Unhandled = () => {
-  const [path] = useControl((control) => control.path);
-  const [value] = useControlValue(path);
+const Unhandled = (props: { error?: Error | null }) => {
+  const controlId = use(ControlContext);
 
   return useMaybeDevValue(
     () => (
       <div style={{ backgroundColor: '#e5e5e5', wordBreak: 'break-all' }}>
-        value: {JSON.stringify(value)} <br />
-        scope: {JSON.stringify(path)} <br />
+        {controlId}: {props.error?.message}
       </div>
     ),
     () => null

@@ -11,7 +11,9 @@ export type ValidateData = (value: any) => {
 
 type ValidateDataInternal = (
   value: any,
-  schema?: JsonSchema
+  schema?: JsonSchema,
+  pointer?: string,
+  path?: string,
 ) => {
   isValid: boolean;
   errors: JsonError[];

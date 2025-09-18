@@ -1,16 +1,16 @@
-import { jsx as _jsx, jsxs as _jsxs } from "react/jsx-runtime";
+import { jsxs as _jsxs, jsx as _jsx } from "react/jsx-runtime";
 import invariant from '../../../core/internals/invariant';
+import { use } from 'react';
 import { useCallback } from 'react';
 import { ControlContext } from '../context/ControlContext';
-import { useControl, useControlProps, useControlValue } from '../hooks';
+import { useControl, useControlProps } from '../hooks';
 import { useMaybeDevValue } from '../hooks/useMaybeDevValue';
 import { useControlNode } from '../hooks/useRenderer';
 import { WithErrorBoundary } from './ErrorBoundary';
 import { fastDeepEqual } from '../../../core/internals/object';
-const Unhandled = () => {
-    const [path] = useControl((control) => control.path);
-    const [value] = useControlValue(path);
-    return useMaybeDevValue(() => (_jsxs("div", { style: { backgroundColor: '#e5e5e5', wordBreak: 'break-all' }, children: ["value: ", JSON.stringify(value), " ", _jsx("br", {}), "scope: ", JSON.stringify(path), " ", _jsx("br", {})] })), () => null);
+const Unhandled = (props) => {
+    const controlId = use(ControlContext);
+    return useMaybeDevValue(() => (_jsxs("div", { style: { backgroundColor: '#e5e5e5', wordBreak: 'break-all' }, children: [controlId, ": ", props.error?.message] })), () => null);
 };
 const WithControlContext = (Component) => {
     return function WithControlContext(props) {

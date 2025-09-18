@@ -1,6 +1,6 @@
 
 import { FormEvent, useCallback, useMemo, type ComponentProps } from 'react';
-import { ValidateReturnType, compileSchema } from 'json-schema-library';
+
 
 import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
@@ -9,6 +9,7 @@ import { useStore } from '@binaryoperations/json-forms-react/core/hooks';
 import { uniqBy } from '@binaryoperations/json-forms-core/internals/object';
 
 import {split} from "@sagold/json-pointer"
+import { JsonError } from '@binaryoperations/json-forms-core/lib';
 
 
 export const Form = function Form(props: ComponentProps<'form'>) {
@@ -38,41 +39,46 @@ function useSubFormProps(props: {id: string}) {
     const uiContext = storeRef.current.uiContext;
 
     let allValidatedResult = !props.id ?
-      [uiContext.deriveControlSchemaNode("#", formDataRef.current).validate(formDataRef.current)]
+      [storeRef.current.validate(formDataRef.current, uiContext.deriveControlSchemaNode("#", formDataRef.current))]
       : uniqBy(uiContext.getChildControls(props.id), "path")
         .map((node) => {
           const splitSlices = split(node.path);
           const currentNode = splitSlices.at(-1)!;
           const data = uiContext.deriveDataNodeAtPath(formDataRef.current, node.path);
 
-          if (!node.required) return uiContext
-            .deriveControlSchemaNode(node.path, formDataRef.current)
-            .validate(data.value, data.pointer);
+          if (!node.required) return storeRef.current.validate(
+            formDataRef.current,
+            uiContext.deriveControlSchemaNode(node.path, formDataRef.current),
+            node.path
+          );
 
           const nodeSchema = uiContext
             .deriveControlSchemaNode(node.path, formDataRef.current);
 
-          return compileSchema({
+          return storeRef.current.validate(
+            { [currentNode]: data.value },
+            uiContext.deriveSchemaNode({
               type: "object",
-              properties: { [currentNode]: nodeSchema },
+              properties: { [currentNode]: nodeSchema.schema },
               required: node.required ? [currentNode] : []
-            }, {drafts: [uiContext.draftType]})
-            .validate({[currentNode]: data.value}, data.pointer);
+            }),
+            ["#", ...splitSlices.slice(0, -1)].join("/"),
+            "#",
+          );
         });
 
 
 
     // Validate Parent schema
-    const { errors } = allValidatedResult.reduce((x: ValidateReturnType, validateState) => {
+    const { errors } = allValidatedResult.reduce((x, validateState) => {
       return {
         ...x,
-        valid: x.valid && validateState.valid,
+        isValid: x.valid && validateState.isValid,
         errors: [...x.errors, ...validateState.errors],
       }
     }, {
       valid: true,
-      errors: [],
-      errorsAsync: [],
+      errors: [] as JsonError[],
     });
 
 

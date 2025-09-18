@@ -1,6 +1,7 @@
 import { ControlSchema } from '../../models/ControlSchema';
 import { ControlNodeType, LayoutSchema } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
+import { Draft, JsonSchema } from '../../lib';
 export type { SchemaNode };
 type Extensions = {
     required?: boolean;
@@ -17,7 +18,10 @@ export declare class UiStore {
     get rootSchema(): SchemaNode & {
         cache: WeakMap<object, object>;
     };
-    get draftType(): import("json-schema-library").Draft;
+    get draftType(): Draft;
+    deriveSchemaNode(schema: JsonSchema, draft?: Draft): SchemaNode & {
+        cache: WeakMap<object, object>;
+    };
     getChildren(key: string): string[];
     getNode(key: string): ExtendedLayoutSchema;
     getNodeByPath(path: string): ExtendedControlSchema;

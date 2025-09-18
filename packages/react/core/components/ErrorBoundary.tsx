@@ -7,7 +7,7 @@ type ErrorBoundaryState = {
 
 type ErrorBoundaryProps = PropsWithChildren<{
   renderError?: (onRetry: () => void) => ReactNode;
-  Fallback?: ComponentType<{ onRetry: () => void }>;
+  Fallback?: ComponentType<{ onRetry: () => void, error: null | Error }>;
 }>;
 
 export class ErrorBoundary extends PureComponent<
@@ -32,7 +32,7 @@ export class ErrorBoundary extends PureComponent<
     if (this.props.renderError) return this.props.renderError(this.retry);
 
     const Fallback = this.props.Fallback;
-    if (Fallback) return <Fallback onRetry={this.retry} />;
+    if (Fallback) return <Fallback onRetry={this.retry} error={this.state.error} />;
 
     return null;
   }

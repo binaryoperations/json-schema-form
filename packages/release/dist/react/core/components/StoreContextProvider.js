@@ -12,18 +12,16 @@ import { fastDeepEqual, noop } from '../../../core/internals/object';
 import { useMemoizedValue } from '../hooks/useMemoizedValue';
 export const StoreContextProvider = memo(function StoreContextProvider(props) {
     const schema = useMemoizedValue(props.schema, fastDeepEqual);
-    const schemaDraft = useMemo(() => LogicalSchema.parse(schema), [schema]);
+    const schemaDraft = useMemo(() => LogicalSchema.parse(schema, props.draft), [schema, props.draft]);
     const formDataRef = useFormDataRef();
-    const schemaDraftRef = useLatest(schemaDraft);
     const onSubmitLatestRef = useLatest(props.onSubmit);
     const controlState = useControlState(props.initialData);
-    const validate = useCallback((value, schema) => schemaDraftRef.current.validate(value, schema), []);
     const uiSchema = useMemoizedValue(props.uiSchema, fastDeepEqual);
     const uiContext = useMemo(() => UiSchema.prepare(uiSchema, schemaDraft), [uiSchema, schemaDraft]);
     const validateOnSubmit = useLatest({
         uiContext,
         validationMode: "onSubmit",
-        validate,
+        validate: schemaDraft.validate,
         onSubmit: noop,
         submit: noop,
         ...controlState
@@ -45,11 +43,11 @@ export const StoreContextProvider = memo(function StoreContextProvider(props) {
     useImperativeHandle(props.ref, () => ({ validate: validateFunc, resetErrors: controlState.resetErrors }), [validateOnSubmit, controlState.resetErrors]);
     const contextValue = useMemo(() => ({
         uiContext,
-        validate,
+        validate: schemaDraft.validate,
         validationMode: props.validationMode,
         onSubmit,
         submit,
         ...controlState,
-    }), [uiContext, validate, props.validationMode, controlState, onSubmit]);
+    }), [uiContext, schemaDraft, props.validationMode, controlState, onSubmit]);
     return (_jsx(UiStoreContextProvider, { value: contextValue, children: props.children }));
 });

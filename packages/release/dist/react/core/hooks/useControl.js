@@ -98,8 +98,7 @@ export function useValidateData(path, validateOn, storeRef) {
                 errors: [],
             };
         const shouldReset = validateOn === 'onSubmit';
-        const testSchema = schema?.schema ??
-            storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current).schema;
+        const testSchema = schema ?? storeRef.current.uiContext.deriveControlSchemaNode(path, formDataRef.current);
         const validateResult = shouldReset
             ? storeRef.current.validate(value ?? formDataRef.current, testSchema)
             : storeRef.current.validate(value, testSchema);

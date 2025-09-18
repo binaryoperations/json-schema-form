@@ -1,6 +1,5 @@
 import { jsx as _jsx } from "react/jsx-runtime";
 import { useCallback, useMemo } from 'react';
-import { compileSchema } from 'json-schema-library';
 import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
@@ -25,36 +24,32 @@ function useSubFormProps(props) {
     const handleSubmit = useCallback((e, onSubmit) => {
         const uiContext = storeRef.current.uiContext;
         let allValidatedResult = !props.id ?
-            [uiContext.deriveControlSchemaNode("#", formDataRef.current).validate(formDataRef.current)]
+            [storeRef.current.validate(formDataRef.current, uiContext.deriveControlSchemaNode("#", formDataRef.current))]
             : uniqBy(uiContext.getChildControls(props.id), "path")
                 .map((node) => {
                 const splitSlices = split(node.path);
                 const currentNode = splitSlices.at(-1);
                 const data = uiContext.deriveDataNodeAtPath(formDataRef.current, node.path);
                 if (!node.required)
-                    return uiContext
-                        .deriveControlSchemaNode(node.path, formDataRef.current)
-                        .validate(data.value, data.pointer);
+                    return storeRef.current.validate(formDataRef.current, uiContext.deriveControlSchemaNode(node.path, formDataRef.current), node.path);
                 const nodeSchema = uiContext
                     .deriveControlSchemaNode(node.path, formDataRef.current);
-                return compileSchema({
+                return storeRef.current.validate({ [currentNode]: data.value }, uiContext.deriveSchemaNode({
                     type: "object",
-                    properties: { [currentNode]: nodeSchema },
+                    properties: { [currentNode]: nodeSchema.schema },
                     required: node.required ? [currentNode] : []
-                }, { drafts: [uiContext.draftType] })
-                    .validate({ [currentNode]: data.value }, data.pointer);
+                }), ["#", ...splitSlices.slice(0, -1)].join("/"), "#");
             });
         // Validate Parent schema
         const { errors } = allValidatedResult.reduce((x, validateState) => {
             return {
                 ...x,
-                valid: x.valid && validateState.valid,
+                isValid: x.valid && validateState.isValid,
                 errors: [...x.errors, ...validateState.errors],
             };
         }, {
             valid: true,
             errors: [],
-            errorsAsync: [],
         });
         storeRef.current.setErrors("#", errors, true);
         if (errors.length) {

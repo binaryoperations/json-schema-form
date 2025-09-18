@@ -4,7 +4,7 @@ import type {
 } from '@binaryoperations/json-forms-core/models';
 import LogicalSchema from '@binaryoperations/json-forms-core/schema/logical.schema';
 import UiSchema from '@binaryoperations/json-forms-core/schema/ui.schema';
-import type { JsonSchema, SchemaNode } from 'json-schema-library';
+import type { Draft, SchemaNode } from 'json-schema-library';
 import type { ComponentType, FormEvent, PropsWithChildren, Ref, RefObject } from 'react';
 import { memo, useImperativeHandle, useMemo } from 'react';
 import { useCallback } from 'react';
@@ -30,6 +30,7 @@ export type StoreContextProviderProps = PropsWithChildren<{
   initialData: object;
   ref?: Ref<FormRef>;
   onSubmit?: (e: FormEvent | undefined, data: object) => void | Promise<void>;
+  draft?: Draft
 }>;
 export type StoreContextProvider = ComponentType<StoreContextProviderProps>;
 
@@ -37,21 +38,15 @@ export const StoreContextProvider: StoreContextProvider = memo(
   function StoreContextProvider(props) {
     const schema = useMemoizedValue(props.schema, fastDeepEqual);
     const schemaDraft = useMemo(
-      () => LogicalSchema.parse(schema),
-      [schema]
+      () => LogicalSchema.parse(schema, props.draft),
+      [schema, props.draft]
     );
 
 
     const formDataRef = useFormDataRef();
-    const schemaDraftRef = useLatest(schemaDraft);
     const onSubmitLatestRef = useLatest(props.onSubmit);
 
     const controlState = useControlState(props.initialData);
-
-    const validate = useCallback(
-      (value: any, schema?: JsonSchema) => schemaDraftRef.current!.validate(value, schema),
-      []
-    );
 
     const uiSchema = useMemoizedValue(props.uiSchema, fastDeepEqual);
     const uiContext = useMemo(
@@ -59,12 +54,10 @@ export const StoreContextProvider: StoreContextProvider = memo(
       [uiSchema, schemaDraft]
     );
 
-
-
     const validateOnSubmit = useLatest({
       uiContext,
       validationMode: "onSubmit",
-      validate,
+      validate: schemaDraft.validate,
       onSubmit: noop,
       submit: noop,
       ...controlState
@@ -98,13 +91,13 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const contextValue = useMemo(
       () => ({
         uiContext,
-        validate,
+        validate: schemaDraft.validate,
         validationMode: props.validationMode,
         onSubmit,
         submit,
         ...controlState,
       }),
-      [uiContext, validate, props.validationMode, controlState, onSubmit]
+      [uiContext, schemaDraft, props.validationMode, controlState, onSubmit]
     );
 
 

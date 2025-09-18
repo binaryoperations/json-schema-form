@@ -17,7 +17,7 @@ export class ErrorBoundary extends PureComponent {
             return this.props.renderError(this.retry);
         const Fallback = this.props.Fallback;
         if (Fallback)
-            return _jsx(Fallback, { onRetry: this.retry });
+            return _jsx(Fallback, { onRetry: this.retry, error: this.state.error });
         return null;
     }
     render() {

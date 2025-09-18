@@ -1,6 +1,8 @@
 import { cast } from '../../internals/cast';
 import resolvers from '../../internals/resolvers';
 import { EnumUiNode, } from '../../models/LayoutSchema';
+import { assign } from '../../internals/object';
+import { setNodes } from '../logical.schema/nodeStore';
 export class UiStore {
     draftSchema;
     keyMap = {};
@@ -14,6 +16,9 @@ export class UiStore {
     }
     get draftType() {
         return this.draftSchema.draftType;
+    }
+    deriveSchemaNode(schema, draft) {
+        return this.draftSchema.deriveSchemaNode(schema, draft);
     }
     getChildren(key) {
         return this.tree[key];
@@ -43,6 +48,10 @@ export class UiStore {
     freeze() {
         this.keyMap = Object.freeze(this.keyMap);
         this.tree = Object.freeze(this.tree);
+        assign(this.draftSchema, {
+            beforeValidate: () => { setNodes(this.pathMap); },
+            afterValidate: () => { setNodes(null); },
+        });
         return this;
     }
     prepareTemplate(schema, data) {

@@ -8,6 +8,9 @@ import {
   EnumUiNode,
 } from '../../models/LayoutSchema';
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
+import { Draft, JsonSchema } from '@binaryoperations/json-forms-core/lib';
+import { assign } from '@binaryoperations/json-forms-core/internals/object';
+import { setNodes } from '../logical.schema/nodeStore';
 
 
 export type { SchemaNode };
@@ -32,6 +35,10 @@ export class UiStore {
   }
   get draftType() {
     return this.draftSchema.draftType;
+  }
+
+  deriveSchemaNode(schema: JsonSchema, draft?: Draft) {
+    return this.draftSchema.deriveSchemaNode(schema, draft)
   }
 
   getChildren(key: string) {
@@ -68,6 +75,11 @@ export class UiStore {
   freeze() {
     this.keyMap = Object.freeze(this.keyMap);
     this.tree = Object.freeze(this.tree);
+
+    assign(this.draftSchema, {
+      beforeValidate: () => { setNodes(this.pathMap) },
+      afterValidate: () => { setNodes(null) },
+    });
 
     return this;
   }
@@ -106,7 +118,6 @@ export class UiStore {
   deriveControlSchemaNode(path: string, data: object) {
     return this.draftSchema.getSchemaNodeOf(path, data);
   }
-
 
   deriveDataNodeAtPath(data: object, pointer: string) {
     return {

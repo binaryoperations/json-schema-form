@@ -1,6 +1,6 @@
 
 
-import { orderBy } from '@binaryoperations/json-forms-core/internals/object';
+import { orderBy, assign } from '@binaryoperations/json-forms-core/internals/object';
 import type { LayoutNodeType, LayoutSchema, } from '../../models/LayoutSchema';
 import { LogicalSchema } from '../logical.schema/Parser';
 import { ExtendedControlSchema, UiStore } from './UiStore';
@@ -18,8 +18,17 @@ export class UiSchemaPreparer {
   // Do I need to prepare the tree in ahead-of-time?
   // can the child nodes be derived just-in-time?
   private traverse(uiSchema: LayoutSchema, idRoot?: string) {
-    const nextCount = this.counter++;
-    const id = [idRoot ?? [], (uiSchema.id ?? nextCount)].flat().join("/");
+    const id = [idRoot ?? [], (uiSchema.id ?? this.counter++)].flat().join("/");
+
+    if (uiSchema.id) {
+      uiSchema = assign({}, uiSchema, {
+          options: {
+            ...uiSchema.options,
+            id: uiSchema.id,
+          },
+          id,
+      })
+    }
 
 
     if ("path" in  uiSchema) {
@@ -29,8 +38,10 @@ export class UiSchemaPreparer {
       const parentNode = dataPath.slice(0, -1).join("/");
       const item = dataPath.pop();
 
+      const options = uiSchema?.options ?? {}
+      const isRequired = "required" in options ? !!options.required : !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item);
       uiSchema = Object.defineProperty(uiSchema, 'required', {
-        value: !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item),
+        value: isRequired,
         writable: false,
         enumerable: false,
       });
