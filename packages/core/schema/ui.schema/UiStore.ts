@@ -10,7 +10,7 @@ import {
 import { LogicalSchema, SchemaNode } from '../logical.schema/Parser';
 import { Draft, JsonSchema } from '@binaryoperations/json-forms-core/lib';
 import { assign } from '@binaryoperations/json-forms-core/internals/object';
-import { setNodes } from '../logical.schema/nodeStore';
+import { $$setNodes } from '../logical.schema/nodeStore';
 
 
 export type { SchemaNode };
@@ -77,8 +77,8 @@ export class UiStore {
     this.tree = Object.freeze(this.tree);
 
     assign(this.draftSchema, {
-      beforeValidate: () => { setNodes(this.pathMap) },
-      afterValidate: () => { setNodes(null) },
+      beforeValidate: () => { $$setNodes(this.pathMap) },
+      afterValidate: () => { $$setNodes(null) },
     });
 
     return this;

@@ -2,7 +2,7 @@ import { merge, assign } from '../../internals/object';
 import { addKeywords, compileSchema, draft2020, } from '../../lib';
 import { get } from "@sagold/json-pointer";
 import { mapValues } from 'lodash';
-import { getNode } from './nodeStore';
+import { $$getNode } from './nodeStore';
 import { getDefaultKeywords } from '../../utils/keywords';
 import { extendDraft } from 'json-schema-library';
 export class LogicalSchema {
@@ -28,7 +28,7 @@ export class LogicalSchema {
         this.schemaCache = new Map();
     }
     prepareValidator = (validator) => (data) => {
-        const result = validator(assign(data, { uiNode: getNode(data.pointer) }));
+        const result = validator(assign(data, { uiNode: $$getNode(data.pointer) }));
         return result;
     };
     prepareKeywords = (keywords) => {

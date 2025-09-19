@@ -12,7 +12,7 @@ import {
 } from '../../lib';
 import { get } from "@sagold/json-pointer"
 import { mapValues } from 'lodash';
-import { getNode } from './nodeStore';
+import { $$getNode } from './nodeStore';
 import { getDefaultKeywords } from '@binaryoperations/json-forms-core/utils/keywords';
 import { extendDraft, OptionalNodeOrError } from 'json-schema-library';
 
@@ -65,7 +65,7 @@ export class LogicalSchema {
   }
 
   private prepareValidator = (validator: JsonSchemaValidator): JsonSchemaValidator => (data) => {
-    const result = validator(assign(data, { uiNode: getNode(data.pointer) }));
+    const result = validator(assign(data, { uiNode: $$getNode(data.pointer) }));
     return result;
   }
 
