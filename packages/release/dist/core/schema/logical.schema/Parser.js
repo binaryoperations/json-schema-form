@@ -52,7 +52,30 @@ export class LogicalSchema {
         return attachCache(node);
     }
     getData(data = {}, pointer = "#") {
-        return get(data, pointer);
+        const result = get(data, pointer);
+        if (result !== undefined)
+            return result;
+        return this.getDefaultData(data, pointer);
+    }
+    getDefaultData(data = {}, pointer = "#") {
+        const type = this.getSchemaOf(pointer, data)?.type;
+        switch ([].concat(type).at(0)) {
+            case "string":
+            case "text":
+                return "";
+            case "number":
+            case "integer":
+                return null;
+            case "boolean":
+                return false;
+            case "null":
+                return null;
+            case "array":
+                return [];
+            case "object":
+                return {};
+        }
+        return;
     }
     prepareTemplate(controlSchema = this.draftSchema, data) {
         if (!this.draftSchema.cache.has(controlSchema)) {
@@ -79,11 +102,15 @@ export class LogicalSchema {
     }
     getSchemaNodeOf(pointer, data = {}) {
         if (!this.schemaCache.has(pointer)) {
-            const schemaNode = this.draftSchema.getNode(pointer, data, { pointer });
-            if (schemaNode.error)
-                throw new Error(schemaNode.error.message, { cause: schemaNode.error });
-            this.schemaCache.set(pointer, schemaNode.node);
+            let schemaNode = this.draftSchema.getNode(pointer, data, { pointer });
+            schemaNode = deriveNode(schemaNode).reduceNode(data);
+            this.schemaCache.set(pointer, deriveNode(schemaNode));
         }
         return this.schemaCache.get(pointer);
     }
+}
+function deriveNode(schemaNode) {
+    if (schemaNode.error)
+        throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+    return schemaNode.node;
 }

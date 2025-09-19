@@ -20,7 +20,8 @@ export declare class LogicalSchema {
     deriveSchemaNode(node: SchemaNode | JsonSchema, draft?: Draft): SchemaNode & {
         cache: WeakMap<object, object>;
     };
-    getData(data?: object, pointer?: string): unknown;
+    getData(data?: object, pointer?: string): {} | null | undefined;
+    getDefaultData(data?: object, pointer?: string): {} | null | undefined;
     prepareTemplate(controlSchema?: JsonSchema | SchemaNode, data?: object): object;
     validate: (value: any, schema?: JsonSchema | SchemaNode, pointer?: string, path?: string | undefined) => {
         isValid: boolean;

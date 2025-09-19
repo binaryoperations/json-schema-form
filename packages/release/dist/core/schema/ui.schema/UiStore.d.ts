@@ -31,11 +31,11 @@ export declare class UiStore {
     isControl(key: string): boolean;
     freeze(): this;
     prepareTemplate(schema?: ControlSchema, data?: object): object;
-    deriveControlSchema(key: string, data?: object): ControlSchema | null;
+    deriveControlSchema(key: string, data?: object): JsonSchema | null;
     deriveControlSchemaNode(path: string, data: object): SchemaNode;
     deriveDataNodeAtPath(data: object, pointer: string): {
         pointer: string;
-        value: unknown;
+        value: {} | null | undefined;
     };
     deriveDataAtPointer(data: object, pointer: string): {} | null;
 }

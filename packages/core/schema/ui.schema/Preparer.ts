@@ -10,7 +10,7 @@ export class UiSchemaPreparer {
 
   store!: UiStore;
 
-  constructor(draftSchema: LogicalSchema) {
+  constructor(draftSchema: LogicalSchema, private formData?: object) {
     this.store = new UiStore(draftSchema);
   }
 
@@ -30,6 +30,9 @@ export class UiSchemaPreparer {
       })
     }
 
+    uiSchema = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
+      id: { value: id, writable: false, enumerable: false },
+    });
 
     if ("path" in  uiSchema) {
       uiSchema.path = uiSchema.path.startsWith("#") ? uiSchema.path : `#/${uiSchema.path}`.split("/").filter(Boolean).join("/")
@@ -39,7 +42,11 @@ export class UiSchemaPreparer {
       const item = dataPath.pop();
 
       const options = uiSchema?.options ?? {}
-      const isRequired = "required" in options ? !!options.required : !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item);
+      const isRequired = "required" in options
+        ? !!options.required
+        : !!this.store.deriveControlSchemaNode(parentNode, this.formData ?? {})
+          ?.schema.required?.includes(item);
+
       uiSchema = Object.defineProperty(uiSchema, 'required', {
         value: isRequired,
         writable: false,
@@ -85,9 +92,9 @@ export class UiSchemaPreparer {
     return id;
   }
 
-  static prepare(uiSchema: LayoutSchema, draftSchema: LogicalSchema) {
+  static prepare(uiSchema: LayoutSchema, draftSchema: LogicalSchema, formData?: object) {
     const ClassConstructor: typeof UiSchemaPreparer = Object.assign(this);
-    const parser = new ClassConstructor(draftSchema);
+    const parser = new ClassConstructor(draftSchema, formData);
 
     parser.traverse({
       id: "root",

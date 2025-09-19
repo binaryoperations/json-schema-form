@@ -1,9 +1,11 @@
 import { orderBy, assign } from '../../internals/object';
 import { UiStore } from './UiStore';
 export class UiSchemaPreparer {
+    formData;
     counter = 0;
     store;
-    constructor(draftSchema) {
+    constructor(draftSchema, formData) {
+        this.formData = formData;
         this.store = new UiStore(draftSchema);
     }
     // reconsider:
@@ -20,13 +22,19 @@ export class UiSchemaPreparer {
                 id,
             });
         }
+        uiSchema = "id" in uiSchema ? uiSchema : Object.defineProperties(uiSchema, {
+            id: { value: id, writable: false, enumerable: false },
+        });
         if ("path" in uiSchema) {
             uiSchema.path = uiSchema.path.startsWith("#") ? uiSchema.path : `#/${uiSchema.path}`.split("/").filter(Boolean).join("/");
             const dataPath = uiSchema.path.split("/");
             const parentNode = dataPath.slice(0, -1).join("/");
             const item = dataPath.pop();
             const options = uiSchema?.options ?? {};
-            const isRequired = "required" in options ? !!options.required : !!this.store.rootSchema.getNode(parentNode)?.node?.schema.required?.includes(item);
+            const isRequired = "required" in options
+                ? !!options.required
+                : !!this.store.deriveControlSchemaNode(parentNode, this.formData ?? {})
+                    ?.schema.required?.includes(item);
             uiSchema = Object.defineProperty(uiSchema, 'required', {
                 value: isRequired,
                 writable: false,
@@ -57,9 +65,9 @@ export class UiSchemaPreparer {
         this.store.tree[id] = orderBy(treeNodes, (nodeId) => this.store.keyMap[nodeId].order ?? 0, 'asc');
         return id;
     }
-    static prepare(uiSchema, draftSchema) {
+    static prepare(uiSchema, draftSchema, formData) {
         const ClassConstructor = Object.assign(this);
-        const parser = new ClassConstructor(draftSchema);
+        const parser = new ClassConstructor(draftSchema, formData);
         parser.traverse({
             id: "root",
             nodes: [uiSchema],

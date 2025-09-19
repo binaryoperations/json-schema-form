@@ -50,7 +50,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
 
     const uiSchema = useMemoizedValue(props.uiSchema, fastDeepEqual);
     const uiContext = useMemo(
-      () => UiSchema.prepare(uiSchema, schemaDraft),
+      () => UiSchema.prepare(uiSchema, schemaDraft, formDataRef.current),
       [uiSchema, schemaDraft]
     );
 

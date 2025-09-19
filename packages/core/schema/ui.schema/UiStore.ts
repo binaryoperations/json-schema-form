@@ -88,7 +88,7 @@ export class UiStore {
     return this.draftSchema.prepareTemplate(schema, data);
   }
 
-  deriveControlSchema(key: string, data?: object): ControlSchema | null {
+  deriveControlSchema(key: string, data?: object): JsonSchema | null {
     if (!this.isControl(key)) return null;
 
     const node = cast<ControlNodeType>(this.getNode(key));

@@ -14,7 +14,7 @@ import { get } from "@sagold/json-pointer"
 import { mapValues } from 'lodash';
 import { getNode } from './nodeStore';
 import { getDefaultKeywords } from '@binaryoperations/json-forms-core/utils/keywords';
-import { extendDraft } from 'json-schema-library';
+import { extendDraft, OptionalNodeOrError } from 'json-schema-library';
 
 
 export { JsonError, SchemaNode };
@@ -95,11 +95,37 @@ export class LogicalSchema {
       return attachCache(compileSchema(node, { drafts: [extendedDraft] }));
     }
 
-      return attachCache(node as SchemaNode);
+    return attachCache(node as SchemaNode);
   }
 
   getData(data: object = {}, pointer = "#" ) {
-    return get(data, pointer)
+    const result = get(data, pointer);
+    if (result !== undefined) return result;
+
+    return this.getDefaultData(data,pointer);
+  }
+
+  getDefaultData(data: object = {}, pointer = "#") {
+    const type = this.getSchemaOf(pointer, data)?.type;
+
+    switch (([] as (string | undefined)[]).concat(type).at(0)) {
+      case "string":
+      case "text":
+        return "";
+      case "number":
+      case "integer":
+        return null;
+      case "boolean":
+        return false;
+      case "null":
+        return null;
+      case "array":
+        return [];
+      case "object":
+        return {};
+    }
+
+    return;
   }
 
   prepareTemplate(controlSchema: JsonSchema | SchemaNode = this.draftSchema, data?: object) {
@@ -141,14 +167,20 @@ export class LogicalSchema {
 
   getSchemaNodeOf(pointer: string, data: Record<string, any> = {}) {
     if (!this.schemaCache.has(pointer)) {
-      const schemaNode = this.draftSchema.getNode(pointer, data, { pointer });
+      let schemaNode = this.draftSchema.getNode(pointer, data, { pointer });
+      schemaNode = deriveNode(schemaNode)!.reduceNode(data);
 
-      if (schemaNode.error)
-        throw new Error(schemaNode.error.message, { cause: schemaNode.error });
-
-      this.schemaCache.set(pointer, schemaNode.node!);
+      this.schemaCache.set(pointer, deriveNode(schemaNode));
     }
 
     return this.schemaCache.get(pointer)!;
   }
+}
+
+
+function deriveNode(schemaNode: OptionalNodeOrError) {
+  if (schemaNode.error)
+        throw new Error(schemaNode.error.message, { cause: schemaNode.error });
+
+  return schemaNode.node!
 }

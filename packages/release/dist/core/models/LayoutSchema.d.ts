@@ -44,18 +44,18 @@ type ChildNode<T> = T & {
  * Available Ui Schemas
  *
  */
-export interface UiNodeBase<P extends object = object, CP = object> {
+export interface UiNodeBase<P extends Record<string, unknown>, CP = object> {
     rules?: Rules;
     id?: string;
     order?: number;
     breakpoints?: Breakpoints<Partial<P>>;
     nodes?: ChildNode<PossibleRootNodes<CP, P>>[];
 }
-export interface LayoutNodeType<CP = object, P extends object = object> extends UiNodeBase<P, CP> {
+export interface LayoutNodeType<CP = object, P extends Record<string, unknown> = Record<string, unknown>> extends UiNodeBase<P, CP> {
     type: CP | string;
     options?: P;
 }
-export interface ControlNodeType<CP = object, T extends object = object> extends UiNodeBase<T> {
+export interface ControlNodeType<CP = object, T extends Record<string, unknown> = Record<string, unknown>> extends UiNodeBase<T> {
     type: CP | `${EnumUiNode.CONTROL}`;
     schema?: ControlSchema;
     label?: string;
@@ -65,7 +65,7 @@ export interface ControlNodeType<CP = object, T extends object = object> extends
         label?: string;
     };
 }
-type PossibleRootNodes<CP = object, T extends object = object> = LayoutNodeType<CP, T> | ControlNodeType<CP, T>;
-export type LayoutSchema<CP extends {} = {}, T extends object = object> = PossibleRootNodes<CP, T>;
+type PossibleRootNodes<CP = object, T extends Record<string, unknown> = Record<string, unknown>> = LayoutNodeType<CP, T> | ControlNodeType<CP, T>;
+export type LayoutSchema<CP extends {} = {}, T extends Record<string, unknown> = Record<string, unknown>> = PossibleRootNodes<CP, T>;
 export {};
 //# sourceMappingURL=LayoutSchema.d.ts.map

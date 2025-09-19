@@ -54,7 +54,7 @@ type ChildNode<T> = T & {
  *
  */
 export interface UiNodeBase<
-  P extends object = object,
+  P extends Record<string, unknown>,
   CP = object,
 > {
   rules?: Rules;
@@ -66,13 +66,13 @@ export interface UiNodeBase<
 
 export interface LayoutNodeType<
   CP = object,
-  P extends object = object,
+  P extends Record<string, unknown> = Record<string, unknown>,
 > extends UiNodeBase<P, CP> {
   type: CP | string;
   options?: P;
 }
 
-export interface ControlNodeType<CP = object, T extends object = object> extends UiNodeBase<T> {
+export interface ControlNodeType<CP = object, T extends Record<string, unknown> = Record<string, unknown>> extends UiNodeBase<T> {
   type: CP | `${EnumUiNode.CONTROL}`;
   schema?: ControlSchema;
   label?: string;
@@ -81,8 +81,8 @@ export interface ControlNodeType<CP = object, T extends object = object> extends
 }
 
 
-type PossibleRootNodes<CP = object,T extends object = object>=
+type PossibleRootNodes<CP = object,T extends Record<string, unknown> = Record<string, unknown>>=
   | LayoutNodeType<CP, T>
   | ControlNodeType<CP, T>;
 
-export type LayoutSchema<CP extends {} = {}, T extends object = object> = PossibleRootNodes<CP, T>;
+export type LayoutSchema<CP extends {} = {}, T extends Record<string, unknown> = Record<string, unknown>> = PossibleRootNodes<CP, T>;
