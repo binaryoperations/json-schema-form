@@ -37,7 +37,7 @@ export const StoreContextProvider = memo(function StoreContextProvider(props) {
         e?.preventDefault();
         e?.stopPropagation();
         if (handleSubmit)
-            return handleSubmit(e);
+            return handleSubmit(submit);
         return submit();
     }, [submit]);
     useImperativeHandle(props.ref, () => ({ validate: validateFunc, resetErrors: controlState.resetErrors }), [validateOnSubmit, controlState.resetErrors]);

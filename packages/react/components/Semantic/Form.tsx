@@ -1,8 +1,8 @@
 
-import { FormEvent, useCallback, useMemo, type ComponentProps } from 'react';
+import { useCallback, useMemo, type ComponentProps } from 'react';
 
 
-import { UiStoreContextProvider, useUiStoreRef } from '../../core/context/StoreContext';
+import { UiStoreContextProvider, UiStoreContextType, useUiStoreRef } from '../../core/context/StoreContext';
 import { useFormDataRef } from '../../core/context/FormDataContext';
 import { useFormProps } from '../../core/hooks/useFormProps';
 import { useStore } from '@binaryoperations/json-forms-react/core/hooks';
@@ -35,7 +35,7 @@ function useSubFormProps(props: {id: string}) {
   const storeRef = useUiStoreRef();
   const formDataRef = useFormDataRef();
 
-  const handleSubmit = useCallback((e?: FormEvent, onSubmit?: (e?: FormEvent) => void) => {
+  const handleSubmit = useCallback<UiStoreContextType['onSubmit']>((e?, onSubmit?) => {
     const uiContext = storeRef.current.uiContext;
 
     let allValidatedResult = !props.id ?
@@ -90,8 +90,8 @@ function useSubFormProps(props: {id: string}) {
         return;
     }
 
-    if (onSubmit) onSubmit(e);
-    else storeRef.current.submit?.(e, undefined, undefined, true);
+    if (onSubmit) onSubmit(storeRef.current.submit);
+    else storeRef.current.submit(e);
   }, [storeRef, props.id]);
 
   return useMemo(() => ({

@@ -77,7 +77,7 @@ export const StoreContextProvider: StoreContextProvider = memo(
       e?.preventDefault();
       e?.stopPropagation();
 
-      if (handleSubmit) return handleSubmit(e);
+      if (handleSubmit) return handleSubmit(submit);
       return submit();
     }, [submit]);
 

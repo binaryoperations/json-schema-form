@@ -19,6 +19,15 @@ type ValidateDataInternal = (
   errors: JsonError[];
 };
 
+/**
+ * Submit function type
+ * @param e - optional form event
+ * @param data - optional form data
+ * @param schemaNode - optional schema node
+ * @param shouldValidate [true] - whether to validate before submitting
+ */
+type SubmitFunction = (e?: FormEvent, data?: object, schemaNode?: SchemaNode, shouldValidate?: boolean) => void;
+
 export type UiStoreContextType = {
   uiContext: UiStore;
   validate: ValidateDataInternal;
@@ -31,8 +40,8 @@ export type UiStoreContextType = {
   setDirty: (path: string, value: any) => void;
   setErrors: (path: string, errors: JsonError[], shouldReset: boolean) => void;
   resetErrors: () => void;
-  onSubmit: (e?: FormEvent, onSubmit?: (e?: FormEvent) => void | Promise<void>) => void | Promise<void>;
-  submit: (e?: FormEvent, data?: object, schemaNode?: SchemaNode, shouldValidate?: boolean) => void;
+  onSubmit: (e?: FormEvent, onSubmit?: (handleSubmit?: SubmitFunction) => void | Promise<void>) => void | Promise<void>;
+  submit: SubmitFunction;
 
 };
 

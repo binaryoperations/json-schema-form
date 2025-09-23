@@ -1,6 +1,6 @@
 import type { ComponentProps } from 'react';
 export declare const useFormProps: (props: ComponentProps<"form">) => {
-    onSubmit: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>;
+    onSubmit: (e?: import("react").FormEvent, onSubmit?: (handleSubmit?: (e?: import("react").FormEvent, data?: object, schemaNode?: import("json-schema-library").SchemaNode, shouldValidate?: boolean) => void) => void | Promise<void>) => void | Promise<void>;
     ref?: import("react").Ref<HTMLFormElement> | undefined;
     key?: import("react").Key | null | undefined;
     acceptCharset?: string | undefined;
@@ -295,6 +295,6 @@ export declare const useFormProps: (props: ComponentProps<"form">) => {
 };
 export declare const useSubmitButtonProps: () => {
     type: "submit";
-    onClick: (e?: import("react").FormEvent, onSubmit?: (e?: import("react").FormEvent) => void | Promise<void>) => void | Promise<void>;
+    onClick: (e?: import("react").FormEvent, onSubmit?: (handleSubmit?: (e?: import("react").FormEvent, data?: object, schemaNode?: import("json-schema-library").SchemaNode, shouldValidate?: boolean) => void) => void | Promise<void>) => void | Promise<void>;
 };
 //# sourceMappingURL=useFormProps.d.ts.map
