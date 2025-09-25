@@ -29,7 +29,7 @@ function getJsonSchemaType(value: unknown, expectedType: string | string[]): JST
     return jsType;
 }
 
-function deriveError(dataType: string, value?: unknown) {
+function deriveRequiredError(dataType: string, value?: unknown) {
   switch (dataType) {
     case "null":
       return true;
@@ -37,6 +37,7 @@ function deriveError(dataType: string, value?: unknown) {
     case "number":
       return isNil(value);
     case "string":
+    case "boolean":
       return !value;
   }
 
@@ -53,7 +54,7 @@ function validateValueRequired({ node, data, uiNode, pointer, }: JsonSchemaValid
     return;
   }
 
-  if (!deriveError(dataType, data)) return;
+  if (!deriveRequiredError(dataType, data)) return;
 
   return node.createError("value-required", {
     value: data,
