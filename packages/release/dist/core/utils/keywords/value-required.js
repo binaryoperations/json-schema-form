@@ -18,7 +18,7 @@ function getJsonSchemaType(value, expectedType) {
     }
     return jsType;
 }
-function deriveError(dataType, value) {
+function deriveRequiredError(dataType, value) {
     switch (dataType) {
         case "null":
             return true;
@@ -26,6 +26,7 @@ function deriveError(dataType, value) {
         case "number":
             return isNil(value);
         case "string":
+        case "boolean":
             return !value;
     }
     return false;
@@ -36,7 +37,7 @@ function validateValueRequired({ node, data, uiNode, pointer, }) {
     if (!uiNode?.required) {
         return;
     }
-    if (!deriveError(dataType, data))
+    if (!deriveRequiredError(dataType, data))
         return;
     return node.createError("value-required", {
         value: data,

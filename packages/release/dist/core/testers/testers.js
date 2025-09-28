@@ -36,8 +36,14 @@ function exactEqualsType(type, multiplier = 2) {
 }
 export function uiSchemaMatches(predicate) {
     return Object.defineProperties(function UiSchemaMatches(_, uiSchema) {
-        return predicate(uiSchema);
+        return predicate(cast(uiSchema));
     }, { name: { value: `UiSchemaMatches(${predicate.name || "Unknown"})`, writable: true } });
+}
+;
+export function schemaMatches(predicate) {
+    return Object.defineProperties(function SchemaMatches(schema) {
+        return predicate(schema);
+    }, { name: { value: `SchemaMatches(${predicate.name || "Unknown"})`, writable: true } });
 }
 ;
 export function isType(type) {
@@ -50,7 +56,7 @@ export const hasRows = isType('rows');
 export const hasColumns = isType('columns');
 export const isControl = isType('control');
 export function optionIs(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => +(get(cast(uiSchema).options, property) === expectedValue) * 2)), {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign((uiSchema) => +(get((uiSchema).options, property) === expectedValue) * 2, { name: `TestUiOption(${property}===${expectedValue})` }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
@@ -60,16 +66,41 @@ export function optionIs(property, expectedValue) {
     return func;
 }
 ;
+export function schemaOptionIs(property, expectedValue) {
+    const func = Object.defineProperties(and(isControl, schemaMatches(Object.assign(((schema) => +(get(schema, property) === expectedValue) * 2), { name: `TestSchema(${property}===${expectedValue})` }))), {
+        property: { value: property },
+        expectedValue: { value: expectedValue },
+    });
+    Object.assign(func, {
+        name: `schemaOptionIs(${property}, ${expectedValue})`
+    });
+    return func;
+}
+;
 export function optionStartsWith(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, uiSchemaMatches((uiSchema) => {
-        const value = get(cast(uiSchema).options, property);
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign((uiSchema) => {
+        const value = get(uiSchema.options, property);
         return +(typeof value === 'string' && value.startsWith(expectedValue));
-    })), {
+    }, { name: `TestUiOptionStartsWith(${expectedValue})` }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
     Object.assign(func, {
         name: `OptionStartsWith(${property}, ${expectedValue})`
+    });
+    return func;
+}
+;
+export function schemaOptionStartsWith(property, expectedValue) {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign((uiSchema) => {
+        const value = get(uiSchema.options, property);
+        return +(typeof value === 'string' && value.startsWith(expectedValue));
+    }, { name: `TestSchemaOptionStartsWith(${expectedValue})` }))), {
+        property: { value: property },
+        expectedValue: { value: expectedValue },
+    });
+    Object.assign(func, {
+        name: `schemaOptionStartsWith(${property}, ${expectedValue})`
     });
     return func;
 }
@@ -124,6 +155,6 @@ export const isTextRanked = createRankedTester(isStringSchema);
 export const isArrayRanked = createRankedTester(isArraySchema);
 export const isBooleanRanked = createRankedTester(isBooleanSchema);
 export const isNumberRanked = createRankedTester(isNumberSchema);
-export const isDateRanked = createRankedTester(or(exactEqualsType('string', 1), exactEqualsType('number', 1)), or(optionIs('format', 'date'), optionStartsWith('format', 'date')));
+export const isDateRanked = createRankedTester(or(exactEqualsType('string', 1), exactEqualsType('number', 1)), or(optionIs('format', 'date'), optionStartsWith('format', 'date'), schemaOptionIs("format", 'date'), schemaOptionIs("format", 'date-time')));
 export const isDateTimeRanked = createRankedTester(or(optionIs('format', 'datetime'), optionStartsWith('format', 'datetime')));
 export const isTimeRanked = createRankedTester(or(optionIs("format", 'time'), optionStartsWith('format', 'time')));

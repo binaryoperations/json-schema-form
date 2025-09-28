@@ -57,13 +57,24 @@ function exactEqualsType
   }
 
 export function uiSchemaMatches (
-  predicate: (uiSchema: LayoutSchema) => number
+  predicate: (uiSchema: ControlNodeType) => number
 ): Ranker {
   return Object.defineProperties(
       function UiSchemaMatches(_, uiSchema) {
-        return predicate(uiSchema);
+        return predicate(cast<ControlNodeType>(uiSchema));
       },
       { name: { value: `UiSchemaMatches(${predicate.name || "Unknown"})`, writable: true} }
+    )
+};
+
+export function schemaMatches (
+  predicate: (schema: ControlSchema) => number
+): Ranker {
+  return Object.defineProperties(
+      function SchemaMatches(schema) {
+        return predicate(schema);
+      },
+      { name: { value: `SchemaMatches(${predicate.name || "Unknown"})`, writable: true} }
     )
 };
 
@@ -82,10 +93,7 @@ export function optionIs (property: string, expectedValue: unknown): Ranker {
     and(
       isControl,
       uiSchemaMatches(
-        (uiSchema) =>
-          +(
-            get(cast<ControlNodeType>(uiSchema).options, property) === expectedValue
-          ) * 2
+        Object.assign((uiSchema: ControlNodeType) =>+(get((uiSchema).options, property) === expectedValue) * 2, {name: `TestUiOption(${property}===${expectedValue})` })
       )
     ),
     {
@@ -101,6 +109,27 @@ export function optionIs (property: string, expectedValue: unknown): Ranker {
   return func;
 };
 
+export function schemaOptionIs (property: string, expectedValue: unknown): Ranker {
+  const func = Object.defineProperties(
+    and(
+      isControl,
+      schemaMatches(
+        Object.assign(((schema: ControlSchema) => +(get(schema, property) === expectedValue) * 2), {name:  `TestSchema(${property}===${expectedValue})` })
+      )
+    ),
+    {
+      property: { value: property },
+      expectedValue: { value: expectedValue },
+    }
+  )
+
+  Object.assign(func, {
+    name: `schemaOptionIs(${property}, ${expectedValue})`
+  })
+
+  return func;
+};
+
 export function optionStartsWith (
   property: string,
   expectedValue: string
@@ -109,10 +138,12 @@ export function optionStartsWith (
   const func = Object.defineProperties(
     and(
       isControl,
-      uiSchemaMatches((uiSchema) => {
-        const value = get(cast<ControlNodeType>(uiSchema).options, property);
-        return +(typeof value === 'string' && value.startsWith(expectedValue));
-      })
+      uiSchemaMatches(
+        Object.assign((uiSchema: ControlNodeType) => {
+          const value = get(uiSchema.options, property);
+          return +(typeof value === 'string' && value.startsWith(expectedValue));
+        }, {name: `TestUiOptionStartsWith(${expectedValue})`})
+      )
     ),
     {
       property: { value: property },
@@ -122,6 +153,33 @@ export function optionStartsWith (
 
   Object.assign(func, {
     name: `OptionStartsWith(${property}, ${expectedValue})`
+  })
+
+  return func;
+};
+
+export function schemaOptionStartsWith (
+  property: string,
+  expectedValue: string
+): Ranker{
+  const func = Object.defineProperties(
+    and(
+      isControl,
+      uiSchemaMatches(
+        Object.assign((uiSchema: ControlNodeType) => {
+          const value = get(uiSchema.options, property);
+          return +(typeof value === 'string' && value.startsWith(expectedValue));
+        }, {name: `TestSchemaOptionStartsWith(${expectedValue})`})
+      )
+    ),
+    {
+      property: { value: property },
+      expectedValue: { value: expectedValue },
+    }
+  )
+
+  Object.assign(func, {
+    name: `schemaOptionStartsWith(${property}, ${expectedValue})`
   })
 
   return func;
@@ -208,7 +266,7 @@ export const isNumberRanked = createRankedTester(isNumberSchema);
 
 export const isDateRanked = createRankedTester(
   or(exactEqualsType('string', 1), exactEqualsType('number', 1)),
-  or(optionIs('format', 'date'), optionStartsWith('format', 'date'))
+  or(optionIs('format', 'date'), optionStartsWith('format', 'date'), schemaOptionIs("format", 'date'), schemaOptionIs("format", 'date-time'))
 );
 export const isDateTimeRanked = createRankedTester(
   or(

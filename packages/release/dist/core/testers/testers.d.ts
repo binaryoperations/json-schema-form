@@ -1,11 +1,12 @@
 import type { ControlSchema } from '../models/ControlSchema';
-import { type LayoutSchema } from '../models/LayoutSchema';
+import { ControlNodeType, type LayoutSchema } from '../models/LayoutSchema';
 export type Ranker = (schema: ControlSchema, uiSchema: LayoutSchema, context: {
     rootSchema: ControlSchema;
 }) => number;
 export declare function and(...functions: Ranker[]): Ranker;
 export declare function or(...functions: Ranker[]): Ranker;
-export declare function uiSchemaMatches(predicate: (uiSchema: LayoutSchema) => number): Ranker;
+export declare function uiSchemaMatches(predicate: (uiSchema: ControlNodeType) => number): Ranker;
+export declare function schemaMatches(predicate: (schema: ControlSchema) => number): Ranker;
 export declare function isType(type: string): Ranker;
 export declare const hasFieldSets: Ranker;
 export declare const isFieldSet: Ranker;
@@ -13,7 +14,9 @@ export declare const hasRows: Ranker;
 export declare const hasColumns: Ranker;
 export declare const isControl: Ranker;
 export declare function optionIs(property: string, expectedValue: unknown): Ranker;
+export declare function schemaOptionIs(property: string, expectedValue: unknown): Ranker;
 export declare function optionStartsWith(property: string, expectedValue: string): Ranker;
+export declare function schemaOptionStartsWith(property: string, expectedValue: string): Ranker;
 /**
  *
  * Schema Testers
