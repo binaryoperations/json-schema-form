@@ -93,7 +93,12 @@ export function optionIs (property: string, expectedValue: unknown): Ranker {
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign((uiSchema: ControlNodeType) =>+(get((uiSchema).options, property) === expectedValue) * 2, {name: `TestUiOption(${property}===${expectedValue})` })
+        Object.assign(
+          function testUiOption(uiSchema: ControlNodeType) {
+            return +(get((uiSchema).options, property) === expectedValue) * 2
+          },
+          {name: `TestUiOption(${property}===${expectedValue})` }
+        )
       )
     ),
     {
@@ -114,7 +119,11 @@ export function schemaOptionIs (property: string, expectedValue: unknown): Ranke
     and(
       isControl,
       schemaMatches(
-        Object.assign(((schema: ControlSchema) => +(get(schema, property) === expectedValue) * 2), {name:  `TestSchema(${property}===${expectedValue})` })
+        Object.assign(
+          function TestSchemaOption (schema: ControlSchema){
+            return +(get(schema, property) === expectedValue) * 2;
+          }, {name:  `TestSchema(${property}===${expectedValue})` }
+        )
       )
     ),
     {
@@ -139,7 +148,7 @@ export function optionStartsWith (
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign((uiSchema: ControlNodeType) => {
+        Object.assign(function TestUiOptionStartsWith(uiSchema: ControlNodeType) {
           const value = get(uiSchema.options, property);
           return +(typeof value === 'string' && value.startsWith(expectedValue));
         }, {name: `TestUiOptionStartsWith(${expectedValue})`})
@@ -166,7 +175,7 @@ export function schemaOptionStartsWith (
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign((uiSchema: ControlNodeType) => {
+        Object.assign(function TestSchemaOptionStartsWith(uiSchema: ControlNodeType) {
           const value = get(uiSchema.options, property);
           return +(typeof value === 'string' && value.startsWith(expectedValue));
         }, {name: `TestSchemaOptionStartsWith(${expectedValue})`})
