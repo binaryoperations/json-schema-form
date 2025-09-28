@@ -266,15 +266,27 @@ export const isNumberRanked = createRankedTester(isNumberSchema);
 
 export const isDateRanked = createRankedTester(
   or(exactEqualsType('string', 1), exactEqualsType('number', 1)),
-  or(optionIs('format', 'date'), optionStartsWith('format', 'date'), schemaOptionIs("format", 'date'), schemaOptionIs("format", 'date-time'))
+  or(
+    optionIs('format', 'date'),
+    optionStartsWith('format', 'date'),
+    schemaOptionIs("format", 'date'),
+    schemaOptionStartsWith("format", 'date'),
+  )
 );
 export const isDateTimeRanked = createRankedTester(
   or(
     optionIs('format', 'datetime'),
-    optionStartsWith('format', 'datetime')
+    optionStartsWith('format', 'datetime'),
+    schemaOptionIs("format", 'datetime'),
+    schemaOptionStartsWith("format", 'datetime'),
   )
 );
 
 export const isTimeRanked = createRankedTester(
-  or(optionIs("format", 'time'), optionStartsWith('format', 'time'))
+  or(
+    optionIs("format", 'time'),
+    optionStartsWith('format', 'time'),
+    schemaOptionIs("format", 'time'),
+    schemaOptionStartsWith("format", 'time'),
+  )
 );
