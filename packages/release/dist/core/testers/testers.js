@@ -56,22 +56,21 @@ export const hasRows = isType('rows');
 export const hasColumns = isType('columns');
 export const isControl = isType('control');
 export function optionIs(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign(function testUiOption(uiSchema) {
+    const func = Object.assign(Object.defineProperties(and(isControl, uiSchemaMatches(Object.defineProperties(function testUiOption(uiSchema) {
         return +(get((uiSchema).options, property) === expectedValue) * 2;
-    }, { name: `TestUiOption(${property}===${expectedValue})` }))), {
+    }, { name: { value: `TestUiOption(${property}===${expectedValue})`, writable: true } }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
-    });
-    Object.assign(func, {
+    }), {
         name: `optionIs(${property}, ${expectedValue})`
     });
     return func;
 }
 ;
 export function schemaOptionIs(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, schemaMatches(Object.assign(function TestSchemaOption(schema) {
+    const func = Object.defineProperties(and(isControl, schemaMatches(Object.defineProperties(function TestSchemaOption(schema) {
         return +(get(schema, property) === expectedValue) * 2;
-    }, { name: `TestSchema(${property}===${expectedValue})` }))), {
+    }, { name: { value: `TestSchemaOption(${property}===${expectedValue})`, writable: true } }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
@@ -82,10 +81,10 @@ export function schemaOptionIs(property, expectedValue) {
 }
 ;
 export function optionStartsWith(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign(function TestUiOptionStartsWith(uiSchema) {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.defineProperties(function TestUiOptionStartsWith(uiSchema) {
         const value = get(uiSchema.options, property);
         return +(typeof value === 'string' && value.startsWith(expectedValue));
-    }, { name: `TestUiOptionStartsWith(${expectedValue})` }))), {
+    }, { name: { value: `TestUiOptionStartsWith(${expectedValue})`, writable: true } }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });
@@ -96,10 +95,10 @@ export function optionStartsWith(property, expectedValue) {
 }
 ;
 export function schemaOptionStartsWith(property, expectedValue) {
-    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.assign(function TestSchemaOptionStartsWith(uiSchema) {
+    const func = Object.defineProperties(and(isControl, uiSchemaMatches(Object.defineProperties(function TestSchemaOptionStartsWith(uiSchema) {
         const value = get(uiSchema.options, property);
         return +(typeof value === 'string' && value.startsWith(expectedValue));
-    }, { name: `TestSchemaOptionStartsWith(${expectedValue})` }))), {
+    }, { name: { value: `TestSchemaOptionStartsWith(${expectedValue})`, writable: true } }))), {
         property: { value: property },
         expectedValue: { value: expectedValue },
     });

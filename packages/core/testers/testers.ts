@@ -89,25 +89,23 @@ export const hasColumns: Ranker = isType('columns');
 export const isControl: Ranker = isType('control');
 
 export function optionIs (property: string, expectedValue: unknown): Ranker {
-  const func = Object.defineProperties(
+  const func = Object.assign(Object.defineProperties(
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign(
+        Object.defineProperties(
           function testUiOption(uiSchema: ControlNodeType) {
             return +(get((uiSchema).options, property) === expectedValue) * 2
           },
-          {name: `TestUiOption(${property}===${expectedValue})` }
+          {name: {value: `TestUiOption(${property}===${expectedValue})`, writable: true } }
         )
-      )
+      ),
     ),
     {
       property: { value: property },
       expectedValue: { value: expectedValue },
     }
-  )
-
-  Object.assign(func, {
+  ), {
     name: `optionIs(${property}, ${expectedValue})`
   })
 
@@ -119,10 +117,11 @@ export function schemaOptionIs (property: string, expectedValue: unknown): Ranke
     and(
       isControl,
       schemaMatches(
-        Object.assign(
+        Object.defineProperties(
           function TestSchemaOption (schema: ControlSchema){
             return +(get(schema, property) === expectedValue) * 2;
-          }, {name:  `TestSchema(${property}===${expectedValue})` }
+          },
+          {name: {value: `TestSchemaOption(${property}===${expectedValue})`, writable: true } }
         )
       )
     ),
@@ -148,10 +147,11 @@ export function optionStartsWith (
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign(function TestUiOptionStartsWith(uiSchema: ControlNodeType) {
+        Object.defineProperties(function TestUiOptionStartsWith(uiSchema: ControlNodeType) {
           const value = get(uiSchema.options, property);
           return +(typeof value === 'string' && value.startsWith(expectedValue));
-        }, {name: `TestUiOptionStartsWith(${expectedValue})`})
+        },
+        {name: {value: `TestUiOptionStartsWith(${expectedValue})`, writable: true}})
       )
     ),
     {
@@ -175,10 +175,10 @@ export function schemaOptionStartsWith (
     and(
       isControl,
       uiSchemaMatches(
-        Object.assign(function TestSchemaOptionStartsWith(uiSchema: ControlNodeType) {
+        Object.defineProperties(function TestSchemaOptionStartsWith(uiSchema: ControlNodeType) {
           const value = get(uiSchema.options, property);
           return +(typeof value === 'string' && value.startsWith(expectedValue));
-        }, {name: `TestSchemaOptionStartsWith(${expectedValue})`})
+        }, {name: {value: `TestSchemaOptionStartsWith(${expectedValue})`, writable: true}})
       )
     ),
     {
