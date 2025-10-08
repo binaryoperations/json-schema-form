@@ -1,4 +1,4 @@
-import { merge, assign } from '@binaryoperations/json-forms-core/internals/object';
+import { merge, assign, mapValues } from '@binaryoperations/json-forms-core/internals/object';
 import {
   addKeywords,
   compileSchema,
@@ -11,7 +11,7 @@ import {
   type SchemaNode,
 } from '../../lib';
 import { get } from "@sagold/json-pointer"
-import { mapValues } from 'lodash';
+
 import { $$getNode } from './nodeStore';
 import { getDefaultKeywords } from '@binaryoperations/json-forms-core/utils/keywords';
 import { extendDraft, OptionalNodeOrError } from 'json-schema-library';

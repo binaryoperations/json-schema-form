@@ -15,12 +15,13 @@ import type _set from 'lodash/set';
 import noop from 'lodash/noop';
 import debounce from 'lodash/debounce';
 import isEmpty from 'lodash/isEmpty';
+import mapValues from 'lodash/mapValues';
 
 export { default as fastDeepEqual } from 'fast-deep-equal';
 
 import { extractSegmentsFromPath } from './extractSegmentsFromPath';
 
-export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq, uniqBy, merge, assign, isNil };
+export { get, groupBy, keyBy, maxBy, fpPick, cloneDeep, noop, orderBy, debounce, isEmpty, uniq, uniqBy, merge, assign, isNil, mapValues };
 
 export const set: typeof _set = (data: object, path: string, value: any) => {
   if (Object.is(get(data, path), value)) return data;

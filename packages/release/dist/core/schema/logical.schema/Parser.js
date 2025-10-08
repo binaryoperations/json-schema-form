@@ -1,7 +1,6 @@
-import { merge, assign } from '../../internals/object';
+import { merge, assign, mapValues } from '../../internals/object';
 import { addKeywords, compileSchema, draft2020, } from '../../lib';
 import { get } from "@sagold/json-pointer";
-import { mapValues } from 'lodash';
 import { $$getNode } from './nodeStore';
 import { getDefaultKeywords } from '../../utils/keywords';
 import { extendDraft } from 'json-schema-library';

@@ -1,10 +1,12 @@
 import {
   fastDeepEqual,
   get,
+  groupBy,
 } from '@binaryoperations/json-forms-core/internals/object';
 import type { JsonError } from 'json-schema-library';
-import { groupBy } from 'lodash';
+
 import { useCallback, useMemo, useReducer } from 'react';
+
 
 import type { UiStoreContextType } from '../context/StoreContext';
 import { useLatest } from '../hooks/useLatest';

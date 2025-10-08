@@ -1,5 +1,5 @@
-import { maxBy } from 'lodash';
 
+import { maxBy } from '../internals/object';
 import type { ControlSchema, LayoutSchema } from '../models';
 import type { RankedControl } from './createControl';
 

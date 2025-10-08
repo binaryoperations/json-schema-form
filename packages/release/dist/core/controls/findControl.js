@@ -1,4 +1,4 @@
-import { maxBy } from 'lodash';
+import { maxBy } from '../internals/object';
 export const findControl = (controls, node, schema) => {
     const ranked = controls.map((control) => ({
         ...control,

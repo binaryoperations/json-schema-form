@@ -1,5 +1,4 @@
-import { fastDeepEqual, get, } from '../../../core/internals/object';
-import { groupBy } from 'lodash';
+import { fastDeepEqual, get, groupBy, } from '../../../core/internals/object';
 import { useCallback, useMemo, useReducer } from 'react';
 import { useLatest } from '../hooks/useLatest';
 export function useControlState(initialData) {
