@@ -66,8 +66,8 @@ export const StoreContextProvider: StoreContextProvider = memo(
     const validateFunc = useValidateData("#", "onSubmit", validateOnSubmit as RefObject<UiStoreContextType>);
 
     const submit = useCallback((e?: FormEvent, data = formDataRef.current, schemaNode?: SchemaNode, shouldValidate = true) => {
-      const isValid = !shouldValidate || validateFunc(data, schemaNode);
-      if (!isValid) return;
+      const isValid = shouldValidate ? validateFunc(data, schemaNode) : { isValid: true, errors: [] };
+      if (!isValid.isValid) return;
 
       return onSubmitLatestRef.current?.(e, formDataRef.current);
     }, [validateFunc]);
